@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Analyst session 2 of 8. The cohort retention table is the single most useful artifact in retention analytics: users who joined in month 0, and the percent still active in months 1 through 10. Build it in pandas, render it as a heatmap, and learn the three scan directions that turn it into answers.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="The cohort table and heatmap - learn customer retention with phoebe">
+<meta property="og:description" content="Analyst session 2 of 8. Build the registration-cohort retention table in pandas and render the heatmap: the canonical recipe, the masking rules, and the three scan directions.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-customer-retention-with-phoebe/courses/a2-cohort-table-and-heatmap.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-customer-retention-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The cohort table and heatmap - learn customer retention with phoebe">
+<meta name="twitter:description" content="Build the registration-cohort retention table in pandas and render the heatmap: the canonical recipe, the masking rules, and the three scan directions.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-customer-retention-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Analyst session 2 · The cohort table and heatmap - learn customer retention with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-customer-retention-with-phoebe</a> / Analyst session 2 of 8</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Customer Retention with Phoebe · Analyst track · Session 2 of 8</div>
+    <h1>The cohort table and <span class="accent">heatmap</span></h1>
+    <p class="sub">Users who joined in January are a cohort. Follow them month by month - what percent came back in month 1, month 2, out to month 10 - and you get the single most information-dense artifact in retention analytics: the cohort triangle. Today you build it from raw orders in five lines of pandas, render it as a heatmap that executives can actually read, and learn the three scan directions that turn colored cells into answers.</p>
+    <div class="chip-row">
+      <span class="chip level">🟠 Analyst track</span>
+      <span class="chip audience">Data analysts · Python</span>
+      <span class="chip audience">Build-along: pandas + seaborn</span>
+      <span class="chip time">The core session</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-15 · The cohort table</span>
+      <span class="a3" style="flex:5">15-40 · Build the heatmap</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Where this session sits</h2>
+    </div>
+    <p class="lede">Eight analyst sessions, one running artifact: a retention report your stakeholders can act on. Session a1 nailed down what "day-7 retention" even means (three different things, it turns out). Today builds the table everything else reads from. The viz gallery (a3), segmentation (a4), survival analysis (a5), CLV models (a6), and churn prediction (a7) all start from the cohort table you build here, and the capstone (a8) ships it. Work along in the companion notebook <code>notebooks/a2_cohort_heatmap.ipynb</code> on the repo's synthetic data, then re-run on the real Online Retail II dataset.</p>
+    <div class="legend">
+      <span class="pill solid">Live - presented in session</span>
+      <span class="pill light">Self-study - read after class</span>
+      <span class="pill peach">★ Build-along - run the code yourself</span>
+      <span class="pill inkpill">Sources covered</span>
+    </div>
+    <div class="callout win">
+      <strong>★ What you walk out with today</strong>
+      The canonical five-line pandas recipe for a registration-cohort retention table, a seaborn heatmap that masks immature cells instead of painting them as failures, and the three scan directions - across, down, diagonal - that let you read product changes, cohort quality, and calendar shocks straight off the colors.
+    </div>
+  </section>
+
+  <!-- ============ PART 1: THE TABLE ============ -->
+  <section class="section" id="cohort-table">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers registration cohorts + the frozen-history rule</span>
+      <h2>One cohort, one row, frozen forever <span class="tag concept">6 min live</span></h2>
+    </div>
+    <p class="lede">A <strong>registration cohort</strong> is everyone who joined in the same month. Month 0 is their join month, so month 0 retention is 100% by construction. Month 1 is the percent who came back the next calendar month, and so on. Each cohort gets one row, each age gets one column - and because young cohorts have not lived long enough to fill their late columns, the table is a triangle. The empty corner is not missing data. It is the future.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A cohort retention triangle: rows are join months January to June, columns are months since joining, cells hold retention percentages. Completed cells are frozen and never change; only the current month's newest diagonal is still updating; the lower right corner is empty because those windows have not happened yet.">
+        <style>
+          .ctT { font: 700 14px Inter, sans-serif; fill: #241A12; }
+          .ctH { font: 600 11px Inter, sans-serif; fill: #6B5D52; }
+          .ctC { font: 700 11.5px Inter, sans-serif; fill: #241A12; }
+          .ctW { font: 700 11.5px Inter, sans-serif; fill: #FFFFFF; }
+          .ctN { font: 400 11.5px Inter, sans-serif; fill: #6B5D52; }
+        </style>
+        <rect x="0" y="0" width="880" height="330" fill="#FDF9F5"/>
+        <text class="ctT" x="40" y="28">The cohort triangle: frozen history, one updating diagonal, an empty future</text>
+        <text class="ctH" x="86" y="66" text-anchor="end">Cohort</text>
+        <text class="ctH" x="130" y="66" text-anchor="middle">M0</text>
+        <text class="ctH" x="196" y="66" text-anchor="middle">M1</text>
+        <text class="ctH" x="262" y="66" text-anchor="middle">M2</text>
+        <text class="ctH" x="328" y="66" text-anchor="middle">M3</text>
+        <text class="ctH" x="394" y="66" text-anchor="middle">M4</text>
+        <text class="ctH" x="460" y="66" text-anchor="middle">M5</text>
+
+        <text class="ctH" x="86" y="96" text-anchor="end">Jan</text>
+        <rect x="100" y="78" width="60" height="28" rx="5" fill="#7C2D12"/><text class="ctW" x="130" y="96" text-anchor="middle">100%</text>
+        <rect x="166" y="78" width="60" height="28" rx="5" fill="#C2410C"/><text class="ctW" x="196" y="96" text-anchor="middle">46%</text>
+        <rect x="232" y="78" width="60" height="28" rx="5" fill="#E06A2E"/><text class="ctW" x="262" y="96" text-anchor="middle">34%</text>
+        <rect x="298" y="78" width="60" height="28" rx="5" fill="#EE9A66"/><text class="ctC" x="328" y="96" text-anchor="middle">28%</text>
+        <rect x="364" y="78" width="60" height="28" rx="5" fill="#F6C39E"/><text class="ctC" x="394" y="96" text-anchor="middle">25%</text>
+        <rect x="430" y="78" width="60" height="28" rx="5" fill="#FBE3D2" stroke="#EA580C" stroke-width="2"/><text class="ctC" x="460" y="96" text-anchor="middle">23%</text>
+
+        <text class="ctH" x="86" y="130" text-anchor="end">Feb</text>
+        <rect x="100" y="112" width="60" height="28" rx="5" fill="#7C2D12"/><text class="ctW" x="130" y="130" text-anchor="middle">100%</text>
+        <rect x="166" y="112" width="60" height="28" rx="5" fill="#C2410C"/><text class="ctW" x="196" y="130" text-anchor="middle">48%</text>
+        <rect x="232" y="112" width="60" height="28" rx="5" fill="#E06A2E"/><text class="ctW" x="262" y="130" text-anchor="middle">35%</text>
+        <rect x="298" y="112" width="60" height="28" rx="5" fill="#EE9A66"/><text class="ctC" x="328" y="130" text-anchor="middle">29%</text>
+        <rect x="364" y="112" width="60" height="28" rx="5" fill="#FBE3D2" stroke="#EA580C" stroke-width="2"/><text class="ctC" x="394" y="130" text-anchor="middle">26%</text>
+
+        <text class="ctH" x="86" y="164" text-anchor="end">Mar</text>
+        <rect x="100" y="146" width="60" height="28" rx="5" fill="#7C2D12"/><text class="ctW" x="130" y="164" text-anchor="middle">100%</text>
+        <rect x="166" y="146" width="60" height="28" rx="5" fill="#C2410C"/><text class="ctW" x="196" y="164" text-anchor="middle">51%</text>
+        <rect x="232" y="146" width="60" height="28" rx="5" fill="#E06A2E"/><text class="ctW" x="262" y="164" text-anchor="middle">38%</text>
+        <rect x="298" y="146" width="60" height="28" rx="5" fill="#FBE3D2" stroke="#EA580C" stroke-width="2"/><text class="ctC" x="328" y="164" text-anchor="middle">31%</text>
+
+        <text class="ctH" x="86" y="198" text-anchor="end">Apr</text>
+        <rect x="100" y="180" width="60" height="28" rx="5" fill="#7C2D12"/><text class="ctW" x="130" y="198" text-anchor="middle">100%</text>
+        <rect x="166" y="180" width="60" height="28" rx="5" fill="#C2410C"/><text class="ctW" x="196" y="198" text-anchor="middle">55%</text>
+        <rect x="232" y="180" width="60" height="28" rx="5" fill="#FBE3D2" stroke="#EA580C" stroke-width="2"/><text class="ctC" x="262" y="198" text-anchor="middle">40%</text>
+
+        <text class="ctH" x="86" y="232" text-anchor="end">May</text>
+        <rect x="100" y="214" width="60" height="28" rx="5" fill="#7C2D12"/><text class="ctW" x="130" y="232" text-anchor="middle">100%</text>
+        <rect x="166" y="214" width="60" height="28" rx="5" fill="#FBE3D2" stroke="#EA580C" stroke-width="2"/><text class="ctC" x="196" y="232" text-anchor="middle">57%</text>
+
+        <text class="ctH" x="86" y="266" text-anchor="end">Jun</text>
+        <rect x="100" y="248" width="60" height="28" rx="5" fill="#FBE3D2" stroke="#EA580C" stroke-width="2"/><text class="ctC" x="130" y="266" text-anchor="middle">100%</text>
+
+        <rect x="530" y="78" width="310" height="112" rx="10" fill="#F8EADD"/>
+        <text class="ctC" x="546" y="102">Solid cells: window completed.</text>
+        <text class="ctN" x="546" y="122">Frozen. This number never changes again,</text>
+        <text class="ctN" x="546" y="140">no matter what users do later.</text>
+        <text class="ctC" x="546" y="164">Outlined cells: current month.</text>
+        <text class="ctN" x="546" y="182">Still filling. The only cells that update.</text>
+
+        <rect x="530" y="206" width="310" height="70" rx="10" fill="#FFFFFF" stroke="#EFE2D6"/>
+        <text class="ctC" x="546" y="230">Empty corner: the future.</text>
+        <text class="ctN" x="546" y="248">June's month-5 has not happened yet.</text>
+        <text class="ctN" x="546" y="266">Immature - never plot it as low retention.</text>
+
+        <text class="ctN" x="40" y="312">Read down the M1 column: 46, 48, 51, 55, 57 - every new class of users sticks better than the last.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the triangle shape is the point: frozen past, one live diagonal, empty future</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The frozen-history rule: this course's reporting law<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Every retention number in this course is computed one way: <strong>fix the base, look forward</strong>. The base is a cohort anchored to a fixed date - everyone who registered in January, or everyone active on Aug 1. Then you look forward 1, 7, 14, 30 days (or 1 to 10 months) and count who came back. Because the base never changes and the window eventually closes, a completed cell is <strong>immutable</strong>. January's month-3 retention is the same number today, next quarter, and forever.</p>
+        <ul>
+          <li><strong>Forward-looking, cohort-based:</strong> the question is always "of the people who started at time T, how many returned within x days?" The denominator is locked at time T.</li>
+          <li><strong>Frozen once complete:</strong> when the window has fully elapsed, the number is final. Your January row will never restate. A dashboard whose history rewrites itself cannot be trusted, compared, or targeted against.</li>
+          <li><strong>Only the current window updates:</strong> the newest diagonal of the triangle is still filling. Mark it as partial - an outline, an asterisk, a lighter shade - so nobody reads a half-filled month as a collapse.</li>
+        </ul>
+        <div class="callout tip">
+          <strong>The two banned metrics</strong>
+          Two popular numbers violate this law, and both are banned from reporting in this course. <strong>Trailing look-back</strong> ("of today's actives, how many were here 7 days ago") re-anchors to today, so the denominator shifts every single day and yesterday's number is already different. <strong>Rolling retention</strong> ("returned on day 7 or any later day") lets a user who resurfaces on day 45 rewrite day-7 history retroactively - Mixpanel's own default works this way, which is why its historical numbers keep creeping up. Session a1 covers both as concepts; neither ever goes on a dashboard.
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why month 0 is 100% and other denominator fine print<span class="mini">3 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The cohort table hides three denominator decisions. Make them explicitly, write them on the dashboard, and never change them silently mid-year.</p>
+        <ul>
+          <li><strong>Who counts as joined?</strong> All signups, or only activated users (completed a first core action)? Activated-base retention reads far higher and answers a different question: product stickiness versus funnel-plus-product combined. Both are legitimate. Mixing them is not.</li>
+          <li><strong>What counts as active?</strong> For a game: opened a session. For ecommerce: <em>placed an order</em> - login-based retention is nearly meaningless for shops, since people browse without buying. Purchase-based cohorts are the ecommerce standard.</li>
+          <li><strong>Which calendar?</strong> Monthly periods for a 10-month view like ours; weekly for fast products. Games use day-based windows (D1/D7/D30) since play cadence is daily - a1 covers how day boundaries and timezones can make two tools disagree on the same data.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2: THE RECIPE ============ -->
+  <section class="section" id="pandas-recipe">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers the canonical pandas cohort recipe</span>
+      <h2>Five lines of pandas <span class="tag concept">8 min live</span></h2>
+    </div>
+    <p class="lede">The whole construction is one idea: <strong>stamp every order with the customer's first-ever month, then count distinct customers per (cohort, age) pair</strong>. Everything else is bookkeeping. We build it on the repo's synthetic orders file first - where the answer is known because we generated the churn - then you re-run the identical cells on Online Retail II.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The pandas pipeline in four stages: raw orders with customer id and date, then each row stamped with its customer's cohort month via a groupby transform min, then a period number computed as order month minus cohort month, then a pivot table of distinct customers per cohort and period divided by cohort size to give the retention matrix.">
+        <style>
+          .ppT { font: 700 14px Inter, sans-serif; fill: #241A12; }
+          .ppH { font: 700 12.5px Inter, sans-serif; fill: #FFFFFF; }
+          .ppB { font: 400 11.5px Inter, sans-serif; fill: #241A12; }
+          .ppM { font: 600 11px 'SF Mono', Menlo, monospace; fill: #7C2D12; }
+          .ppN { font: 400 11.5px Inter, sans-serif; fill: #6B5D52; }
+          .ppA { stroke: #EA580C; stroke-width: 2.2; fill: none; marker-end: url(#ppArr); }
+        </style>
+        <defs>
+          <marker id="ppArr" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+            <path d="M0,0 L8,4.5 L0,9 z" fill="#EA580C"/>
+          </marker>
+        </defs>
+        <rect x="0" y="0" width="880" height="320" fill="#FDF9F5"/>
+        <text class="ppT" x="40" y="28">From raw orders to retention matrix: the four-stage pipeline</text>
+
+        <rect x="40" y="52" width="185" height="96" rx="10" fill="#C2410C"/>
+        <text class="ppH" x="132" y="76" text-anchor="middle">1 · Raw orders</text>
+        <rect x="52" y="88" width="161" height="48" rx="6" fill="#FDF9F5"/>
+        <text class="ppM" x="60" y="106">customer_id, date</text>
+        <text class="ppB" x="60" y="124">one row per order</text>
+
+        <rect x="255" y="52" width="185" height="96" rx="10" fill="#C2410C"/>
+        <text class="ppH" x="347" y="76" text-anchor="middle">2 · Stamp the cohort</text>
+        <rect x="267" y="88" width="161" height="48" rx="6" fill="#FDF9F5"/>
+        <text class="ppM" x="275" y="106">groupby(customer)</text>
+        <text class="ppM" x="275" y="122">.transform("min")</text>
+
+        <rect x="470" y="52" width="185" height="96" rx="10" fill="#C2410C"/>
+        <text class="ppH" x="562" y="76" text-anchor="middle">3 · Age each order</text>
+        <rect x="482" y="88" width="161" height="48" rx="6" fill="#FDF9F5"/>
+        <text class="ppM" x="490" y="106">period = order_month</text>
+        <text class="ppM" x="490" y="122">- cohort_month</text>
+
+        <rect x="685" y="52" width="155" height="96" rx="10" fill="#7C2D12"/>
+        <text class="ppH" x="762" y="76" text-anchor="middle">4 · Count + divide</text>
+        <rect x="697" y="88" width="131" height="48" rx="6" fill="#FDF9F5"/>
+        <text class="ppM" x="705" y="106">pivot_table</text>
+        <text class="ppM" x="705" y="122">nunique / M0</text>
+
+        <path class="ppA" d="M225,100 L251,100"/>
+        <path class="ppA" d="M440,100 L466,100"/>
+        <path class="ppA" d="M655,100 L681,100"/>
+
+        <rect x="40" y="176" width="800" height="104" rx="10" fill="#F8EADD"/>
+        <text class="ppB" x="58" y="202"><tspan style="font-weight:700">The one trick worth memorizing:</tspan> transform("min") broadcasts each customer's first purchase date back onto</text>
+        <text class="ppB" x="58" y="220">every one of their rows - no merge needed. Someone who bought in Jan, Mar and Aug gets cohort = Jan on all three rows,</text>
+        <text class="ppB" x="58" y="238">so the Mar order lands in (Jan cohort, period 2) and the Aug order in (Jan cohort, period 7).</text>
+        <text class="ppN" x="58" y="264">Distinct-count per cell, divide every row by its month-0 count, and the matrix is done.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - stamp, age, count, divide: the entire recipe in one picture</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>★ Build-along: the recipe, line by line<span class="mini">8 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Load the repo's synthetic ecommerce orders and run each stage. Every line below is in the companion notebook with its printed output.</p>
+        <div class="prompt-box good"><span class="label">★ Stage 1-2 · load and stamp each order with its customer's cohort month</span>import pandas as pd
+
+orders = pd.read_csv("data/ecommerce_orders.csv", parse_dates=["order_date"])
+
+orders["order_month"] = orders["order_date"].dt.to_period("M")
+orders["cohort"] = (
+    orders.groupby("customer_id")["order_date"]
+          .transform("min")            # first-ever purchase date, broadcast to every row
+          .dt.to_period("M")
+)</div>
+        <div class="prompt-box good"><span class="label">★ Stage 3 · age every order: months since the cohort month</span>orders["period"] = (orders["order_month"] - orders["cohort"]).apply(lambda d: d.n)</div>
+        <div class="prompt-box good"><span class="label">★ Stage 4 · count distinct customers per cell, divide by cohort size</span>counts = orders.pivot_table(index="cohort", columns="period",
+                            values="customer_id", aggfunc="nunique")
+
+retention = counts.divide(counts.iloc[:, 0], axis=0)   # column 0 = cohort size
+retention.round(2)</div>
+        <p>Read the result before you plot it. Column 0 is all 1.00 - everyone is active in their join month, by construction. Each row steps down as the cohort ages. The bottom-right is NaN, and it must stay NaN: those windows have not completed. <strong>NaN here means "not yet", never "zero".</strong></p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p><strong>The same five lines run a game studio's dashboard.</strong> Swap orders for session logs, month for day, and the identical stamp-age-count-divide pipeline produces D1/D7/D30 tables. Mobile publishers gate soft-launch decisions on exactly this artifact - Supercell killed Smash Land in 2015 off its soft-launch cohort tables even though player feedback was positive. The table you just built is a kill-or-scale decision instrument.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Online Retail II: what real data does to your clean recipe<span class="mini">5 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The notebook's second half re-runs the pipeline on the UCI <strong>Online Retail II</strong> dataset (1,067,371 rows, a UK gift retailer, Dec 2009 to Dec 2011). It is deliberately messy, and every mess is a lesson:</p>
+        <ul>
+          <li><strong>Cancellations:</strong> invoices starting with "C" are cancellations carrying negative quantities. Keep them and your cohort sizes are wrong. Filter first.</li>
+          <li><strong>Missing customers:</strong> around 135k rows have no CustomerID (guest checkouts) - even though the dataset's own documentation claims no missing values. Never trust metadata over a <code>df.isna().sum()</code>.</li>
+          <li><strong>The inflated first cohort:</strong> the earliest month sweeps in every pre-existing customer as if they were new - their real first purchase happened before the data starts. Left-censoring. Either drop the first cohort or annotate it.</li>
+          <li><strong>Wholesalers:</strong> a handful of trade buyers order weekly and never churn. They are real, but they will dominate any average - segment them out in a4.</li>
+        </ul>
+        <div class="prompt-box"><span class="label">Clean-up gate before the cohort recipe</span>retail = retail[~retail["Invoice"].astype(str).str.startswith("C")]   # drop cancellations
+retail = retail.dropna(subset=["Customer ID"])                         # drop guest checkouts
+retail = retail[retail["Quantity"] &gt; 0]                                # paranoia: no negatives</div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ DEMO: THE HEATMAP ============ -->
+  <section class="section" id="heatmap">
+    <div class="section-kicker">
+      <span class="klabel">Demo · the artifact itself</span>
+      <h2>Render the heatmap properly <span class="tag demo">★ 12 min · everyone builds</span></h2>
+    </div>
+    <p class="lede">A cohort table full of decimals is analyst food. The heatmap is what everyone else reads. Four choices separate a professional one from a misleading one: <strong>annotate every cell</strong>, <strong>mask the future</strong>, <strong>anchor the color scale</strong>, and <strong>use a colorblind-safe single-hue ramp</strong>.</p>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>★ Build-along: the seaborn call and its four deliberate choices<span class="mini">6 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <div class="prompt-box good"><span class="label">★ The heatmap, done right</span>import matplotlib.pyplot as plt
+import seaborn as sns
+
+fig, ax = plt.subplots(figsize=(11, 6))
+sns.heatmap(
+    retention,
+    annot=True, fmt=".0%",          # 1: numbers on every cell - color alone is not data
+    mask=retention.isnull(),        # 2: future cells stay BLANK, not painted as 0%
+    vmin=0, vmax=0.5,               # 3: anchor the scale - one loyal cohort must not wash it out
+    cmap="Oranges",                 # 4: single-hue, perceptually ordered, colorblind-safe
+    linewidths=1, linecolor="white",
+    cbar_kws={"format": lambda x, _: f"{x:.0%}"},
+    ax=ax,
+)
+ax.set_title("Monthly cohort retention - registration cohorts, purchase-based")
+ax.set_xlabel("Months since first purchase")
+ax.set_ylabel("Cohort (first-purchase month)")
+plt.tight_layout()</div>
+        <ul>
+          <li><strong>annot + fmt=".0%":</strong> the number is the data; color is only the index that guides the eye to it.</li>
+          <li><strong>mask:</strong> an unmasked NaN renders at the colormap floor - the darkest cell on the chart - and every executive will read the future as a catastrophe. This is the single most common cohort-chart bug in the wild.</li>
+          <li><strong>vmin/vmax:</strong> without anchors, seaborn rescales to the data every refresh, so this month's chart is not comparable to last month's. Frozen history deserves a frozen color scale.</li>
+          <li><strong>cmap:</strong> sequential single-hue (Oranges, Blues) or perceptually uniform (viridis, cividis). Never jet or rainbow - they invent boundaries that are not in the data - and never red-green encodings, which about 8% of men cannot separate.</li>
+        </ul>
+      </div>
+    </details>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three scan directions on a cohort heatmap. Reading across a row shows one cohort aging, which is the retention curve. Reading down a column compares every cohort at the same age, revealing whether the product is improving. Reading along a diagonal shows one calendar month, so a diagonal stripe means a calendar event such as an outage hit all cohorts at once.">
+        <style>
+          .sdT { font: 700 14px Inter, sans-serif; fill: #241A12; }
+          .sdH { font: 700 12.5px Inter, sans-serif; fill: #241A12; }
+          .sdB { font: 400 11.5px Inter, sans-serif; fill: #6B5D52; }
+          .sdW { font: 700 11px Inter, sans-serif; fill: #FFFFFF; }
+        </style>
+        <rect x="0" y="0" width="880" height="330" fill="#FDF9F5"/>
+        <text class="sdT" x="40" y="28">Three scan directions, three different questions answered</text>
+
+        <rect x="40" y="52" width="250" height="150" rx="10" fill="#FFFFFF" stroke="#EFE2D6"/>
+        <g>
+          <rect x="60" y="70" width="38" height="24" rx="4" fill="#7C2D12"/>
+          <rect x="102" y="70" width="38" height="24" rx="4" fill="#C2410C"/>
+          <rect x="144" y="70" width="38" height="24" rx="4" fill="#E06A2E"/>
+          <rect x="186" y="70" width="38" height="24" rx="4" fill="#EE9A66"/>
+          <rect x="228" y="70" width="38" height="24" rx="4" fill="#F6C39E"/>
+          <rect x="60" y="98" width="38" height="24" rx="4" fill="#F8EADD"/>
+          <rect x="102" y="98" width="38" height="24" rx="4" fill="#F8EADD"/>
+          <rect x="144" y="98" width="38" height="24" rx="4" fill="#F8EADD"/>
+          <rect x="186" y="98" width="38" height="24" rx="4" fill="#F8EADD"/>
+          <rect x="60" y="126" width="38" height="24" rx="4" fill="#F8EADD"/>
+          <rect x="102" y="126" width="38" height="24" rx="4" fill="#F8EADD"/>
+          <rect x="144" y="126" width="38" height="24" rx="4" fill="#F8EADD"/>
+        </g>
+        <rect x="56" y="66" width="214" height="32" rx="6" fill="none" stroke="#0F766E" stroke-width="2.5"/>
+        <text class="sdH" x="60" y="230">Across a row</text>
+        <text class="sdB" x="60" y="250">One cohort aging: its retention</text>
+        <text class="sdB" x="60" y="268">curve laid flat. Shape = diagnosis.</text>
+
+        <rect x="330" y="52" width="250" height="150" rx="10" fill="#FFFFFF" stroke="#EFE2D6"/>
+        <g>
+          <rect x="350" y="70" width="38" height="24" rx="4" fill="#F8EADD"/>
+          <rect x="392" y="70" width="38" height="24" rx="4" fill="#EE9A66"/>
+          <rect x="434" y="70" width="38" height="24" rx="4" fill="#F8EADD"/>
+          <rect x="476" y="70" width="38" height="24" rx="4" fill="#F8EADD"/>
+          <rect x="518" y="70" width="38" height="24" rx="4" fill="#F8EADD"/>
+          <rect x="350" y="98" width="38" height="24" rx="4" fill="#F8EADD"/>
+          <rect x="392" y="98" width="38" height="24" rx="4" fill="#E06A2E"/>
+          <rect x="434" y="98" width="38" height="24" rx="4" fill="#F8EADD"/>
+          <rect x="476" y="98" width="38" height="24" rx="4" fill="#F8EADD"/>
+          <rect x="350" y="126" width="38" height="24" rx="4" fill="#F8EADD"/>
+          <rect x="392" y="126" width="38" height="24" rx="4" fill="#C2410C"/>
+          <rect x="434" y="126" width="38" height="24" rx="4" fill="#F8EADD"/>
+        </g>
+        <rect x="388" y="66" width="46" height="90" rx="6" fill="none" stroke="#0F766E" stroke-width="2.5"/>
+        <text class="sdH" x="350" y="230">Down a column</text>
+        <text class="sdB" x="350" y="250">Every cohort at the same age. Darker</text>
+        <text class="sdB" x="350" y="268">going down = newer cohorts stick better.</text>
+
+        <rect x="620" y="52" width="250" height="150" rx="10" fill="#FFFFFF" stroke="#EFE2D6"/>
+        <g>
+          <rect x="640" y="70" width="38" height="24" rx="4" fill="#F8EADD"/>
+          <rect x="682" y="70" width="38" height="24" rx="4" fill="#F8EADD"/>
+          <rect x="724" y="70" width="38" height="24" rx="4" fill="#C2410C"/>
+          <rect x="766" y="70" width="38" height="24" rx="4" fill="#F8EADD"/>
+          <rect x="640" y="98" width="38" height="24" rx="4" fill="#F8EADD"/>
+          <rect x="682" y="98" width="38" height="24" rx="4" fill="#C2410C"/>
+          <rect x="724" y="98" width="38" height="24" rx="4" fill="#F8EADD"/>
+          <rect x="766" y="98" width="38" height="24" rx="4" fill="#F8EADD"/>
+          <rect x="640" y="126" width="38" height="24" rx="4" fill="#C2410C"/>
+          <rect x="682" y="126" width="38" height="24" rx="4" fill="#F8EADD"/>
+          <rect x="724" y="126" width="38" height="24" rx="4" fill="#F8EADD"/>
+        </g>
+        <line x1="636" y1="160" x2="778" y2="60" stroke="#0F766E" stroke-width="2.5" stroke-dasharray="6 4"/>
+        <text class="sdH" x="640" y="230">Along a diagonal</text>
+        <text class="sdB" x="640" y="250">One calendar month. A diagonal stripe =</text>
+        <text class="sdB" x="640" y="268">an outage, price change, or season hit all.</text>
+
+        <text class="sdB" x="40" y="308">A vertical stripe instead means a lifecycle event: something hits every cohort at the same AGE - like a month-2 paywall.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - across = aging, down = product improvement, diagonal = calendar shocks</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step"><p>Run the heatmap cell on the synthetic data. Find the month-1 column and read it downward: is the product improving for newer cohorts?</p></div>
+      <div class="step"><p>Delete the <code>mask</code> argument and re-run. Watch the empty corner turn into the darkest cells on the chart. Put it back. Now you have seen the bug you will spend your career catching in other people's decks.</p></div>
+      <div class="step"><p>Delete <code>vmin/vmax</code> and re-run. The colors shift even though not one number changed. Anchors back in.</p></div>
+      <div class="step"><p>Re-run the whole pipeline on Online Retail II after the clean-up gate. Say out loud what the first cohort's row means, knowing it is left-censored.</p></div>
+    </div>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>The flattening row that bought a company.</strong> Dollar Shave Club's cohort rows flattened at roughly 50% six-month retention - transaction data later confirmed by Second Measure showed it led its whole category. Investors read that flattening as durable revenue, and the story ended in a $1B acquisition by Unilever. Same artifact you just built, rendered the same way.</p>
+    </div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Try it yourself - this week <span class="tag exercise">◐ 30 min total</span></h2>
+    </div>
+    <ul>
+      <li>Run the companion notebook end to end on the synthetic data, then on Online Retail II. Both heatmaps go in your running retention report - the capstone (a8) assembles it.</li>
+      <li>Build the same table on YOUR product's data: pick the anchor event (registration or first purchase), the active event, and the period size. Write all three choices at the top of the notebook as comments.</li>
+      <li>Find one existing retention chart at your company and check it against the four choices: annotated? masked? anchored? safe colormap? Bring the worst offender to the next session.</li>
+      <li>Answer in one sentence: why can your January cohort's month-3 number never change after April ends?</li>
+    </ul>
+  </section>
+
+  <!-- ============ SOURCES ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session draws on</h2>
+    </div>
+    <p class="lede">Cohort analysis has no single certificate - it is a craft standardized by the analytics tools and a handful of durable essays. This page teaches the working core of:</p>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The canonical pandas cohort recipe (Towards Data Science / community standard)</span><span class="note">Part 2 · stamp, age, count, divide</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Lenny's Newsletter - "Measuring cohort retention" (Olga Berezovsky)</span><span class="note">Part 1 · denominator discipline, active = core value action</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Amplitude retention docs - bounded vs unbounded, immature buckets</span><span class="note">Part 1 · the frozen-history rationale</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Reforge - cohort analysis basics (triangle reading)</span><span class="note">Demo · scan directions; curve shapes get full treatment in a3</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">UCI Online Retail II dataset documentation</span><span class="note">Self-study card · the quirks are the curriculum</span></div>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions before you go 🎯 <span class="tag exercise">◐ 90 seconds</span></h2>
+    </div>
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">1 · Your January cohort's month-2 retention was 34% when you reported it in April. It is now August. What is January's month-2 retention?</p>
+      <button class="qopt" type="button">A · Whatever the dashboard recomputes today - retention is always live</button>
+      <button class="qopt" type="button">B · 34% - the window completed, so the number is frozen forever</button>
+      <button class="qopt" type="button">C · Slightly higher, because some users came back later</button>
+      <p class="qwhy">Forward-looking cohort retention locks the base (January joiners) and the window (month 2). Once March ended, every fact the number depends on is in the past. "Came back later" is rolling retention - the banned metric that rewrites history.</p>
+    </div>
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">2 · You forget the mask argument and NaN cells render at the colormap floor. What does your VP see?</p>
+      <button class="qopt" type="button">A · Nothing - seaborn skips NaN automatically</button>
+      <button class="qopt" type="button">B · Blank cells, same as with the mask</button>
+      <button class="qopt" type="button">C · The newest cohorts apparently collapsing to zero - the future painted as a catastrophe</button>
+      <p class="qwhy">Unmasked NaN takes the darkest end of the scale, so windows that simply have not happened yet read as 0% retention. Mask with retention.isnull() so immature cells stay blank - "not yet" is not "zero".</p>
+    </div>
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">3 · Month-1 retention read down the column: Jan 46%, Feb 48%, Mar 51%, Apr 55%. What is this telling you?</p>
+      <button class="qopt" type="button">A · Newer cohorts retain better at the same age - the product or acquisition quality is improving</button>
+      <button class="qopt" type="button">B · The January cohort is recovering over time</button>
+      <button class="qopt" type="button">C · Retention always rises in spring - seasonality</button>
+      <p class="qwhy">Down a column every cohort is compared at the SAME age, so cohort-over-cohort improvement is the cleanest read of whether changes since January actually work. (One cohort recovering would show across its row; a calendar effect would show on a diagonal.)</p>
+    </div>
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Analyst session 2 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>Registration cohort</b><span>Everyone who joined in the same month. Month 0 = join month = 100% by construction. One cohort, one row, forever.</span></div>
+      <div class="cheat-item"><b>The frozen-history rule</b><span>Fix the base, look forward x days. Completed windows are immutable; only the current window updates, visibly marked partial.</span></div>
+      <div class="cheat-item"><b>Banned from dashboards</b><span>Trailing look-back (denominator moves daily) and rolling "day N or later" retention (history rewrites itself). Concepts only.</span></div>
+      <div class="cheat-item"><b>The recipe</b><span>cohort = groupby(customer).transform("min") -&gt; period = order_month - cohort -&gt; pivot_table nunique -&gt; divide by column 0.</span></div>
+      <div class="cheat-item"><b>The four heatmap choices</b><span>annot every cell · mask the future · anchor vmin/vmax · single-hue colorblind-safe cmap. Break one and the chart lies.</span></div>
+      <div class="cheat-item"><b>Three scan directions</b><span>Across a row = one cohort aging. Down a column = product improving? Diagonal = calendar shock (vertical stripe = lifecycle event).</span></div>
+      <div class="cheat-item"><b>NaN means not-yet</b><span>The empty triangle corner is the future, never zero. Unmasked NaN painted dark is the most common cohort-chart bug in the wild.</span></div>
+      <div class="cheat-item"><b>Real data gates</b><span>Online Retail II: drop C-invoices, drop missing CustomerID, mind the left-censored first cohort, segment out wholesalers.</span></div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <span>Analyst session 2 of 8 · learn-customer-retention-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="../index.html">← All sessions</a> &nbsp;·&nbsp; <a href="a3-retention-viz-gallery.html">Next: The retention viz gallery →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>

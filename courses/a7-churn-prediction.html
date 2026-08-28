@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Analyst session 7 of 8. Machine-learning churn prediction that actually helps: leak-proof feature/label windows, logistic baseline then XGBoost, honest precision-recall evaluation, SHAP explanations, and the Ascarza caveat - the customers most likely to churn are often the least persuadable.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Churn prediction that helps - learn customer retention with phoebe">
+<meta property="og:description" content="Analyst session 7 of 8. Leak-proof windowing, XGBoost + SHAP, precision-recall over accuracy, thresholds priced by intervention economics, and why prediction is not prevention.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-customer-retention-with-phoebe/courses/a7-churn-prediction.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-customer-retention-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Churn prediction that helps - learn customer retention with phoebe">
+<meta name="twitter:description" content="Leak-proof windowing, XGBoost + SHAP, precision-recall over accuracy, and why the highest-risk customers are often the wrong ones to chase.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-customer-retention-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Analyst session 7 · Churn prediction that helps - learn customer retention with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-customer-retention-with-phoebe</a> / Analyst session 7 of 8</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Customer Retention with Phoebe · Analyst track · Session 7 of 8</div>
+    <h1>Churn prediction that <span class="accent">helps</span></h1>
+    <p class="sub">A churn model is the easiest impressive artifact in data science and the easiest to get silently wrong. Today you build one that survives contact with reality: a training frame whose feature window strictly precedes its label window, an evaluation that does not let accuracy lie about imbalanced classes, SHAP explanations a stakeholder can act on - and the honesty core that most courses skip: the customers your model ranks riskiest are often exactly the ones an offer cannot save.</p>
+    <div class="chip-row">
+      <span class="chip level">🟠 Analyst track</span>
+      <span class="chip audience">Data analysts · Python</span>
+      <span class="chip audience">Build-along: XGBoost + SHAP</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-20 · Framing without leaks</span>
+      <span class="a3" style="flex:5">20-40 · Model, explain, price</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Where this session sits</h2>
+    </div>
+    <p class="lede">Seventh of eight analyst sessions, one running artifact: the retention report a8 ships. You already know what retention means (a1), you built the cohort triangle (a2) and its viz gallery (a3), you segmented who retains (a4), modeled lifetimes (a5), and scored P(alive) per customer (a6). Today adds the last modeling piece: a supervised churn model that names WHO is at risk and WHY - risk scores the capstone folds into its recommendations. Work along in the companion notebook <code>notebooks/a7_churn.ipynb</code> on the repo's synthetic data, where the churn generator is known, so a leak shows up as an impossible score.</p>
+    <div class="legend">
+      <span class="pill solid">Live - presented in session</span>
+      <span class="pill light">Self-study - read after class</span>
+      <span class="pill peach">★ Build-along - run the code yourself</span>
+      <span class="pill inkpill">Sources covered</span>
+    </div>
+    <div class="callout win">
+      <strong>★ What you walk out with today</strong>
+      A leak-proof windowed training frame (features strictly before a cutoff, labels strictly after), a logistic baseline plus an XGBoost workhorse evaluated on precision-recall instead of the accuracy lie, SHAP plots that translate the model into stakeholder language, and the Ascarza discipline: spend the retention budget on persuadables, not on the doomed or the already-loyal.
+    </div>
+  </section>
+
+  <!-- ============ PART 1: FRAMING ============ -->
+  <section class="section" id="framing">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers label/feature windows + the leakage traps</span>
+      <h2>The framing IS the model <span class="tag concept">10 min live</span></h2>
+    </div>
+    <p class="lede">Before any algorithm, you make one decision that determines whether the model is real: pick a cutoff time t. Features may use behavior <strong>up to and including t</strong>. The label is whether the customer churned in a window <strong>strictly after t</strong> - within 30, 60, or 90 days, matching a1's forward-looking law. Any feature that peeks past the cutoff is leakage: the model aces validation because it is reading the answer key, then dies in production where the future genuinely is not available yet.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A timeline split by a cutoff line. Left of the cutoff is the feature window: behavior the model may see, such as orders, tenure, tickets and days since last order measured at the cutoff. Right of the cutoff is the label window: did the customer churn within 90 days after the cutoff. A red arrow shows a leaking feature, exit survey score, reaching back across the cutoff and it is struck out in red.">
+        <style>
+          .a7twT { font: 700 14px Inter, sans-serif; fill: #241A12; }
+          .a7twH { font: 700 12.5px Inter, sans-serif; fill: #241A12; }
+          .a7twB { font: 400 11.5px Inter, sans-serif; fill: #241A12; }
+          .a7twN { font: 400 11.5px Inter, sans-serif; fill: #6B5D52; }
+          .a7twR { font: 700 11.5px Inter, sans-serif; fill: #991B1B; }
+          .a7twC { font: 700 12px Inter, sans-serif; fill: #0F766E; }
+        </style>
+        <defs>
+          <marker id="a7twArr" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+            <path d="M0,0 L8,4.5 L0,9 z" fill="#991B1B"/>
+          </marker>
+        </defs>
+        <rect x="0" y="0" width="880" height="320" fill="#FDF9F5"/>
+        <text class="a7twT" x="40" y="28">The two windows: what the model may see vs what it must predict</text>
+
+        <line x1="50" y1="215" x2="830" y2="215" stroke="#6B5D52" stroke-width="1.5"/>
+        <text class="a7twN" x="50" y="238">past</text>
+        <text class="a7twN" x="796" y="238">future</text>
+
+        <rect x="70" y="120" width="340" height="88" rx="10" fill="#F8EADD" stroke="#C2410C" stroke-width="2"/>
+        <text class="a7twH" x="86" y="144">Feature window</text>
+        <text class="a7twB" x="86" y="164">Behavior up to t: orders, tenure,</text>
+        <text class="a7twB" x="86" y="181">tickets, payment failures,</text>
+        <text class="a7twB" x="86" y="198">days-since-last measured AT t</text>
+
+        <line x1="440" y1="80" x2="440" y2="240" stroke="#0F766E" stroke-width="3"/>
+        <text class="a7twC" x="440" y="68" text-anchor="middle">cutoff t</text>
+
+        <rect x="470" y="120" width="300" height="88" rx="10" fill="#FBE3D2" stroke="#EA580C" stroke-width="2"/>
+        <text class="a7twH" x="486" y="144">Label window</text>
+        <text class="a7twB" x="486" y="164">Churned within 90 days after t?</text>
+        <text class="a7twB" x="486" y="181">Only events in (t, t + 90d]</text>
+        <text class="a7twB" x="486" y="198">define the label. Nothing else.</text>
+
+        <path d="M600,100 C540,86 400,86 340,100" stroke="#991B1B" stroke-width="2.5" fill="none" stroke-dasharray="7 4" marker-end="url(#a7twArr)"/>
+        <line x1="428" y1="78" x2="452" y2="102" stroke="#991B1B" stroke-width="3.5"/>
+        <line x1="452" y1="78" x2="428" y2="102" stroke="#991B1B" stroke-width="3.5"/>
+        <text class="a7twR" x="600" y="112">exit_survey_score - only exists AFTER churn</text>
+
+        <rect x="40" y="262" width="800" height="40" rx="10" fill="#FEF2F2" stroke="#FCA5A5"/>
+        <text class="a7twR" x="58" y="287">Any feature that crosses the cutoff aces validation and dies in production - the leak IS the lie.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - features left of the cutoff, labels right of it, and nothing may cross the line</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Spot the leak: 8 features, 3 of them lie<span class="mini">6 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A junior analyst proposes this feature list for a 90-day ecommerce churn model with cutoff t. Three features leak. Find them before reading on - in session we vote before the reveal.</p>
+        <ol>
+          <li><code>tenure_days</code> - days from first purchase to t</li>
+          <li><code>orders_last_90d</code> - orders in the 90 days before t</li>
+          <li><code>days_since_last_order</code> - computed when the training script runs (today)</li>
+          <li><code>support_tickets_180d</code> - tickets opened in the 180 days before t</li>
+          <li><code>exit_survey_score</code> - the churn survey answer, NaN for active customers</li>
+          <li><code>payment_failures_90d</code> - failed charges in the 90 days before t</li>
+          <li><code>sessions_week_after_cutoff</code> - site visits in the 7 days after t</li>
+          <li><code>avg_order_value</code> - mean order value over orders before t</li>
+        </ol>
+        <div class="callout tip">
+          <strong>The reveal: 3, 5 and 7</strong>
+          <strong>#3</strong> is the classic silent leak: days-since-last computed at training time instead of at the cutoff encodes everything that happened AFTER t - churners trivially have huge values. Compute it as (t - last order before t). <strong>#5</strong> is a field only populated at churn: exit-survey answers, final-invoice flags, cancellation reasons - the label wearing a costume. If a column is NaN for exactly the customers who did not churn, it is the answer key. <strong>#7</strong> is post-cutoff activity, the label window itself. The other five are clean because every one of them can be computed on the day t falls, using only the past.
+        </div>
+        <div class="prompt-box good"><span class="label">★ Build the windowed training frame - the cutoff does all the work</span>import pandas as pd
+
+events = pd.read_csv("data/ecommerce_orders.csv", parse_dates=["order_date"])
+cutoff = pd.Timestamp("2011-06-01")
+
+past   = events[events["order_date"] &lt;= cutoff]                # feature window
+future = events[(events["order_date"] &gt; cutoff) &amp;
+                (events["order_date"] &lt;= cutoff + pd.Timedelta(days=90))]
+
+feats = past.groupby("customer_id").agg(
+    tenure_days     = ("order_date", lambda s: (cutoff - s.min()).days),
+    orders_90d      = ("order_date",
+                       lambda s: (s &gt; cutoff - pd.Timedelta(days=90)).sum()),
+    days_since_last = ("order_date", lambda s: (cutoff - s.max()).days),
+    avg_order_value = ("amount", "mean"),
+)
+feats["churned_90d"] = (~feats.index.isin(future["customer_id"])).astype(int)</div>
+        <p>One frame per cutoff. Every aggregate above reads only <code>past</code>; the label reads only <code>future</code>. That physical separation - two dataframes, not one - is the cheapest leakage insurance there is.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2: MODEL + EVALUATE ============ -->
+  <section class="section" id="model">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers baseline-then-boost, imbalance, SHAP</span>
+      <h2>Baseline, boost, explain <span class="tag demo">★ 12 min · everyone builds</span></h2>
+    </div>
+    <p class="lede">Always fit <strong>logistic regression first</strong>: its coefficients are a sanity check (does more tenure really lower risk? do payment failures raise it?) and a floor the fancy model must beat. Then XGBoost or LightGBM as the workhorse. And because churn is imbalanced, <strong>accuracy is a lie</strong>: on 5% churn, a model that predicts "nobody churns" is 95% accurate and catches zero churners. Precision-recall is the honest lens - precision is your wasted intervention budget, recall is your missed churners.</p>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>★ Build-along: split by time, fit, evaluate honestly<span class="mini">8 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <div class="prompt-box good"><span class="label">★ Split BY TIME, never randomly - random rows leak the future</span>train_cutoffs = [pd.Timestamp("2010-12-01"), pd.Timestamp("2011-03-01")]
+test_cutoff   =  pd.Timestamp("2011-06-01")      # strictly later than training
+
+train = pd.concat([build_frame(events, c) for c in train_cutoffs])
+test  = build_frame(events, test_cutoff)
+
+X_tr, y_tr = train.drop(columns="churned_90d"), train["churned_90d"]
+X_te, y_te = test.drop(columns="churned_90d"),  test["churned_90d"]
+# NEVER train_test_split(shuffle=True) here: rows from the same calendar
+# period land on both sides, and validation quietly rehearses the future.</div>
+        <div class="prompt-box good"><span class="label">★ Logistic baseline, then the XGBoost workhorse</span>from sklearn.linear_model import LogisticRegression
+from xgboost import XGBClassifier
+
+base = LogisticRegression(max_iter=1000).fit(X_tr, y_tr)
+print(dict(zip(X_tr.columns, base.coef_[0].round(3))))   # signs make sense?
+
+model = XGBClassifier(
+    n_estimators=300, max_depth=4, learning_rate=0.05,
+    scale_pos_weight=(len(y_tr) - y_tr.sum()) / y_tr.sum(),  # imbalance
+    eval_metric="aucpr",
+).fit(X_tr, y_tr)</div>
+        <div class="prompt-box good"><span class="label">★ Evaluate on precision-recall - accuracy stays in the drawer</span>from sklearn.metrics import classification_report, average_precision_score
+
+proba = model.predict_proba(X_te)[:, 1]
+print(classification_report(y_te, proba &gt;= 0.5))
+print("PR-AUC:", round(average_precision_score(y_te, proba), 3))
+# Compare against the do-nothing baseline: PR-AUC of a random ranker
+# equals the churn rate itself. Beat THAT, not 0.5.</div>
+        <div class="prompt-box good"><span class="label">★ SHAP: global drivers, then one customer's story</span>import shap
+
+explainer   = shap.TreeExplainer(model)
+shap_values = explainer(X_te)
+
+shap.summary_plot(shap_values, X_te)      # beeswarm: which features drive risk
+shap.plots.waterfall(shap_values[42])     # why THIS customer scores 0.83</div>
+        <p>The beeswarm answers the stakeholder question ("what drives churn here?") once, globally. The waterfall answers the CRM question ("why is this customer flagged?") per row - that per-customer explanation is what makes a score actionable instead of spooky.</p>
+      </div>
+    </details>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Precision and recall plotted against the decision threshold. As the threshold rises, precision rises and recall falls. A movable threshold line sits in the middle. The zone left of it is labeled low threshold: many contacts, wasted offer budget, the precision cost. The zone right of it is labeled high threshold: few contacts, missed churners, the recall cost.">
+        <style>
+          .a7prT { font: 700 14px Inter, sans-serif; fill: #241A12; }
+          .a7prH { font: 700 12px Inter, sans-serif; fill: #241A12; }
+          .a7prB { font: 400 11.5px Inter, sans-serif; fill: #6B5D52; }
+          .a7prP { font: 700 12px Inter, sans-serif; fill: #7C2D12; }
+          .a7prR { font: 700 12px Inter, sans-serif; fill: #E06A2E; }
+          .a7prC { font: 700 12px Inter, sans-serif; fill: #0F766E; }
+        </style>
+        <rect x="0" y="0" width="880" height="330" fill="#FDF9F5"/>
+        <text class="a7prT" x="40" y="28">Precision vs recall as the threshold moves: two costs, one slider</text>
+
+        <line x1="80" y1="60" x2="80" y2="240" stroke="#6B5D52" stroke-width="1.5"/>
+        <line x1="80" y1="240" x2="820" y2="240" stroke="#6B5D52" stroke-width="1.5"/>
+        <text class="a7prB" x="80" y="262">threshold 0 (contact everyone)</text>
+        <text class="a7prB" x="632" y="262">threshold 1 (contact no one)</text>
+
+        <path d="M100,215 C300,200 560,140 800,80" stroke="#7C2D12" stroke-width="3" fill="none"/>
+        <text class="a7prP" x="700" y="66">Precision rises</text>
+
+        <path d="M100,75 C340,95 580,160 800,225" stroke="#E06A2E" stroke-width="3" fill="none" stroke-dasharray="8 5"/>
+        <text class="a7prR" x="104" y="62">Recall falls</text>
+
+        <line x1="430" y1="60" x2="430" y2="240" stroke="#0F766E" stroke-width="2.5" stroke-dasharray="6 4"/>
+        <circle cx="430" cy="160" r="8" fill="#0F766E"/>
+        <text class="a7prC" x="442" y="152">your threshold lives here</text>
+
+        <rect x="96" y="278" width="340" height="34" rx="8" fill="#F8EADD"/>
+        <text class="a7prH" x="110" y="299">Too low: wasted offers (precision cost)</text>
+        <rect x="452" y="278" width="368" height="34" rx="8" fill="#F8EADD"/>
+        <text class="a7prH" x="466" y="299">Too high: missed churners (recall cost)</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the threshold is a budget dial: precision prices wasted offers, recall prices missed churners</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Feature ideas that survive production<span class="mini">4 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The features that keep working are the boring ones any pipeline can recompute at any historical cutoff:</p>
+        <ul>
+          <li><strong>Tenure</strong> at the cutoff - months since first purchase or install.</li>
+          <li><strong>Usage trend deltas</strong> - this week's activity minus last week's, week-over-week, computed inside the feature window. A falling delta is often the earliest honest signal.</li>
+          <li><strong>Support tickets</strong> - count and recency before the cutoff; pair with resolution time if you have it.</li>
+          <li><strong>Payment failures</strong> - failed charges before the cutoff; among the strongest involuntary-churn predictors.</li>
+          <li><strong>Days-since-last, computed at the cutoff</strong> - the same recency that powers a6's BG/NBD, and this session's #1 leak when computed lazily at training time.</li>
+        </ul>
+        <p>Rule of thumb: for every feature, ask "could the data warehouse have produced this exact value on the morning of the cutoff date?" If the answer needs the word "today", it leaks.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3: PREDICTION IS NOT PREVENTION ============ -->
+  <section class="section" id="uplift">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers the Ascarza caveat + intervention economics</span>
+      <h2>Prediction is not prevention <span class="tag concept">8 min live</span></h2>
+    </div>
+    <p class="lede">Here is the finding that should be stapled to every churn model, from Eva Ascarza's research: <strong>the customers most likely to churn are often the least persuadable</strong>. Ranking by risk and mailing the top decile wastes budget twice - on "lost causes" no offer can save, and on "sure things" who would have stayed anyway. What moves money is targeting <strong>persuadables</strong>: customers whose behavior actually changes because you contacted them. That is uplift modeling - two models (treated vs control) or one model with a treatment flag - and it needs experiment data, which is why this course hands the intervention design to learn-experimentation-with-phoebe.</p>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The four customer types - and the one worth your budget<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Cross two counterfactuals - what they do if left alone, what they do if contacted - and every customer lands in one of four boxes:</p>
+        <ul>
+          <li><strong>Sure things</strong> - stay either way. Every discount sent here is margin set on fire.</li>
+          <li><strong>Persuadables</strong> - churn if ignored, stay if contacted. The ONLY box where the offer causes retention. All budget goes here.</li>
+          <li><strong>Lost causes</strong> - churn either way. Usually the top of your risk ranking, which is exactly the trap.</li>
+          <li><strong>Sleeping dogs</strong> - stay if ignored, churn BECAUSE you contacted them. A renewal reminder that wakes someone who forgot they were subscribed. Do not disturb.</li>
+        </ul>
+        <p>And the threshold question changes shape: not "which cutoff maximizes F1" but <strong>which cutoff maximizes (margin saved per rescued customer) minus (cost of offer x customers contacted)</strong>. A $5 winback email tolerates low precision; a $50 discount does not. Price the threshold from the intervention economics, then read the precision-recall curve at that price.</p>
+      </div>
+    </details>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A two by two grid of customer types. Columns: what they do if left alone, stay or churn. Rows: what they do if contacted, stay or churn. Sure things stay either way; persuadables stay only if contacted; lost causes churn either way; sleeping dogs churn because you contacted them. Arrows from the retention budget box point only at the persuadables cell.">
+        <style>
+          .a7pgT { font: 700 14px Inter, sans-serif; fill: #241A12; }
+          .a7pgH { font: 700 12.5px Inter, sans-serif; fill: #241A12; }
+          .a7pgW { font: 700 12.5px Inter, sans-serif; fill: #FFFFFF; }
+          .a7pgB { font: 400 11px Inter, sans-serif; fill: #241A12; }
+          .a7pgV { font: 400 11px Inter, sans-serif; fill: #FBE3D2; }
+          .a7pgN { font: 400 11.5px Inter, sans-serif; fill: #6B5D52; }
+          .a7pgR { font: 700 11px Inter, sans-serif; fill: #991B1B; }
+          .a7pgA { stroke: #0F766E; stroke-width: 2.6; fill: none; marker-end: url(#a7pgArr); }
+        </style>
+        <defs>
+          <marker id="a7pgArr" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+            <path d="M0,0 L8,4.5 L0,9 z" fill="#0F766E"/>
+          </marker>
+        </defs>
+        <rect x="0" y="0" width="880" height="360" fill="#FDF9F5"/>
+        <text class="a7pgT" x="40" y="28">The persuadability grid: budget flows to exactly one box</text>
+
+        <text class="a7pgN" x="200" y="66" text-anchor="middle">left alone: STAYS</text>
+        <text class="a7pgN" x="440" y="66" text-anchor="middle">left alone: CHURNS</text>
+        <text class="a7pgN" x="84" y="132" text-anchor="end">contacted:</text>
+        <text class="a7pgN" x="84" y="148" text-anchor="end">STAYS</text>
+        <text class="a7pgN" x="84" y="252" text-anchor="end">contacted:</text>
+        <text class="a7pgN" x="84" y="268" text-anchor="end">CHURNS</text>
+
+        <rect x="96" y="78" width="208" height="110" rx="10" fill="#F6C39E"/>
+        <text class="a7pgH" x="112" y="104">Sure things</text>
+        <text class="a7pgB" x="112" y="124">Stay either way.</text>
+        <text class="a7pgB" x="112" y="140">An offer here is pure cost:</text>
+        <text class="a7pgB" x="112" y="156">discounting the loyal.</text>
+
+        <rect x="336" y="78" width="208" height="110" rx="10" fill="#C2410C"/>
+        <text class="a7pgW" x="352" y="104">Persuadables</text>
+        <text class="a7pgV" x="352" y="124">Churn if ignored, stay if</text>
+        <text class="a7pgV" x="352" y="140">contacted. The only box the</text>
+        <text class="a7pgV" x="352" y="156">offer actually changes.</text>
+
+        <rect x="96" y="198" width="208" height="110" rx="10" fill="#FEF2F2" stroke="#FCA5A5" stroke-width="2"/>
+        <text class="a7pgR" x="112" y="224">Sleeping dogs</text>
+        <text class="a7pgB" x="112" y="244">Churn BECAUSE you called.</text>
+        <text class="a7pgB" x="112" y="260">Contact reminds them to</text>
+        <text class="a7pgB" x="112" y="276">cancel. Do not disturb.</text>
+
+        <rect x="336" y="198" width="208" height="110" rx="10" fill="#FBE3D2"/>
+        <text class="a7pgH" x="352" y="224">Lost causes</text>
+        <text class="a7pgB" x="352" y="244">Churn either way. Highest</text>
+        <text class="a7pgB" x="352" y="260">risk score, zero return -</text>
+        <text class="a7pgB" x="352" y="276">the risk-ranking trap.</text>
+
+        <rect x="620" y="118" width="220" height="70" rx="10" fill="#F8EADD" stroke="#0F766E" stroke-width="2"/>
+        <text class="a7pgH" x="636" y="144">Retention budget</text>
+        <text class="a7pgB" x="636" y="164">Offers, winbacks, saves -</text>
+        <text class="a7pgB" x="636" y="180">spent on uplift, not risk.</text>
+        <path class="a7pgA" d="M620,140 C580,132 566,132 550,133"/>
+        <path class="a7pgA" d="M624,182 C588,196 570,182 550,166"/>
+
+        <text class="a7pgN" x="40" y="342">Risk models sort top-to-bottom by churn probability; uplift models sort left-to-right. Money lives left-to-right.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - sure things, persuadables, lost causes, sleeping dogs: budget arrows point at one box only</figcaption>
+    </figure>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>Winback economics, priced honestly.</strong> Reactivation emails realistically win back 10-30% of lapsed customers - a real but bounded lever. The combination that works in practice: a7's risk score says who is fading, a6's P(alive) says who is still plausibly alive, and a4's value segments say who is worth an offer. Send the winback to high-value, fading-but-alive customers - not to the whole top of the risk ranking, where the lost causes live and the budget goes to die.</p>
+    </div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Try it yourself - this week <span class="tag exercise">◐ 40 min total</span></h2>
+    </div>
+    <ul>
+      <li>Build the windowed training frame on the synthetic orders data with cutoff 2011-06-01 and a 90-day label window, exactly as in Part 1.</li>
+      <li>Deliberately add one leaky feature - <code>days_since_last</code> computed from the dataset's max date instead of the cutoff. Refit and watch PR-AUC jump toward perfect. Feel the lie. Then remove it and keep the honest number.</li>
+      <li>Run the SHAP beeswarm and write the top-3 churn drivers as three plain sentences a stakeholder could act on - no feature names, no log-odds. "Customers whose weekly orders are falling" beats "orders_delta_w1_w2".</li>
+      <li>Answer in one sentence: your model's top decile has 60% churn probability - why might mailing all of them a discount still lose money?</li>
+    </ul>
+  </section>
+
+  <!-- ============ SOURCES ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session draws on</h2>
+    </div>
+    <p class="lede">ML churn modeling is standard supervised learning; what makes it churn-specific is the windowing discipline and the intervention caveat. This page teaches the working core of:</p>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Leakage and windowing discipline - feature window strictly precedes label window</span><span class="note">Part 1 · the spot-the-leak drill</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The XGBoost + SHAP workflow (logistic baseline, time-based split, PR evaluation)</span><span class="note">Part 2 · build-along</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Eva Ascarza - retention futility research: prediction is not prevention, target persuadables</span><span class="note">Part 3 · the four-types grid</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Intervention-economics thresholding (offer cost vs margin saved, not F1)</span><span class="note">Parts 2-3 · the budget dial</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Uplift modeling implementation (two-model, treatment-flag)</span><span class="note">Caveat taught; full method handed to learn-experimentation-with-phoebe</span></div>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions before you go 🎯 <span class="tag exercise">◐ 90 seconds</span></h2>
+    </div>
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">1 · A colleague splits the churn training frame with train_test_split(shuffle=True) and reports a stellar validation score. Why is the split itself a leak?</p>
+      <button class="qopt" type="button">A · It is not - random splits are the sklearn default for good reason</button>
+      <button class="qopt" type="button">B · Rows from the same calendar period land on both sides, so validation rehearses the very future the model claims to predict</button>
+      <button class="qopt" type="button">C · Random splits only fail when the classes are imbalanced</button>
+      <p class="qwhy">Churn frames are time-stamped: customers observed under the same market conditions, promotions and seasonality end up in both train and test, so the model is graded on a period it effectively trained on. Split by time - train on older cutoffs, test on a strictly later one - so validation simulates deployment.</p>
+    </div>
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">2 · Your churn rate is 5% and a model reports 95% accuracy. What have you learned about the model?</p>
+      <button class="qopt" type="button">A · Almost nothing - predicting "nobody churns" also scores 95% while catching zero churners</button>
+      <button class="qopt" type="button">B · It is production-ready - 95% clears any reasonable bar</button>
+      <button class="qopt" type="button">C · It is overfit, because accuracy that high is impossible on real data</button>
+      <p class="qwhy">On imbalanced classes, accuracy mostly measures the class ratio. Precision-recall is the honest lens: precision prices wasted intervention budget, recall prices missed churners, and PR-AUC should be compared against the churn rate itself (a random ranker's PR-AUC), not against 0.5.</p>
+    </div>
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">3 · Under uplift thinking, who gets the retention offer?</p>
+      <button class="qopt" type="button">A · The top decile by churn probability - highest risk, highest urgency</button>
+      <button class="qopt" type="button">B · Everyone above the threshold that maximizes F1</button>
+      <button class="qopt" type="button">C · Persuadables - customers who churn if ignored but stay if contacted</button>
+      <p class="qwhy">Ascarza's finding: the riskiest customers are often lost causes no offer can save, and blanket saves also pay sure things who would stay anyway - while sleeping dogs churn BECAUSE you contacted them. Only persuadables convert offer spend into retained revenue, and only experiment data can identify them.</p>
+    </div>
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Analyst session 7 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>The framing law</b><span>Features from behavior up to cutoff t; label from (t, t+30/60/90d]. Any overlap is leakage. The framing IS the model.</span></div>
+      <div class="cheat-item"><b>The classic leaks</b><span>The cancellation event itself · post-cutoff activity · churn-only fields (exit surveys, final-invoice flags) · days-since-last computed at training time.</span></div>
+      <div class="cheat-item"><b>Split by time</b><span>Train on older cutoffs, test on a strictly later one. Random splits let validation rehearse the future - the score is a lie.</span></div>
+      <div class="cheat-item"><b>Accuracy lies</b><span>95% accuracy on 5% churn can catch zero churners. Precision = wasted offers; recall = missed churners; benchmark PR-AUC against the churn rate.</span></div>
+      <div class="cheat-item"><b>Baseline then boost</b><span>Logistic regression first - coefficient signs are the sanity check and the floor. Then XGBoost/LightGBM with scale_pos_weight for imbalance.</span></div>
+      <div class="cheat-item"><b>SHAP two ways</b><span>summary_plot beeswarm = global drivers for the stakeholder deck; waterfall = why THIS customer scored 0.83, for the CRM.</span></div>
+      <div class="cheat-item"><b>Prediction is not prevention</b><span>Sure things / persuadables / lost causes / sleeping dogs. Budget goes to persuadables only - uplift, not risk ranking (Ascarza).</span></div>
+      <div class="cheat-item"><b>Price the threshold</b><span>Choose the cutoff where margin saved beats offer cost x contacts - intervention economics, never F1. Cheap emails tolerate low precision; discounts do not.</span></div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <span>Analyst session 7 of 8 · learn-customer-retention-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="a6-clv-buy-till-you-die.html">← Prev: CLV and buy-till-you-die</a> &nbsp;·&nbsp; <a href="a8-capstone-retention-report.html">Next: Capstone - the retention report →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>

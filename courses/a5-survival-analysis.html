@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Analyst session 5 of 8. Customers still active at the end of your data have not churned - they are censored, and averaging only the quitters biases lifetime low. Kaplan-Meier counts everyone honestly, log-rank says whether a segment gap is real, and Cox hazards turn covariates into multiplicative risk.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Survival analysis - learn customer retention with phoebe">
+<meta property="og:description" content="Analyst session 5 of 8. Censoring, Kaplan-Meier curves, log-rank tests, and Cox proportional hazards in lifelines - retention math that counts still-active customers honestly.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-customer-retention-with-phoebe/courses/a5-survival-analysis.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-customer-retention-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Survival analysis - learn customer retention with phoebe">
+<meta name="twitter:description" content="Censoring, Kaplan-Meier, log-rank, and Cox hazard ratios in lifelines - retention math that counts still-active customers honestly.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-customer-retention-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Analyst session 5 · Survival analysis - learn customer retention with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-customer-retention-with-phoebe</a> / Analyst session 5 of 8</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Customer Retention with Phoebe · Analyst track · Session 5 of 8</div>
+    <h1>Survival analysis and the <span class="accent">censoring problem</span></h1>
+    <p class="sub">Your best customers share an annoying statistical property: they have not churned yet. Average the lifetimes of only the customers who quit and you get a number biased low - you measured the quitters and ignored the loyal. Today you meet censoring, build Kaplan-Meier curves that count everyone honestly, test segment gaps with log-rank, and read Cox hazard ratios - all in lifelines, all feeding the retention report you ship in a8.</p>
+    <div class="chip-row">
+      <span class="chip level">🟠 Analyst track</span>
+      <span class="chip audience">Data analysts · Python</span>
+      <span class="chip audience">Build-along: lifelines</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:5">3-18 · Censoring &amp; KM</span>
+      <span class="a3" style="flex:7">18-40 · Cox hazards</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Where this session sits</h2>
+    </div>
+    <p class="lede">The cohort triangle from a2 describes what happened. Starting today, we model it. Survival analysis is the bridge: it keeps a2's honest, forward-looking spirit but adds two things the triangle cannot give you - correct handling of still-active customers, and covariate effects ("does contract type change churn risk?"). The RFM personas you built in a4 become the segments we compare here, and the P(alive) models in a6 pick up where censoring math leaves off. Work along in the companion notebook <code>notebooks/a5_survival.ipynb</code>.</p>
+    <div class="legend">
+      <span class="pill solid">Live - presented in session</span>
+      <span class="pill light">Self-study - read after class</span>
+      <span class="pill peach">★ Build-along - run the code yourself</span>
+      <span class="pill inkpill">Sources covered</span>
+    </div>
+    <div class="callout win">
+      <strong>★ What you walk out with today</strong>
+      A working definition of right-censoring and why "average lifetime of churned customers" is biased low, a Kaplan-Meier fit in lifelines with a defensible median lifetime, a log-rank test that says whether a segment gap is real, and a Cox model whose exp(coef) column you can read out loud - plus a clear rule for when a plain cohort table is all you need.
+    </div>
+  </section>
+
+  <!-- ============ PART 1: CENSORING + KM ============ -->
+  <section class="section" id="censoring-km">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers right-censoring + the Kaplan-Meier estimator</span>
+      <h2>The censoring problem <span class="tag concept">15 min live</span></h2>
+    </div>
+    <p class="lede">A customer who is still active when your data ends has <strong>not churned</strong> - their lifetime is at least what you observed, and that is all you know. They are <strong>right-censored</strong>. The naive "average customer lifetime" - mean tenure of the customers who churned - silently throws these people away, so it only counts the quitters and comes out biased low. <strong>Kaplan-Meier</strong> counts everyone: S(t) is the probability of surviving past t, drawn as a step curve that steps down only at observed churn events. Censored customers simply exit the risk set when their data runs out - they thin the denominator of later steps without stepping the curve themselves.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 410" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Six customer timelines: three end in observed churn events, three end censored while still active. Below them, the Kaplan-Meier step curve built from the same six customers steps down only at the three churn events, with censored customers exiting the risk set without a step. The naive mean of the three churned customers is 4.3 months while the Kaplan-Meier median survival is 7 months.">
+        <style>
+          .a5kmT { font: 700 14px Inter, sans-serif; fill: #241A12; }
+          .a5kmH { font: 600 11px Inter, sans-serif; fill: #6B5D52; }
+          .a5kmB { font: 700 11.5px Inter, sans-serif; fill: #241A12; }
+          .a5kmN { font: 400 11.5px Inter, sans-serif; fill: #6B5D52; }
+          .a5kmF { font: 600 10.5px Inter, sans-serif; fill: #7C2D12; }
+          .a5kmL { stroke: #6B5D52; stroke-width: 2; }
+        </style>
+        <rect x="0" y="0" width="880" height="410" fill="#FDF9F5"/>
+        <text class="a5kmT" x="40" y="28">Six customers, one honest curve: censoring thins the risk set without stepping S(t)</text>
+
+        <rect x="560" y="44" width="280" height="66" rx="10" fill="#F8EADD"/>
+        <text class="a5kmB" x="574" y="66">● churn observed - steps the curve</text>
+        <text class="a5kmB" x="574" y="86">○ censored - still active at data end,</text>
+        <text class="a5kmN" x="588" y="103">exits the risk set, no step</text>
+
+        <text class="a5kmH" x="92" y="68" text-anchor="end">A</text>
+        <line class="a5kmL" x1="100" y1="64" x2="232" y2="64"/><circle cx="232" cy="64" r="5" fill="#C2410C"/>
+        <text class="a5kmH" x="92" y="92" text-anchor="end">B</text>
+        <line class="a5kmL" x1="100" y1="88" x2="298" y2="88"/><circle cx="298" cy="88" r="5" fill="#FDF9F5" stroke="#0F766E" stroke-width="2.5"/>
+        <text class="a5kmH" x="92" y="116" text-anchor="end">C</text>
+        <line class="a5kmL" x1="100" y1="112" x2="364" y2="112"/><circle cx="364" cy="112" r="5" fill="#C2410C"/>
+        <text class="a5kmH" x="92" y="140" text-anchor="end">D</text>
+        <line class="a5kmL" x1="100" y1="136" x2="430" y2="136"/><circle cx="430" cy="136" r="5" fill="#FDF9F5" stroke="#0F766E" stroke-width="2.5"/>
+        <text class="a5kmH" x="92" y="164" text-anchor="end">E</text>
+        <line class="a5kmL" x1="100" y1="160" x2="562" y2="160"/><circle cx="562" cy="160" r="5" fill="#C2410C"/>
+        <text class="a5kmH" x="92" y="188" text-anchor="end">F</text>
+        <line class="a5kmL" x1="100" y1="184" x2="694" y2="184"/><circle cx="694" cy="184" r="5" fill="#FDF9F5" stroke="#0F766E" stroke-width="2.5"/>
+
+        <text class="a5kmB" x="100" y="220">Kaplan-Meier S(t) from the same six customers</text>
+        <line x1="100" y1="225" x2="100" y2="355" stroke="#6B5D52" stroke-width="1.5"/>
+        <text class="a5kmH" x="92" y="229" text-anchor="end">1.0</text>
+        <text class="a5kmH" x="92" y="294" text-anchor="end">0.5</text>
+        <text class="a5kmH" x="92" y="359" text-anchor="end">0.0</text>
+        <path d="M100,225 H232 V247 H364 V274 H562 V314 H727" fill="none" stroke="#7C2D12" stroke-width="3"/>
+        <line x1="298" y1="240" x2="298" y2="254" stroke="#0F766E" stroke-width="2.5"/>
+        <line x1="430" y1="267" x2="430" y2="281" stroke="#0F766E" stroke-width="2.5"/>
+        <line x1="694" y1="307" x2="694" y2="321" stroke="#0F766E" stroke-width="2.5"/>
+        <text class="a5kmF" x="238" y="242">x 5/6</text>
+        <text class="a5kmF" x="370" y="269">x 3/4</text>
+        <text class="a5kmF" x="568" y="309">x 1/2</text>
+        <line x1="100" y1="290" x2="562" y2="290" stroke="#0F766E" stroke-width="1.5" stroke-dasharray="5 4"/>
+        <line x1="562" y1="290" x2="562" y2="355" stroke="#0F766E" stroke-width="1.5" stroke-dasharray="5 4"/>
+        <text class="a5kmB" x="572" y="342" fill="#0F766E">median = 7 months</text>
+        <line x1="100" y1="355" x2="770" y2="355" stroke="#6B5D52" stroke-width="1.5"/>
+        <text class="a5kmH" x="100" y="372" text-anchor="middle">0</text>
+        <text class="a5kmH" x="232" y="372" text-anchor="middle">2</text>
+        <text class="a5kmH" x="364" y="372" text-anchor="middle">4</text>
+        <text class="a5kmH" x="496" y="372" text-anchor="middle">6</text>
+        <text class="a5kmH" x="628" y="372" text-anchor="middle">8</text>
+        <text class="a5kmH" x="760" y="372" text-anchor="middle">10</text>
+        <text class="a5kmN" x="40" y="400">Naive mean of the 3 churned = 4.3 months; KM median = 7 months. Ignoring censoring understates lifetime.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - three churn events step the curve, three censored exits only thin the risk set</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>★ Build-along: the six-customer worked example<span class="mini">8 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Six customers, observed for up to ten months. A churned at month 2, C at month 4, E at month 7. B, D and F were still active when the data ended, at months 3, 5 and 9 - censored. Walk the estimator by hand once, then let lifelines do it forever:</p>
+        <ul>
+          <li><strong>Month 2:</strong> 6 customers at risk, 1 churns. S(2) = 5/6 = 0.83. B is censored at month 3 - the curve does not move, but B leaves the risk set.</li>
+          <li><strong>Month 4:</strong> 4 at risk (C, D, E, F), 1 churns. S(4) = 0.83 x 3/4 = 0.63. D exits censored at month 5.</li>
+          <li><strong>Month 7:</strong> 2 at risk (E, F), 1 churns. S(7) = 0.63 x 1/2 = 0.31. F exits censored at month 9. Median survival - where S(t) crosses 0.5 - is 7 months.</li>
+          <li><strong>The naive number:</strong> mean tenure of the churned three is (2 + 4 + 7) / 3 = 4.3 months. The honest median is 7. Same data, and the naive figure understated lifetime by counting only quitters.</li>
+        </ul>
+        <div class="prompt-box good"><span class="label">★ The same example in lifelines - fit, plot, median</span>from lifelines import KaplanMeierFitter
+
+durations      = [2, 3, 4, 5, 7, 9]     # months each customer was observed
+event_observed = [1, 0, 1, 0, 1, 0]     # 1 = churn seen, 0 = censored (still active)
+
+kmf = KaplanMeierFitter()
+kmf.fit(durations, event_observed=event_observed, label="All customers")
+kmf.plot_survival_function()             # the step curve, with censor ticks
+print(kmf.median_survival_time_)         # 7.0 - not the naive 4.3</div>
+        <div class="callout tip">
+          <strong>But what is a "churn event" for a shop?</strong>
+          Contract businesses observe churn: the cancellation lands in a table with a timestamp. Ecommerce and games do not - a quiet customer might be gone or just slow. To run survival on non-subscription data you must define churn as an <strong>inactivity window</strong>: no purchase for 60 / 90 / 120 days, or a multiple of that customer's own inter-purchase gap. Write the definition down; the homework makes you feel how much the answer moves when it changes.
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2: COMPARING SEGMENTS ============ -->
+  <section class="section" id="segments">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers per-segment KM + the log-rank test</span>
+      <h2>Comparing segments honestly <span class="tag concept">8 min live</span></h2>
+    </div>
+    <p class="lede">One KM curve per segment - contract type, acquisition channel, or the RFM personas from a4 - and the gaps become visible. But visible is not the same as real: two curves from the same population will drift apart by luck. The <strong>log-rank test</strong> compares whole curves, not one cherry-picked time point, and answers "how surprising is a gap this size if the segments actually churn identically?" This is the censoring-correct cousin of reading a2's triangle rows: same question, but every still-active customer is counted instead of dropped.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two Kaplan-Meier curves over 24 months: a two-year contract segment stays near 75 percent survival while a month-to-month segment falls toward 35 percent. The area between the curves is shaded, and a verdict box reports an illustrative log-rank p-value of 0.003, meaning a gap this size is very unlikely if the segments churn identically.">
+        <style>
+          .a5lrT { font: 700 14px Inter, sans-serif; fill: #241A12; }
+          .a5lrH { font: 600 11px Inter, sans-serif; fill: #6B5D52; }
+          .a5lrB { font: 700 11.5px Inter, sans-serif; fill: #241A12; }
+          .a5lrN { font: 400 11.5px Inter, sans-serif; fill: #6B5D52; }
+        </style>
+        <rect x="0" y="0" width="880" height="340" fill="#FDF9F5"/>
+        <text class="a5lrT" x="40" y="28">Two segments, one question: is the gap real or luck?</text>
+        <path d="M80,60 H140 V78 H240 V91 H360 V104 H480 V115 H560 V203 H480 V188 H360 V170 H260 V144 H180 V104 H120 V60 Z" fill="#FBE3D2" opacity="0.6"/>
+        <path d="M80,60 H140 V78 H240 V91 H360 V104 H480 V115 H560" fill="none" stroke="#7C2D12" stroke-width="3"/>
+        <path d="M80,60 H120 V104 H180 V144 H260 V170 H360 V188 H480 V203 H560" fill="none" stroke="#E06A2E" stroke-width="3"/>
+        <text class="a5lrB" x="392" y="94" fill="#7C2D12">Two-year contract</text>
+        <text class="a5lrB" x="272" y="222" fill="#E06A2E">Month-to-month</text>
+        <line x1="80" y1="60" x2="80" y2="280" stroke="#6B5D52" stroke-width="1.5"/>
+        <line x1="80" y1="280" x2="560" y2="280" stroke="#6B5D52" stroke-width="1.5"/>
+        <text class="a5lrH" x="72" y="64" text-anchor="end">1.0</text>
+        <text class="a5lrH" x="72" y="174" text-anchor="end">0.5</text>
+        <text class="a5lrH" x="72" y="284" text-anchor="end">0.0</text>
+        <text class="a5lrH" x="80" y="298" text-anchor="middle">0</text>
+        <text class="a5lrH" x="200" y="298" text-anchor="middle">6</text>
+        <text class="a5lrH" x="320" y="298" text-anchor="middle">12</text>
+        <text class="a5lrH" x="440" y="298" text-anchor="middle">18</text>
+        <text class="a5lrH" x="560" y="298" text-anchor="middle">24 mo</text>
+        <rect x="600" y="70" width="240" height="152" rx="10" fill="#F8EADD"/>
+        <text class="a5lrB" x="616" y="96">Log-rank verdict</text>
+        <text class="a5lrB" x="616" y="120" fill="#7C2D12">p = 0.003 (illustrative)</text>
+        <text class="a5lrN" x="616" y="144">A gap this size is very</text>
+        <text class="a5lrN" x="616" y="162">unlikely if both segments</text>
+        <text class="a5lrN" x="616" y="180">churn identically. It tests</text>
+        <text class="a5lrN" x="616" y="198">whole curves, not one</text>
+        <text class="a5lrN" x="616" y="216">cherry-picked month.</text>
+        <text class="a5lrN" x="40" y="326">KM per segment is the censoring-correct cousin of a2's retention rows; log-rank replaces eyeballing the gap.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the shaded gap is the claim, the log-rank p-value is the evidence</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>★ Build-along: two KM fits overlaid + log-rank<span class="mini">6 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Split the frame by segment, fit one KaplanMeierFitter per side, plot on a shared axis, then let the test speak. Swap in any a4 persona pair - Champions vs Hibernating is a favorite.</p>
+        <div class="prompt-box good"><span class="label">★ Overlay two segments, then test the gap</span>from lifelines import KaplanMeierFitter
+from lifelines.statistics import logrank_test
+
+m2m  = df[df["contract"] == "month-to-month"]
+two  = df[df["contract"] == "two-year"]
+
+ax = KaplanMeierFitter().fit(m2m["tenure_months"], m2m["churned"],
+                             label="Month-to-month").plot_survival_function()
+KaplanMeierFitter().fit(two["tenure_months"], two["churned"],
+                        label="Two-year").plot_survival_function(ax=ax)
+
+res = logrank_test(m2m["tenure_months"], two["tenure_months"],
+                   event_observed_A=m2m["churned"],
+                   event_observed_B=two["churned"])
+print(res.p_value)     # small = the gap is unlikely to be luck</div>
+        <p>Two reading rules. First, a tiny p-value on a tiny gap can still be commercially boring - report the gap size and the p-value together. Second, if the curves cross, the log-rank test loses power and "which segment is better" depends on the horizon; say so instead of averaging it away.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3: COX ============ -->
+  <section class="section" id="cox">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers Cox proportional hazards + when not to bother</span>
+      <h2>Cox proportional hazards <span class="tag concept">14 min live</span></h2>
+    </div>
+    <p class="lede">KM compares one segmentation at a time. <strong>Cox proportional hazards</strong> handles many covariates at once, and it is <strong>semi-parametric</strong>: it estimates each covariate's effect as a <strong>hazard ratio</strong> without ever specifying the baseline churn curve. The canonical Telco read: a month-to-month contract carries roughly <strong>3x the churn hazard</strong> of a two-year contract, other covariates held fixed. Read <code>exp(coef)</code> as multiplicative risk, verify the proportional-hazards assumption with <code>check_assumptions()</code>, and judge ranking quality with the C-index.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A hazard-ratio forest plot with three covariate rows on a log scale around a reference line at hazard ratio 1.0. Month-to-month contract sits near 3.0 with a confidence interval clear of 1.0, a schematic protective covariate sits near 0.7, and a third covariate's interval crosses 1.0 so no effect should be reported.">
+        <style>
+          .a5cxT { font: 700 14px Inter, sans-serif; fill: #241A12; }
+          .a5cxH { font: 600 11px Inter, sans-serif; fill: #6B5D52; }
+          .a5cxB { font: 700 11.5px Inter, sans-serif; fill: #241A12; }
+          .a5cxN { font: 400 11.5px Inter, sans-serif; fill: #6B5D52; }
+        </style>
+        <rect x="0" y="0" width="880" height="330" fill="#FDF9F5"/>
+        <text class="a5cxT" x="40" y="28">Reading a forest plot: which side of 1.0, and does the interval cross it?</text>
+        <line x1="420" y1="70" x2="420" y2="245" stroke="#0F766E" stroke-width="2" stroke-dasharray="5 4"/>
+        <text class="a5cxB" x="420" y="60" text-anchor="middle" fill="#0F766E">HR = 1.0 - no effect</text>
+
+        <text class="a5cxB" x="52" y="114">Month-to-month (vs two-year)</text>
+        <line x1="565" y1="110" x2="623" y2="110" stroke="#C2410C" stroke-width="3"/>
+        <circle cx="594" cy="110" r="6" fill="#7C2D12"/>
+        <text class="a5cxN" x="650" y="114">HR ~3.0 - the canonical Telco read</text>
+
+        <text class="a5cxB" x="52" y="164">Covariate B - protective</text>
+        <line x1="325" y1="160" x2="403" y2="160" stroke="#E06A2E" stroke-width="3"/>
+        <circle cx="363" cy="160" r="6" fill="#C2410C"/>
+        <text class="a5cxN" x="650" y="164">HR 0.7 - lowers risk (schematic)</text>
+
+        <text class="a5cxB" x="52" y="214">Covariate C - no evidence</text>
+        <line x1="394" y1="210" x2="462" y2="210" stroke="#6B5D52" stroke-width="3"/>
+        <circle cx="428" cy="210" r="6" fill="#6B5D52"/>
+        <text class="a5cxN" x="650" y="214">CI crosses 1.0 - report nothing</text>
+
+        <line x1="180" y1="245" x2="700" y2="245" stroke="#6B5D52" stroke-width="1.5"/>
+        <text class="a5cxH" x="310" y="262" text-anchor="middle">0.5</text>
+        <text class="a5cxH" x="420" y="262" text-anchor="middle">1.0</text>
+        <text class="a5cxH" x="530" y="262" text-anchor="middle">2.0</text>
+        <text class="a5cxH" x="640" y="262" text-anchor="middle">4.0</text>
+        <text class="a5cxH" x="700" y="262" text-anchor="end">hazard ratio (log scale)</text>
+        <text class="a5cxN" x="40" y="292">exp(coef) is multiplicative: HR 3.0 = three times the instantaneous churn risk among survivors, at every t.</text>
+        <text class="a5cxN" x="40" y="312">Right of 1.0 raises risk, left lowers it. Bars B and C are schematic reading practice, not Telco estimates.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the whole model summary in one picture: point, interval, and the 1.0 line</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>★ Build-along: CoxPHFitter on a Telco-shaped frame<span class="mini">8 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>One row per customer: tenure in months, a churn flag, and covariates. Fit, print the summary, and read the exp(coef) column out loud before anything else.</p>
+        <div class="prompt-box good"><span class="label">★ Fit, read hazard ratios, check the assumption, judge ranking</span>from lifelines import CoxPHFitter
+
+model_df = telco[["tenure_months", "churned",
+                  "contract_m2m", "monthly_charges", "tech_support"]]
+
+cph = CoxPHFitter()
+cph.fit(model_df, duration_col="tenure_months", event_col="churned")
+
+cph.print_summary()          # exp(coef) column = hazard ratios
+cph.plot_partial_effects_on_outcome("contract_m2m", values=[0, 1])
+cph.check_assumptions(model_df)   # proportional-hazards diagnostics
+print(cph.concordance_index_)     # C-index: 0.5 = coin flip, ~0.7+ useful</div>
+        <ul>
+          <li><strong>exp(coef) = 3.0</strong> reads: "at any moment, a month-to-month customer who is still with us has three times the instantaneous churn risk of an otherwise-identical two-year customer."</li>
+          <li><strong>Proportional hazards</strong> means that ratio is assumed constant over time. <code>check_assumptions()</code> flags covariates that violate it - stratify or add time-varying terms rather than shipping a broken ratio.</li>
+          <li><strong>C-index</strong> is the probability the model correctly orders a random pair by churn time - a ranking score, not a calibration score.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Hazard vs probability, and why models get versions<span class="mini">4 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Hazard is not probability.</strong> The hazard at t is the instantaneous churn risk among customers who survived to t - risk per unit time, conditional on still being here. S(t) is the cumulative result of running that gauntlet. A segment can have high early hazard and still contain the most durable survivors, which is exactly the a5 lesson a6 leans on: churn falls with tenure because the fragile leave first.</p>
+        <p><strong>The frozen-history tie-in.</strong> a2's completed triangle cells are facts: frozen, immutable, never restated. Survival estimates are not facts - they are <strong>models</strong>, and they legitimately update as more customers age and censored lifetimes resolve. So version them: stamp every KM median and hazard ratio with a fit date and a data cutoff, and never splice a re-fit estimate into a frozen reported table as if it were the same kind of number.</p>
+        <p><strong>When NOT to reach for survival:</strong> descriptive reporting where the cohort table already answers the question. Reach for it when censoring is material (many still-active customers), when you need covariate effects, or when you want individual lifetime estimates. A tool upgrade you do not need is just a slower way to say the same thing.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>Subscription and non-subscription businesses are playing different games.</strong> A contract business observes churn: the cancellation is an event with a timestamp, so KM and Cox apply directly - which is why Telco churn is the canonical teaching dataset. A shop or a game only ever <em>infers</em> churn from silence, through the inactivity-window definitions from Part 1. That inference gap is precisely why the buy-till-you-die models in a6 exist: they replace "define a window and hope" with a per-customer P(alive).</p>
+    </div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Try it yourself - this week <span class="tag exercise">◐ 30 min total</span></h2>
+    </div>
+    <ul>
+      <li>Fit KM on the synthetic ecommerce orders using a <strong>90-day inactivity</strong> churn definition: a customer's duration ends at their last purchase + 90 days if no further order lands in that window; otherwise they are censored at the data cutoff.</li>
+      <li>Re-run with 60-day and 120-day windows and watch <code>median_survival_time_</code> move. Write one sentence on what that means: the churn definition IS a modeling choice, and it belongs printed on the chart.</li>
+      <li>Overlay KM for two a4 personas and run the log-rank test. Report gap size and p-value together, in one stakeholder-ready sentence.</li>
+      <li>Both plots go into your running retention report - a8 assembles it, and a6 will want your churn-window choice as its baseline.</li>
+    </ul>
+  </section>
+
+  <!-- ============ SOURCES ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session draws on</h2>
+    </div>
+    <p class="lede">Survival analysis is a mature statistical field; this session teaches the working retention-analyst core of:</p>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">lifelines documentation - KaplanMeierFitter, logrank_test, CoxPHFitter</span><span class="note">Parts 1-3 · the build-along API</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Kaplan-Meier and Cox proportional hazards foundations</span><span class="note">Parts 1 + 3 · estimator, hazard ratios, PH assumption, C-index</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Telco churn teaching dataset - the canonical contract-type read</span><span class="note">Part 3 · used for shape and the ~3x month-to-month hazard; full modeling in a7</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Course-map churn-window guidance for non-subscription data</span><span class="note">Part 1 + homework · 60/90/120 days or a multiple of own inter-purchase gap</span></div>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions before you go 🎯 <span class="tag exercise">◐ 90 seconds</span></h2>
+    </div>
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">1 · Mean tenure of your churned customers is 4.3 months. Why is "average customer lifetime is 4.3 months" wrong?</p>
+      <button class="qopt" type="button">A · The sample of churned customers is too small to average</button>
+      <button class="qopt" type="button">B · Means are always the wrong summary for lifetimes; only modes work</button>
+      <button class="qopt" type="button">C · Everyone still active is excluded - the average counts only quitters, so it is biased low</button>
+      <p class="qwhy">Still-active customers are right-censored: their lifetimes are at least what you observed, and they are disproportionately your durable customers. Averaging only observed churns systematically understates lifetime. KM keeps them in the risk set and gets the honest answer.</p>
+    </div>
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">2 · Your Cox summary shows exp(coef) = 3.0 for month-to-month contracts. What does that mean?</p>
+      <button class="qopt" type="button">A · At any moment, a still-active month-to-month customer has 3x the instantaneous churn risk of the reference group</button>
+      <button class="qopt" type="button">B · Month-to-month customers churn exactly 3 months earlier on average</button>
+      <button class="qopt" type="button">C · 3% more month-to-month customers churn each month</button>
+      <p class="qwhy">A hazard ratio is multiplicative instantaneous risk among survivors, assumed constant over time (that is the proportional-hazards assumption - check it). It is not a difference in months and not a percentage-point gap.</p>
+    </div>
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">3 · When is the plain a2 cohort table enough, with no survival model at all?</p>
+      <button class="qopt" type="button">A · Never - survival analysis is always strictly better</button>
+      <button class="qopt" type="button">B · Descriptive reporting where censoring is immaterial and you need no covariate effects or individual lifetime estimates</button>
+      <button class="qopt" type="button">C · Only for games, never for ecommerce</button>
+      <p class="qwhy">The cohort table is the right tool for describing what happened. Survival earns its complexity when censoring is material, when you need covariate effects (Cox), or when you want per-customer lifetime estimates. Matching tool to question is the skill.</p>
+    </div>
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Analyst session 5 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>Right-censoring</b><span>Still active at data end = not churned, lifetime at least what you saw. Dropping them biases every lifetime estimate low.</span></div>
+      <div class="cheat-item"><b>Kaplan-Meier S(t)</b><span>Probability of surviving past t. Steps down only at observed churn events; censored customers exit the risk set without a step.</span></div>
+      <div class="cheat-item"><b>The naive-lifetime trap</b><span>Mean tenure of churned customers counts only quitters. Six-customer example: naive 4.3 months vs honest KM median 7.</span></div>
+      <div class="cheat-item"><b>Log-rank test</b><span>Is the gap between two KM curves real? Tests whole curves, not one time point. Report gap size and p-value together.</span></div>
+      <div class="cheat-item"><b>Hazard vs probability</b><span>Hazard = instantaneous risk among survivors at t, per unit time. S(t) is the cumulative result. High early hazard can coexist with durable survivors.</span></div>
+      <div class="cheat-item"><b>Cox PH</b><span>Semi-parametric: exp(coef) = multiplicative hazard ratio, no baseline needed. check_assumptions() before trusting; C-index for ranking quality.</span></div>
+      <div class="cheat-item"><b>Churn windows for shops</b><span>Non-subscription churn = inactivity window (60/90/120d, or a multiple of own inter-purchase gap). The definition is a modeling choice - print it.</span></div>
+      <div class="cheat-item"><b>Models get versions</b><span>Survival estimates update as data accrues - stamp fit date + cutoff. Unlike a2's frozen triangle, they are models, not frozen facts.</span></div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <span>Analyst session 5 of 8 · learn-customer-retention-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="a4-segmentation-rfm.html">← Prev: Segmentation</a> &nbsp;·&nbsp; <a href="../index.html">All sessions</a> &nbsp;·&nbsp; <a href="a6-clv-buy-till-you-die.html">Next: CLV and buy-till-you-die →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>

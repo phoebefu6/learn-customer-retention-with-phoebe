@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Analyst session 3 of 8. The retention viz gallery: curve shapes as diagnosis, the truncated-cohort trap, layer-cake and growth-accounting charts, the power-user curve, and a live simulator where four product levers and one ad-spend trap fight over the same two headline numbers.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="The retention viz gallery - learn customer retention with phoebe">
+<meta property="og:description" content="Curve shapes as diagnosis, layer-cake and growth accounting, the truncated-cohort trap, and the flatten-the-curve simulator with a double-ad-spend anti-lever.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-customer-retention-with-phoebe/courses/a3-retention-viz-gallery.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-customer-retention-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The retention viz gallery - learn customer retention with phoebe">
+<meta name="twitter:description" content="Curve shapes as diagnosis, layer-cake and growth accounting, and the flatten-the-curve simulator with a double-ad-spend anti-lever.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-customer-retention-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Analyst session 3 · The retention viz gallery - learn customer retention with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-customer-retention-with-phoebe</a> / Analyst session 3 of 8</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Customer Retention with Phoebe · Analyst track · Session 3 of 8</div>
+    <h1>The retention <span class="accent">viz gallery</span></h1>
+    <p class="sub">The heatmap from a2 is one chart in a family. Each member answers a different question: the curve answers "do we have product-market fit", the layer-cake answers "is revenue durable", growth accounting answers "are we filling the bucket faster than it leaks", the power-user curve answers "who is actually hooked". Today you build the family in Python - and then drive a live simulator where four product levers fight one very expensive trap.</p>
+    <div class="chip-row">
+      <span class="chip level">🟠 Analyst track</span>
+      <span class="chip audience">Data analysts · Python</span>
+      <span class="chip audience">▶ Live flatten-the-curve simulator</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-16 · Curves &amp; shapes</span>
+      <span class="a3" style="flex:5">16-40 · Gallery + simulator</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>From one chart to a vocabulary</h2>
+    </div>
+    <p class="lede">a2 gave you the cohort table and its heatmap. This session turns the same table into every other chart the retention conversation needs, teaches the one averaging trap that quietly corrupts most of them, and ends in the course's signature simulator: a real cohort engine in your browser where you flatten the curve lever by lever - and discover what doubling the ad budget does and does not buy. Companion notebook: <code>notebooks/a3_viz_gallery.ipynb</code>.</p>
+    <div class="legend">
+      <span class="pill solid">Live - presented in session</span>
+      <span class="pill light">Self-study - read after class</span>
+      <span class="pill peach">▶ Simulator - drive it yourself</span>
+      <span class="pill inkpill">Sources covered</span>
+    </div>
+    <div class="callout win">
+      <strong>★ What you walk out with today</strong>
+      The three curve shapes and what each means for the business, the truncated-cohort averaging trap and its fix, four charts beyond the heatmap (curves, layer-cake, growth accounting, L28) with the matplotlib recipes, and a felt sense - from driving the simulator - of why retention compounds and acquisition rents.
+    </div>
+  </section>
+
+  <!-- ============ PART 1: CURVE SHAPES ============ -->
+  <section class="section" id="curve-shapes">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers curve shapes as PMF diagnosis (Sequoia, Reforge)</span>
+      <h2>The shape is the diagnosis <span class="tag concept">7 min live</span></h2>
+    </div>
+    <p class="lede">Take any cohort row from a2's table and plot it left to right: that is a <strong>retention curve</strong>. Three shapes exist, and they map one-to-one onto business verdicts. Investors literally sort companies by which shape they see - a curve that flattens above zero means a durable core of users found lasting value; a curve that slides to zero means the bucket leaks everything, and growth is a treadmill of ever-more acquisition.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three retention curve shapes. Sloping to zero: the leaky bucket, no product-market fit. Declining then flattening to an asymptote above zero: a durable retained base, the good shape. The smile: flattening then bending upward as churned users resurrect, the rare best case.">
+        <style>
+          .csT { font: 700 14px Inter, sans-serif; fill: #241A12; }
+          .csH { font: 700 12.5px Inter, sans-serif; fill: #241A12; }
+          .csB { font: 400 11.5px Inter, sans-serif; fill: #6B5D52; }
+          .csAx { stroke: #D3C4B8; stroke-width: 1.5; }
+        </style>
+        <rect x="0" y="0" width="880" height="320" fill="#FDF9F5"/>
+        <text class="csT" x="40" y="28">Three shapes, three verdicts</text>
+
+        <rect x="40" y="48" width="250" height="180" rx="10" fill="#FFFFFF" stroke="#EFE2D6"/>
+        <line class="csAx" x1="62" y1="200" x2="272" y2="200"/>
+        <line class="csAx" x1="62" y1="66" x2="62" y2="200"/>
+        <path d="M62,80 C110,150 170,185 268,198" fill="none" stroke="#991B1B" stroke-width="3"/>
+        <text class="csH" x="62" y="252">Sloping to zero</text>
+        <text class="csB" x="62" y="272">Leaky bucket. No PMF. Growth is</text>
+        <text class="csB" x="62" y="290">rented, one ad campaign at a time.</text>
+
+        <rect x="330" y="48" width="250" height="180" rx="10" fill="#FFFFFF" stroke="#EFE2D6"/>
+        <line class="csAx" x1="352" y1="200" x2="562" y2="200"/>
+        <line class="csAx" x1="352" y1="66" x2="352" y2="200"/>
+        <path d="M352,80 C395,135 430,148 460,152 C500,157 530,158 558,158" fill="none" stroke="#C2410C" stroke-width="3"/>
+        <line x1="352" y1="158" x2="558" y2="158" stroke="#EA580C" stroke-width="1.5" stroke-dasharray="5 4"/>
+        <text class="csH" x="352" y="252">Flattens to an asymptote</text>
+        <text class="csB" x="352" y="272">A durable core found lasting value.</text>
+        <text class="csB" x="352" y="290">The higher the floor, the better. PMF.</text>
+
+        <rect x="620" y="48" width="250" height="180" rx="10" fill="#FFFFFF" stroke="#EFE2D6"/>
+        <line class="csAx" x1="642" y1="200" x2="852" y2="200"/>
+        <line class="csAx" x1="642" y1="66" x2="642" y2="200"/>
+        <path d="M642,80 C685,140 715,152 745,154 C785,156 815,140 848,120" fill="none" stroke="#0F766E" stroke-width="3"/>
+        <text class="csH" x="642" y="252">The smile</text>
+        <text class="csB" x="642" y="272">Churned users come back. Rarest and</text>
+        <text class="csB" x="642" y="290">best - winback or seasonality done right.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - slide to zero, flatten, or smile: every cohort row is one of these three</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Flatten the curve: the product goal in one sentence<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Casey Winters' formulation is the cleanest: <strong>a flattened retention curve of your key action, at its natural frequency, plus month-over-month growth in new users, is product-market fit</strong>. Not the D1 number, not the download count - the flat part. Everything a product team does for retention is one of two moves:</p>
+        <ul>
+          <li><strong>Raise the asymptote</strong> - get more of each cohort into the durable core (better onboarding, better habit loops, loyalty economics).</li>
+          <li><strong>Bend the tail up</strong> - resurrect the churned (winback campaigns, reactivation nudges). The only move that creates a smile.</li>
+        </ul>
+        <p>And the benchmark discipline from a1 applies to shapes too: in the 2025 GameAnalytics data (11,600 games), the median mobile game holds under 4% of players at day 7 - most curves in the wild slide to zero. A curve that flattens anywhere above zero already puts you in the minority.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p><strong>The one graph behind a $1B exit.</strong> Dollar Shave Club's cohort curves flattened near 50% at six months - category-leading in Second Measure's transaction data. That flat tail, not the viral video, was the durable-revenue story Unilever paid one billion dollars for. Investors do not read your deck's adjectives; they read the tail of your curve.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The truncated-cohort trap: why "average retention" quietly lies<span class="mini">4 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The obvious move - <code>retention.mean(axis=0)</code> to get "the average curve" - is wrong on real data, and wrong in a way nobody notices. Column 1 averages over every cohort, but column 10 only includes cohorts old enough to have a month 10, which are your oldest vintages. If newer cohorts retain better (they usually do, if the product is improving), the average curve DROPS at late months purely because the good young cohorts have not arrived there yet - a vintage-mix artifact, not a behavior.</p>
+        <ul>
+          <li><strong>Fix 1:</strong> average only over cohorts that have completed the period, and print n per column: <code>retention.count()</code> alongside <code>retention.mean()</code>.</li>
+          <li><strong>Fix 2 (better):</strong> do not average at all - overlay the curves, fade older cohorts grey, bold the newest two or three. The vintage differences ARE the story.</li>
+          <li><strong>Corollary:</strong> never include the still-filling current month in any average. Partial windows drag every mean down - a2's frozen-history rule again.</li>
+        </ul>
+        <div class="prompt-box"><span class="label">Overlaid curves, older cohorts faded</span>ax = retention.T.plot(figsize=(10, 5), color="#D3C4B8", legend=False)
+retention.tail(3).T.plot(ax=ax, linewidth=2.5, color="#C2410C", legend=True)
+ax.set_ylim(0, 1)
+ax.set_xlabel("Months since joining")
+ax.set_title("Every cohort's curve - newest three in ember")</div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2: THE GALLERY ============ -->
+  <section class="section" id="gallery">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers layer-cake, growth accounting, quick ratio, L28</span>
+      <h2>Four charts beyond the heatmap <span class="tag concept">9 min live</span></h2>
+    </div>
+    <p class="lede">Each chart in the family re-slices the same cohort data for a different audience. The <strong>layer-cake</strong> stacks each cohort's revenue over calendar time - if old layers stay thick, revenue is durable. <strong>Growth accounting</strong> decomposes month-over-month change into new + resurrected - churned. The <strong>quick ratio</strong> compresses that into one line. The <strong>L28 power-user curve</strong> is a histogram of engagement depth that averages like DAU/MAU cannot show.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Left: a layer-cake chart, stacked cohort revenue over calendar months where each cohort is a layer and thick persistent layers mean durable revenue. Right: a growth accounting bar chart with new and resurrected users stacked above the axis and churned users below, with the quick ratio equal to new plus resurrected over churned.">
+        <style>
+          .glT { font: 700 14px Inter, sans-serif; fill: #241A12; }
+          .glH { font: 700 12.5px Inter, sans-serif; fill: #241A12; }
+          .glB { font: 400 11.5px Inter, sans-serif; fill: #6B5D52; }
+          .glW { font: 700 11px Inter, sans-serif; fill: #FFFFFF; }
+          .glAx { stroke: #D3C4B8; stroke-width: 1.5; }
+        </style>
+        <rect x="0" y="0" width="880" height="340" fill="#FDF9F5"/>
+        <text class="glT" x="40" y="28">The two charts stakeholders remember</text>
+
+        <rect x="40" y="48" width="390" height="230" rx="10" fill="#FFFFFF" stroke="#EFE2D6"/>
+        <text class="glH" x="60" y="76">Layer-cake: revenue by cohort</text>
+        <line class="glAx" x1="70" y1="250" x2="410" y2="250"/>
+        <path d="M70,250 L110,238 L150,230 L190,226 L230,222 L270,220 L310,218 L350,217 L400,216 L400,250 Z" fill="#7C2D12"/>
+        <path d="M110,238 L150,216 L190,206 L230,200 L270,196 L310,193 L350,191 L400,190 L400,216 L350,217 L310,218 L270,220 L230,222 L190,226 L150,230 L110,238 Z" fill="#C2410C"/>
+        <path d="M150,216 L190,190 L230,178 L270,170 L310,165 L350,162 L400,160 L400,190 L350,191 L310,193 L270,196 L230,200 L190,206 Z" fill="#E06A2E"/>
+        <path d="M190,190 L230,160 L270,146 L310,138 L350,132 L400,128 L400,160 L350,162 L310,165 L270,170 L230,178 Z" fill="#EE9A66"/>
+        <path d="M230,160 L270,128 L310,112 L350,102 L400,96 L400,128 L350,132 L310,138 L270,146 Z" fill="#F6C39E"/>
+        <text class="glW" x="360" y="238">Jan</text>
+        <text class="glB" x="60" y="300">Each layer = one cohort's revenue over time. Old layers</text>
+        <text class="glB" x="60" y="318">staying thick = retention holding = durable revenue.</text>
+
+        <rect x="450" y="48" width="390" height="230" rx="10" fill="#FFFFFF" stroke="#EFE2D6"/>
+        <text class="glH" x="470" y="76">Growth accounting: fill vs leak</text>
+        <line class="glAx" x1="480" y1="185" x2="820" y2="185"/>
+        <g>
+          <rect x="500" y="125" width="40" height="40" fill="#C2410C"/>
+          <rect x="500" y="105" width="40" height="20" fill="#0F766E"/>
+          <rect x="500" y="185" width="40" height="52" fill="#D3C4B8"/>
+          <rect x="570" y="120" width="40" height="45" fill="#C2410C"/>
+          <rect x="570" y="98"  width="40" height="22" fill="#0F766E"/>
+          <rect x="570" y="185" width="40" height="48" fill="#D3C4B8"/>
+          <rect x="640" y="128" width="40" height="37" fill="#C2410C"/>
+          <rect x="640" y="108" width="40" height="20" fill="#0F766E"/>
+          <rect x="640" y="185" width="40" height="56" fill="#D3C4B8"/>
+          <rect x="710" y="118" width="40" height="47" fill="#C2410C"/>
+          <rect x="710" y="92"  width="40" height="26" fill="#0F766E"/>
+          <rect x="710" y="185" width="40" height="44" fill="#D3C4B8"/>
+        </g>
+        <text class="glB" x="762" y="130">new</text>
+        <text class="glB" x="762" y="108">resurrected</text>
+        <text class="glB" x="762" y="210">churned</text>
+        <text class="glB" x="470" y="300">Above the axis: users gained. Below: users lost. Quick ratio =</text>
+        <text class="glB" x="470" y="318">(new + resurrected) / churned. Above 1 grows; 1.5-2 is strong.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - layer-cake for durability, growth accounting for the fill-vs-leak balance</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>★ Build-along: layer-cake and growth accounting in matplotlib<span class="mini">6 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Both charts fall straight out of a2's objects. The layer-cake is the COUNTS table (not the percentages) re-indexed to calendar months; growth accounting compares each user's active months to their previous month.</p>
+        <div class="prompt-box good"><span class="label">★ Layer-cake: stack cohort actives (or revenue) on calendar time</span>calendar = counts.copy()
+calendar.columns = range(len(calendar.columns))
+# shift each cohort row to its calendar position, then stack
+cal = pd.DataFrame({
+    c: row.shift(i) for i, (c, row) in enumerate(calendar.iterrows())
+}).T
+cal.T.plot.area(figsize=(10, 5), cmap="Oranges_r", linewidth=0)
+plt.title("Layer-cake: monthly actives, one layer per cohort")
+plt.xlabel("Calendar month")</div>
+        <div class="prompt-box good"><span class="label">★ Growth accounting: new + resurrected - churned per month</span>active = orders.groupby(["customer_id", "order_month"]).size().reset_index()
+active["prev"] = active.groupby("customer_id")["order_month"].shift(1)
+active["gap"] = (active["order_month"] - active["prev"]).apply(
+    lambda d: d.n if pd.notna(d) else None)
+
+def state(row):
+    if row["prev"] is None or pd.isna(row["gap"]): return "new"
+    return "retained" if row["gap"] == 1 else "resurrected"
+
+active["state"] = active.apply(state, axis=1)
+monthly = active.pivot_table(index="order_month", columns="state",
+                             values="customer_id", aggfunc="count").fillna(0)
+# churned this month = active last month but not this month
+monthly["churned"] = (monthly.sum(axis=1).shift(1) - monthly["retained"]).clip(lower=0)
+monthly["quick_ratio"] = (monthly["new"] + monthly["resurrected"]) / monthly["churned"]</div>
+        <div class="callout tip">
+          <strong>Which chart for which audience</strong>
+          Analysts live in the heatmap. Product managers want the curves. Executives and investors want the layer-cake or the D30-by-cohort trend line - ONE chart, annotated with what changed and when. Never lead a leadership readout with the full triangle; lead with the one line that answers "are we getting better", and keep the triangle for the appendix.
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The L28 power-user curve: the engagement histogram<span class="mini">3 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>DAU/MAU compresses engagement into one ratio and hides its distribution. The <strong>L28 curve</strong> plots, for one 28-day window, how many users were active exactly 1 day, 2 days, up to 28 days. (28, not 30 - four exact weeks kills the weekday mix.) The shape is the verdict: a <strong>smile</strong> - mass at both ends - means a hardcore daily segment exists alongside casual users. A curve slumped entirely left means nobody is hooked, whatever the averages say.</p>
+        <div class="prompt-box"><span class="label">L28 in four lines</span>window = sessions[sessions["date"].between("2026-06-01", "2026-06-28")]
+days_active = window.groupby("user_id")["date"].nunique()
+days_active.value_counts().sort_index().plot.bar(
+    figsize=(10, 4), color="#C2410C", title="L28: users by active days")</div>
+        <p>Facebook's growth team invented this reading; a16z popularized it as "the power user curve". Use it whenever a stakeholder says "our DAU/MAU is fine" - the histogram tells you whether that ratio is one loyal core or a blur of drive-bys.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ DEMO: SIMULATOR ============ -->
+  <section class="section" id="simulator">
+    <div class="section-kicker">
+      <span class="klabel">Demo · the signature simulator</span>
+      <h2>Flatten the curve <span class="tag demo">▶ 15 min · everyone drives</span></h2>
+    </div>
+    <p class="lede">Below is a real cohort engine: 12 monthly cohorts of simulated users, each with their own churn probability, counted into a live triangle exactly the way your pandas pivot counts orders. Four product levers change how users behave. One dashed lever changes only how many arrive. Your two headline numbers: <strong>the January cohort still active in month 6</strong>, and <strong>December MAU</strong>. Watch which levers move which number.</p>
+
+    <div id="rl-sim"></div>
+
+    <div class="steps">
+      <div class="step"><p>Baseline: month-6 retention <strong>27%</strong>, sliding to 20% by month 11 - a curve on its way to zero. December MAU 4,422. This is the leaky bucket.</p></div>
+      <div class="step"><p>Turn on the four product levers one by one, top to bottom, and watch the ladder: 27% to <strong>38%</strong> (onboarding) to <strong>44%</strong> (habit) to <strong>53%</strong> (loyalty - now look at the curve flatten: months 4-6 read 57/55/53) to <strong>60%</strong> with winback, where month 11 holds at 59% - a genuinely flat tail.</p></div>
+      <div class="step"><p>Reset to baseline (all levers off), then hit <strong>Double ad spend</strong>. MAU jumps to 7,970 - up 80%. Month-6 retention: still <strong>27%</strong>. Not one cell of the triangle changed color. You bought a bigger bucket with the same holes.</p></div>
+      <div class="step"><p>Now the punchline: all four product levers together also produce December MAU of <strong>7,970</strong> - the exact same headline as doubling the budget. Same MAU, opposite futures: the levers version holds 59% of January at month 11; the ad-spend version holds 21%. One compounds, one rents.</p></div>
+    </div>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>This is Duolingo's actual playbook, compressed.</strong> Their growth team modeled users as a state machine (new, current, reactivated, resurrected, at-risk, dormant), ran sensitivity analysis, and found that current-user retention - CURR - had about five times the DAU impact of the next best metric. Four years of streaks, leagues, and notification discipline later: CURR up 21%, DAU up 4.5x, with acquisition spend flat. They pulled the levers you just pulled, and refused the dashed one.</p>
+    </div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Try it yourself - this week <span class="tag exercise">◐ 30 min total</span></h2>
+    </div>
+    <ul>
+      <li>Run the a3 notebook: overlaid curves with faded vintages, the layer-cake, growth accounting with the quick-ratio line, and the L28 histogram - all four go in your running retention report.</li>
+      <li>Compute your product's quick ratio for the last six months. Is the bucket filling faster than it leaks, and is the trend direction friendly?</li>
+      <li>Find the "average retention curve" chart nearest to you and check: does its late tail include only old vintages? If yes, you have found a truncated-cohort artifact in the wild - re-plot it as overlaid curves.</li>
+      <li>In the simulator, find the cheapest single lever that gets month-6 retention above 50%. (It cannot be done with one - which is itself the lesson: retention is a portfolio, not a silver bullet.)</li>
+    </ul>
+  </section>
+
+  <!-- ============ SOURCES ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session draws on</h2>
+    </div>
+    <p class="lede">The chart family is standardized across a handful of durable essays and tool docs. This page teaches the working core of:</p>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Sequoia "Retention" + Casey Winters on PMF - curve shapes as diagnosis</span><span class="note">Part 1 · slide, flatten, smile</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Jonathan Hsu (Social Capital) - growth accounting and the quick ratio</span><span class="note">Part 2 · fill vs leak, rules at 1 and 4</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The layer-cake convention (Daasity / investor decks)</span><span class="note">Part 2 · cohort revenue durability</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">a16z "The Power User Curve" (Li Jin)</span><span class="note">Self-study card · L28 histogram; segmentation depth in a4</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Jorge Mazal - "How Duolingo reignited user growth" (Lenny's Newsletter)</span><span class="note">Simulator debrief · the CURR case gets full treatment in s3</span></div>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions before you go 🎯 <span class="tag exercise">◐ 90 seconds</span></h2>
+    </div>
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">1 · A retention curve that declines for four months and then holds flat at 22% means...</p>
+      <button class="qopt" type="button">A · The product is failing - 78% of users are gone</button>
+      <button class="qopt" type="button">B · The data is broken - curves should keep declining</button>
+      <button class="qopt" type="button">C · A durable core found lasting value - the flat tail is the product-market-fit signal</button>
+      <p class="qwhy">The asymptote, not the early drop, is the verdict. Most products lose the majority early (the median mobile game keeps under 4% at day 7); what separates durable businesses is the curve flattening above zero. Raise the floor, then worry about the slope.</p>
+    </div>
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">2 · Why is retention.mean(axis=0) a lie on a live cohort table?</p>
+      <button class="qopt" type="button">A · Late columns only contain the oldest cohorts, so the "average" mixes vintages - a mix artifact, not behavior</button>
+      <button class="qopt" type="button">B · pandas computes means wrong on NaN</button>
+      <button class="qopt" type="button">C · It is fine - averaging is always safe</button>
+      <p class="qwhy">Column 1 averages all cohorts; column 10 only the ones old enough to reach it. If newer cohorts retain differently, the average curve's tail reflects WHO is in it, not how users behave. Average only completed cohorts, print n per column, or better: overlay the curves.</p>
+    </div>
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">3 · In the simulator, doubling ad spend and turning on all four product levers both produce December MAU of 7,970. What tells them apart?</p>
+      <button class="qopt" type="button">A · Nothing - MAU is MAU</button>
+      <button class="qopt" type="button">B · The triangle: ad spend leaves month-11 retention at 21%, the levers hold it at 59% - one rents users, the other keeps them</button>
+      <button class="qopt" type="button">C · Ad spend is better because it works immediately</button>
+      <p class="qwhy">A headline metric can hide opposite realities - which is exactly why growth accounting and the cohort triangle exist. Same MAU today; next quarter the ad-spend version needs the budget doubled again while the levers version compounds for free.</p>
+    </div>
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Analyst session 3 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>Three curve shapes</b><span>Slide to zero = leaky bucket, no PMF. Flatten above zero = durable core. Smile = resurrection. The tail is the verdict.</span></div>
+      <div class="cheat-item"><b>Flatten the curve</b><span>Two moves only: raise the asymptote (onboarding, habit, loyalty) or bend the tail up (winback). Everything else is noise.</span></div>
+      <div class="cheat-item"><b>Truncated-cohort trap</b><span>Late columns hold only old vintages, so naive column means lie. Average completed cohorts only, or overlay curves instead.</span></div>
+      <div class="cheat-item"><b>Layer-cake</b><span>Stacked cohort revenue over calendar time. Old layers staying thick = durable revenue. The investor chart.</span></div>
+      <div class="cheat-item"><b>Growth accounting</b><span>Delta MAU = new + resurrected - churned. Quick ratio = (new + resurrected) / churned; above 1 grows, 1.5-2 is strong.</span></div>
+      <div class="cheat-item"><b>L28 curve</b><span>Histogram of active days per 28-day window. Smile = a hardcore segment exists. The anti-average.</span></div>
+      <div class="cheat-item"><b>One chart per audience</b><span>Analyst: triangle. PM: curves. Executive: layer-cake or D30 trend with annotations. Never lead with the full triangle upstairs.</span></div>
+      <div class="cheat-item"><b>Compound vs rent</b><span>Simulator canon: levers 27 to 60% M6 and MAU 7,970; double ad spend, same 7,970 MAU, retention still 27%. Same headline, opposite futures.</span></div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <span>Analyst session 3 of 8 · learn-customer-retention-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="a2-cohort-table-and-heatmap.html">← a2: The cohort table</a> &nbsp;·&nbsp; <a href="a4-segmentation-rfm.html">Next: Segmentation →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/retention-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>

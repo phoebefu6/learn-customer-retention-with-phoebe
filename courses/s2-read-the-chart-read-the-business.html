@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Stakeholder session 2 of 4. Read any cohort chart in thirty seconds without code: the triangle and its three scan directions, the three curve shapes and what each verdict means for spend, and benchmarks quoted with their vintage - 40/20/10 folklore vs the GameAnalytics 2025 medians.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Read the chart, read the business - learn customer retention with phoebe">
+<meta property="og:description" content="Stakeholder session 2 of 4. The cohort triangle's three scan directions, the three curve shapes as business verdicts, and benchmarks with their vintage. Charts without code.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-customer-retention-with-phoebe/courses/s2-read-the-chart-read-the-business.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-customer-retention-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Read the chart, read the business - learn customer retention with phoebe">
+<meta name="twitter:description" content="The cohort triangle's three scan directions, the three curve shapes as business verdicts, and benchmarks with their vintage. Charts without code.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-customer-retention-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Stakeholder session 2 · Read the chart, read the business - learn customer retention with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-customer-retention-with-phoebe</a> / Stakeholder session 2 of 4</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Customer Retention with Phoebe · Stakeholder track · Session 2 of 4</div>
+    <h1>Read the chart, <span class="accent">read the business</span></h1>
+    <p class="sub">Every retention conversation eventually lands on one chart, and the room splits into people who can read it and people who nod. This session moves you permanently into the first group - no code required. You will learn the cohort triangle and its three scan directions, the three curve shapes and the business verdict each one carries, and how to handle a benchmark the way you would handle a wine: never without checking the year on the label.</p>
+    <div class="chip-row">
+      <span class="chip level">🟢 Stakeholder track</span>
+      <span class="chip audience">Leaders · PMs · no code</span>
+      <span class="chip audience">Charts without code</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:5">3-18 · The triangle</span>
+      <span class="a3" style="flex:7">18-40 · Curves &amp; benchmarks</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Where this session sits</h2>
+    </div>
+    <p class="lede">Session s1 made the money case: retention is the multiplier on every acquisition dollar. Today is the literacy session - the three artifacts your analysts will put in front of you (the cohort triangle, the retention curve, the benchmark) and exactly how to read each one in under a minute. Session s3 tours the levers that move the numbers, and s4 turns you into the person who asks the questions that make readouts decision-ready. Your analysts build today's charts from raw data in their sessions a2 and a3; you are learning to read what they build.</p>
+    <div class="legend">
+      <span class="pill solid">Live - presented in session</span>
+      <span class="pill light">Self-study - read after class</span>
+      <span class="pill inkpill">Sources covered</span>
+    </div>
+    <div class="callout win">
+      <strong>★ What you walk out with today</strong>
+      A thirty-second reading of any cohort triangle (across, down, diagonal - and what each direction answers), the three retention-curve shapes with the decision sentence that belongs to each, and a reflex that will save you from bad targets forever: never accept a benchmark without its year and its source population.
+    </div>
+  </section>
+
+  <!-- ============ PART 1: THE TRIANGLE ============ -->
+  <section class="section" id="triangle">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the cohort triangle + the frozen-history law</span>
+      <h2>The cohort triangle in thirty seconds <span class="tag concept">15 min live</span></h2>
+    </div>
+    <p class="lede">The triangle looks intimidating and is actually three rules. <strong>Rows are join months</strong> - everyone who became a customer in January shares the January row forever. <strong>Columns are months since joining</strong> - month 0 is the join month itself, so it is 100% by construction. And <strong>the empty corner is the future, not failure</strong> - June's month-5 simply has not happened yet. Anyone painting those empty cells as zeros is reporting on events that have not occurred.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A small annotated cohort triangle with rows January to April and columns month 0 to month 4, marked with three scan directions: across a row shows one class of customers aging, down a column compares newer classes at the same age, and the diagonal of outlined cells is the current calendar month still filling. The empty corner is the future.">
+        <style>
+          .s2trT { font: 700 14px Inter, sans-serif; fill: #241A12; }
+          .s2trH { font: 600 11px Inter, sans-serif; fill: #6B5D52; }
+          .s2trW { font: 700 11.5px Inter, sans-serif; fill: #FFFFFF; }
+          .s2trC { font: 700 11.5px Inter, sans-serif; fill: #241A12; }
+          .s2trK { font: 700 12px Inter, sans-serif; fill: #0F766E; }
+          .s2trB { font: 400 11px Inter, sans-serif; fill: #6B5D52; }
+        </style>
+        <rect x="0" y="0" width="880" height="340" fill="#FDF9F5"/>
+        <text class="s2trT" x="40" y="28">One triangle, three scan directions, three different questions</text>
+
+        <text class="s2trH" x="90" y="66" text-anchor="end">Cohort</text>
+        <text class="s2trH" x="130" y="66" text-anchor="middle">M0</text>
+        <text class="s2trH" x="196" y="66" text-anchor="middle">M1</text>
+        <text class="s2trH" x="262" y="66" text-anchor="middle">M2</text>
+        <text class="s2trH" x="328" y="66" text-anchor="middle">M3</text>
+        <text class="s2trH" x="394" y="66" text-anchor="middle">M4</text>
+
+        <text class="s2trH" x="90" y="96" text-anchor="end">Jan</text>
+        <rect x="100" y="78" width="60" height="28" rx="5" fill="#7C2D12"/><text class="s2trW" x="130" y="96" text-anchor="middle">100%</text>
+        <rect x="166" y="78" width="60" height="28" rx="5" fill="#C2410C"/><text class="s2trW" x="196" y="96" text-anchor="middle">45%</text>
+        <rect x="232" y="78" width="60" height="28" rx="5" fill="#E06A2E"/><text class="s2trW" x="262" y="96" text-anchor="middle">33%</text>
+        <rect x="298" y="78" width="60" height="28" rx="5" fill="#EE9A66"/><text class="s2trC" x="328" y="96" text-anchor="middle">27%</text>
+        <rect x="364" y="78" width="60" height="28" rx="5" fill="#FBE3D2" stroke="#C2410C" stroke-width="2"/><text class="s2trC" x="394" y="96" text-anchor="middle">24%</text>
+
+        <text class="s2trH" x="90" y="130" text-anchor="end">Feb</text>
+        <rect x="100" y="112" width="60" height="28" rx="5" fill="#7C2D12"/><text class="s2trW" x="130" y="130" text-anchor="middle">100%</text>
+        <rect x="166" y="112" width="60" height="28" rx="5" fill="#C2410C"/><text class="s2trW" x="196" y="130" text-anchor="middle">47%</text>
+        <rect x="232" y="112" width="60" height="28" rx="5" fill="#E06A2E"/><text class="s2trW" x="262" y="130" text-anchor="middle">35%</text>
+        <rect x="298" y="112" width="60" height="28" rx="5" fill="#FBE3D2" stroke="#C2410C" stroke-width="2"/><text class="s2trC" x="328" y="130" text-anchor="middle">29%</text>
+
+        <text class="s2trH" x="90" y="164" text-anchor="end">Mar</text>
+        <rect x="100" y="146" width="60" height="28" rx="5" fill="#7C2D12"/><text class="s2trW" x="130" y="164" text-anchor="middle">100%</text>
+        <rect x="166" y="146" width="60" height="28" rx="5" fill="#C2410C"/><text class="s2trW" x="196" y="164" text-anchor="middle">50%</text>
+        <rect x="232" y="146" width="60" height="28" rx="5" fill="#FBE3D2" stroke="#C2410C" stroke-width="2"/><text class="s2trC" x="262" y="164" text-anchor="middle">37%</text>
+
+        <text class="s2trH" x="90" y="198" text-anchor="end">Apr</text>
+        <rect x="100" y="180" width="60" height="28" rx="5" fill="#7C2D12"/><text class="s2trW" x="130" y="198" text-anchor="middle">100%</text>
+        <rect x="166" y="180" width="60" height="28" rx="5" fill="#FBE3D2" stroke="#C2410C" stroke-width="2"/><text class="s2trC" x="196" y="198" text-anchor="middle">54%</text>
+
+        <rect x="96" y="74" width="334" height="36" rx="6" fill="none" stroke="#0F766E" stroke-width="2.5"/>
+        <rect x="162" y="74" width="68" height="140" rx="6" fill="none" stroke="#0F766E" stroke-width="2.5" stroke-dasharray="none"/>
+        <line x1="170" y1="216" x2="420" y2="82" stroke="#0F766E" stroke-width="2.5" stroke-dasharray="6 4"/>
+
+        <text class="s2trB" x="262" y="238" text-anchor="middle">Empty corner = the future, not failure.</text>
+
+        <text class="s2trK" x="480" y="88">1 · Across a row</text>
+        <text class="s2trB" x="480" y="105">One class of customers aging: Jan fades 100, 45, 33, 27...</text>
+        <text class="s2trK" x="480" y="136">2 · Down a column (solid box)</text>
+        <text class="s2trB" x="480" y="153">Every class at the SAME age: M1 runs 45, 47, 50, 54.</text>
+        <text class="s2trB" x="480" y="170">The cleanest "is the product improving" read there is.</text>
+        <text class="s2trK" x="480" y="201">3 · The diagonal (dashed line)</text>
+        <text class="s2trB" x="480" y="218">One calendar month - here the outlined, still-filling cells.</text>
+        <text class="s2trB" x="480" y="235">A diagonal stripe = outage, price change, or season hit all.</text>
+
+        <text class="s2trB" x="40" y="290">Completed cells are frozen: last quarter's number is comparable forever. Only the outlined current month updates.</text>
+        <text class="s2trB" x="40" y="310">If a dashboard's history moves, something is wrong with the metric or the pipeline - ask why before trusting a trend.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - across = aging, down = improving, diagonal = the calendar; the empty corner is just the future</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The three scan directions: a thirty-second reading, every time<span class="mini">6 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>You never need to read every cell. Three sweeps of the eyes extract everything the triangle knows:</p>
+        <ul>
+          <li><strong>Across a row - one class of customers aging.</strong> The January row is the January joiners' whole life story: 100% at month 0, then the fade. Where the fade stops mattering more than where it starts - that is the curve shape, and Part 2 is entirely about it.</li>
+          <li><strong>Down a column - are newer classes better?</strong> Down the month-1 column, every cohort is compared at the exact same age, so this is the cleanest "is the product improving" read that exists. 45, 47, 50, 54 going down means every new class of customers sticks better than the last - whatever changed since January is working.</li>
+          <li><strong>Along a diagonal - calendar shocks.</strong> Cells on one diagonal share a calendar month. A dark or light stripe along a diagonal means something hit everyone at once regardless of age: an outage, a price change, a holiday season. (Its cousin: a vertical stripe means something hits every cohort at the same <em>age</em> - like a paywall that appears in month 2.)</li>
+        </ul>
+        <p>The order matters. Across tells you what kind of business you have, down tells you whether it is getting better, diagonal tells you what the calendar did to it. Run all three before anyone starts explaining the chart to you, and you will usually be done before they are.</p>
+      </div>
+    </details>
+
+    <div class="callout tip">
+      <strong>The frozen-history law, stakeholder edition</strong>
+      Every number in this course - and every number you should accept in a readout - is computed by fixing a group at its join date and looking forward. The payoff for you: <strong>a completed cell never changes</strong>. January's month-2 number is the same today, next quarter, and in the board pack two years from now, which is what makes targets and comparisons possible at all. The only legitimately moving cells are the current month's (outlined in the figure, always visibly marked as partial). So if last quarter's number is different in this quarter's deck, do not let it slide: either the metric secretly re-anchors to today, or a returning user is rewriting history retroactively - both are banned in this course, and your analysts learn why in their session a1.
+    </div>
+  </section>
+
+  <!-- ============ PART 2: THE CURVE ============ -->
+  <section class="section" id="curve-shapes">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers curve shapes as verdicts + the PMF read</span>
+      <h2>The curve is the verdict <span class="tag concept">12 min live</span></h2>
+    </div>
+    <p class="lede">Take any row of the triangle and lay it flat and you get the retention curve: percent still active, month by month. Only three shapes exist, and each one is a verdict on the business - not a nuance, a verdict. Learning to name the shape out loud is the single highest-leverage chart skill on this track.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three mini panels showing the three retention curve shapes: a curve sliding all the way to zero meaning a leaky bucket with no product-market fit, a curve flattening to a stable floor above zero meaning a durable base, and a smile-shaped curve that dips then rises as churned users return, which is rare and best.">
+        <style>
+          .s2cvT { font: 700 14px Inter, sans-serif; fill: #241A12; }
+          .s2cvH { font: 700 12.5px Inter, sans-serif; fill: #241A12; }
+          .s2cvB { font: 400 11.5px Inter, sans-serif; fill: #6B5D52; }
+          .s2cvX { font: 400 10px Inter, sans-serif; fill: #6B5D52; }
+          .s2cvF { font: 600 10.5px Inter, sans-serif; fill: #0F766E; }
+          .s2cvL { stroke: #C2410C; stroke-width: 2.5; fill: none; }
+          .s2cvAx { stroke: #EFE2D6; stroke-width: 1.5; }
+        </style>
+        <rect x="0" y="0" width="880" height="320" fill="#FDF9F5"/>
+        <text class="s2cvT" x="40" y="28">Three shapes, three verdicts - name the shape before anyone explains the chart</text>
+
+        <rect x="40" y="52" width="250" height="160" rx="10" fill="#FFFFFF" stroke="#EFE2D6"/>
+        <line class="s2cvAx" x1="60" y1="192" x2="270" y2="192"/>
+        <text class="s2cvX" x="60" y="205">M0</text>
+        <text class="s2cvX" x="255" y="205">M12</text>
+        <path class="s2cvL" d="M60,72 C 100,140 150,178 265,190"/>
+        <text class="s2cvH" x="60" y="238">1 · Slide to zero</text>
+        <text class="s2cvB" x="60" y="256">The bucket leaks dry. No durable base,</text>
+        <text class="s2cvB" x="60" y="273">no product-market fit yet.</text>
+
+        <rect x="330" y="52" width="250" height="160" rx="10" fill="#FFFFFF" stroke="#EFE2D6"/>
+        <line class="s2cvAx" x1="350" y1="192" x2="560" y2="192"/>
+        <text class="s2cvX" x="350" y="205">M0</text>
+        <text class="s2cvX" x="545" y="205">M12</text>
+        <path class="s2cvL" d="M350,72 C 385,130 415,148 460,152 C 505,155 530,155 555,155"/>
+        <line x1="350" y1="155" x2="560" y2="155" stroke="#0F766E" stroke-width="1.5" stroke-dasharray="5 4"/>
+        <text class="s2cvF" x="356" y="148">the floor</text>
+        <text class="s2cvH" x="350" y="238">2 · Flatten above zero</text>
+        <text class="s2cvB" x="350" y="256">A base that stays. The higher the floor,</text>
+        <text class="s2cvB" x="350" y="273">the better - this is PMF territory.</text>
+
+        <rect x="620" y="52" width="250" height="160" rx="10" fill="#FFFFFF" stroke="#EFE2D6"/>
+        <line class="s2cvAx" x1="640" y1="192" x2="850" y2="192"/>
+        <text class="s2cvX" x="640" y="205">M0</text>
+        <text class="s2cvX" x="835" y="205">M12</text>
+        <path class="s2cvL" d="M640,72 C 675,145 705,168 740,166 C 780,164 815,138 845,112"/>
+        <text class="s2cvH" x="640" y="238">3 · The smile</text>
+        <text class="s2cvB" x="640" y="256">Churned users coming back. Rare,</text>
+        <text class="s2cvB" x="640" y="273">and the best shape there is.</text>
+
+        <text class="s2cvB" x="40" y="304">The spend gate: invest in scaling acquisition only AFTER the curve flattens. Pouring traffic onto shape 1 is a treadmill.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - slide, flatten, smile: every retention curve you will ever see is one of these three</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>What to say when you see each shape<span class="mini">6 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The shapes come with decision language. Practice these sentences; they are the difference between reading a chart and using one.</p>
+        <ul>
+          <li><strong>Slide to zero:</strong> "Pause the acquisition scale-up - every cohort we buy is fully evaporating. The money belongs in onboarding and core product until this curve grows a floor." A sliding curve means no product-market fit for that audience yet; traffic cannot fix it, only feed it.</li>
+          <li><strong>Flatten above zero:</strong> "We have a durable base - each cohort leaves permanent residents. Now acquisition spend buys compounding assets, so this is the moment to scale it. And the floor height is the KPI: what moves it?" This is the classic PMF read (Sequoia's retention essays): a flattened curve of the key action at its natural frequency, plus month-over-month new-customer growth, is what product-market fit actually looks like in data (Casey Winters' formulation).</li>
+          <li><strong>The smile:</strong> "Something is resurrecting churned customers - find out what, and bottle it." Smiles are rare and precious: seasonal products, winback campaigns that land, or a feature that pulls dormant users back. Verify it is real resurrection and not a definition quirk, then fund whatever causes it.</li>
+        </ul>
+        <p>One discipline ties all three together: <strong>acquisition spend is gated on the flatten</strong>. It is the stakeholder-track version of "retention precedes monetization" from s1 - retention also precedes scale.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The flattening rows behind a $1B story: Dollar Shave Club<span class="mini">3 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>When Unilever paid $1B for Dollar Shave Club in 2016, the headline was the viral video. The diligence story was shape 2. Second Measure's transaction data showed DSC's cohort curves flattening at roughly <strong>50% retention at six months</strong> - subscriber classes that fell and then <em>stayed</em>, cohort after cohort, leading its whole category.</p>
+        <ul>
+          <li><strong>Why that shape is worth a billion dollars:</strong> a flattening curve means each acquired cohort leaves a permanent layer of recurring revenue. Stack the layers and revenue compounds even if marketing never improves - the "durable base" verdict, priced.</li>
+          <li><strong>Why the triangle beat the topline:</strong> topline revenue growth can be bought with spend (s1's treadmill). Flattening cohort rows cannot be faked that way - they show what customers do after the coupon is spent. This is why sophisticated acquirers and investors read cohort charts, not just revenue charts.</li>
+          <li><strong>Your takeaway as a leader:</strong> when you want to know if a business - yours or one you are buying - has durable revenue, ask for the cohort curves and look for the flatten. It is the same read at every scale.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3: BENCHMARKS ============ -->
+  <section class="section" id="benchmarks">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers 40/20/10 folklore vs GameAnalytics 2025 + ecommerce yardsticks</span>
+      <h2>Benchmarks with their vintage <span class="tag concept">10 min live</span></h2>
+    </div>
+    <p class="lede">Someone will eventually tell you "good games do 40/20/10" - 40% day-1, 20% day-7, 10% day-30 retention. That rule is real folklore with a real past, but today it marks <strong>top-quartile-or-better territory, not average</strong>. The GameAnalytics 2025 study across 11,600 games (1.48B monthly players) puts the medians far lower: <strong>day-1 around 22-27%, day-7 around 3.4-3.9%, and 75% of games under 3% by day 28</strong>. A realistic "good" profile in 2026 looks more like 35/15/5. Ecommerce has the same trap in different clothes: the cross-industry average repeat purchase rate is about <strong>28%</strong>, and roughly <strong>76% of second orders arrive within 90 days</strong> - so a shop comparing itself to a grocery-style repeat rate is benchmarking against the wrong species.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A benchmark ladder bar chart of mobile game day-1 retention from the GameAnalytics 2025 study of 11,600 games: bottom quartile around 10 to 11 percent, median 22 to 27 percent, top quartile above 30 percent, with a dashed line at 40 percent marking the legacy 40/20/10 rule as top-quartile folklore rather than average.">
+        <style>
+          .s2bmT { font: 700 14px Inter, sans-serif; fill: #241A12; }
+          .s2bmL { font: 600 12px Inter, sans-serif; fill: #241A12; }
+          .s2bmV { font: 700 12.5px Inter, sans-serif; fill: #241A12; }
+          .s2bmN { font: 400 11px Inter, sans-serif; fill: #6B5D52; }
+          .s2bmF { font: 600 11px Inter, sans-serif; fill: #0F766E; }
+          .s2bmG { stroke: #EFE2D6; stroke-width: 1; }
+        </style>
+        <rect x="0" y="0" width="880" height="340" fill="#FDF9F5"/>
+        <text class="s2bmT" x="40" y="28">Day-1 retention ladder, mobile games - GameAnalytics 2025, 11,600 games</text>
+
+        <line class="s2bmG" x1="130" y1="225" x2="790" y2="225"/>
+        <text class="s2bmN" x="122" y="229" text-anchor="end">10%</text>
+        <line class="s2bmG" x1="130" y1="180" x2="790" y2="180"/>
+        <text class="s2bmN" x="122" y="184" text-anchor="end">20%</text>
+        <line class="s2bmG" x1="130" y1="135" x2="790" y2="135"/>
+        <text class="s2bmN" x="122" y="139" text-anchor="end">30%</text>
+        <line x1="130" y1="90" x2="790" y2="90" stroke="#0F766E" stroke-width="2" stroke-dasharray="7 5"/>
+        <text class="s2bmN" x="122" y="94" text-anchor="end">40%</text>
+        <text class="s2bmF" x="150" y="82">the 40 in 40/20/10 - legacy folklore, top-decile territory today, not average</text>
+
+        <rect x="180" y="221" width="120" height="49" rx="6" fill="#F6C39E"/>
+        <text class="s2bmV" x="240" y="210" text-anchor="middle">~10-11%</text>
+        <text class="s2bmL" x="240" y="292" text-anchor="middle">Bottom quartile</text>
+
+        <rect x="400" y="158" width="120" height="112" rx="6" fill="#E06A2E"/>
+        <text class="s2bmV" x="460" y="147" text-anchor="middle">22-27%</text>
+        <text class="s2bmL" x="460" y="292" text-anchor="middle">Median</text>
+
+        <rect x="620" y="131" width="120" height="139" rx="6" fill="#7C2D12"/>
+        <text class="s2bmV" x="680" y="120" text-anchor="middle">30%+</text>
+        <text class="s2bmL" x="680" y="292" text-anchor="middle">Top quartile</text>
+
+        <text class="s2bmN" x="40" y="322">Same study: median D7 3.4-3.9%, and 75% of games sit under 3% by D28. A realistic good profile in 2026: ~35/15/5.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the median game lives nowhere near 40/20/10; the folklore line marks the elite, not the middle</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Never accept a naked benchmark<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A benchmark without a year and a source population is a rumor with an axis. Before any number becomes a target, make it answer three questions:</p>
+        <ul>
+          <li><strong>What year is it from?</strong> 40/20/10 dates to the early free-to-play era (its exact attribution is murky even in the industry). Markets saturate, install quality changes, and a 2013 top-quartile bar quoted as a 2026 average will set your team an impossible target - then teach them to hit it by redefining the metric.</li>
+          <li><strong>Who is in the population?</strong> Puzzle games and hyper-casual games have wildly different profiles even within one 2025 study - and a games benchmark means nothing for a shop. For ecommerce, use ecommerce yardsticks: repeat purchase rate near the ~28% cross-industry average, and second orders concentrated inside 90 days.</li>
+          <li><strong>Which definition of retention?</strong> Session s1's homework question returns: a "day-7" computed on all installs vs activated users, or on a rolling instead of fixed-window basis, moves the number enormously with zero change in the business.</li>
+        </ul>
+        <p>The sentence to keep: <strong>"What is the vintage and the population on that benchmark?"</strong> Asking it once, publicly, permanently upgrades the quality of numbers people bring you.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>Supercell: retention as a kill gate.</strong> The studio behind Clash of Clans soft-launches every game in small markets and judges it against the retention bars of its live hits - and kills it if the cohorts fall short. In 2015 alone it killed <strong>Spooky Pop</strong> and <strong>Smash Land</strong> in soft launch (Smash Land despite positive player feedback), and it has killed 30+ titles over the years. Notice what is gating what: the marketing budget does not rescue weak retention - weak retention cancels the marketing budget. That governance pattern travels far beyond games: no scale-up spend until the cohort chart clears the bar.</p>
+    </div>
+
+    <div class="steps">
+      <div class="step"><p>Open your product's cohort chart and run the three scans in order: across the newest complete row, down the month-1 column, then along the diagonals.</p></div>
+      <div class="step"><p>Name the curve shape out loud - slide, flatten, or smile - and say the decision sentence that goes with it.</p></div>
+      <div class="step"><p>Find the benchmark your team currently uses and ask for its year and its source population. If nobody knows, you have found this week's most useful question.</p></div>
+    </div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Try it yourself - this week <span class="tag exercise">◐ 20 min total</span></h2>
+    </div>
+    <ul>
+      <li>Pull up your product's cohort chart (ask your analyst for the monthly triangle if you have never seen it). Do the three scans and write one sentence per direction: what is the row saying, the column, the diagonal?</li>
+      <li>Name the shape of your newest complete cohort's curve out loud - slide, flatten, or smile - and note where the floor is, if there is one.</li>
+      <li>Check whether any empty future cells are being displayed as zeros or dark cells anywhere in your reporting. If yes, that is a bug worth an email today.</li>
+    </ul>
+  </section>
+
+  <!-- ============ SOURCES ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session draws on</h2>
+    </div>
+    <p class="lede">Chart literacy is a craft standardized by a few durable essays and kept honest by fresh benchmark data. This session covers the working core of:</p>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Reforge - cohort analysis basics (the triangle and its scan directions)</span><span class="note">Part 1 · simplified to the executive read</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Sequoia retention essays + Casey Winters on retention-curve PMF</span><span class="note">Part 2 · the three shapes as verdicts</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">GameAnalytics 2025 benchmark study (11,600 games, 1.48B MAU)</span><span class="note">Part 3 · the medians, quoted with their vintage</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Second Measure - Dollar Shave Club transaction data</span><span class="note">Part 2 self-study · the flattening rows behind the $1B story</span></div>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions before you go 🎯 <span class="tag exercise">◐ 90 seconds</span></h2>
+    </div>
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">1 · Reading DOWN a column of the cohort triangle, the numbers rise: 45, 47, 50, 54. What does that mean?</p>
+      <button class="qopt" type="button">A · The January cohort is recovering as it ages</button>
+      <button class="qopt" type="button">B · A calendar event boosted everyone that month</button>
+      <button class="qopt" type="button">C · Newer cohorts stick better at the same age - the product or acquisition quality is improving</button>
+      <p class="qwhy">Down a column, every cohort is compared at the SAME age, so cohort-over-cohort improvement is the cleanest read of whether changes are working. One cohort recovering would show across its own row; a calendar event would show as a diagonal stripe.</p>
+    </div>
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">2 · Which curve shape is the data signature of product-market fit?</p>
+      <button class="qopt" type="button">A · Flattening above zero - each cohort leaves a durable base that stays</button>
+      <button class="qopt" type="button">B · A steep start - high day-1 retention proves people love the product</button>
+      <button class="qopt" type="button">C · Any curve, as long as new-user signups keep growing month over month</button>
+      <p class="qwhy">The flatten is the verdict: a retention curve of the key action that levels off above zero, combined with growing new-customer counts, is the PMF read (Casey Winters / Sequoia). A steep start can coexist with a slide to zero, and signup growth alone is the s1 treadmill.</p>
+    </div>
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">3 · A partner confidently quotes "good games do 40/20/10." What is the right response?</p>
+      <button class="qopt" type="button">A · Adopt it - it is the industry standard for D1/D7/D30</button>
+      <button class="qopt" type="button">B · Ask for its vintage and population: it is legacy top-quartile folklore, and 2025 medians run near 22-27 / 3.4-3.9 / under 3% by D28</button>
+      <button class="qopt" type="button">C · Reject all benchmarks - every product is unique</button>
+      <p class="qwhy">40/20/10 is real folklore with real history, but today it marks top-quartile-or-better, not average: GameAnalytics 2025 (11,600 games) puts medians far lower, with a realistic good profile near 35/15/5. Benchmarks are useful - naked benchmarks are not. Year and population, always.</p>
+    </div>
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Stakeholder session 2 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>Triangle geometry</b><span>Rows = join month, columns = months since joining, month 0 = 100% by construction. The empty corner is the future, not failure.</span></div>
+      <div class="cheat-item"><b>Frozen history</b><span>Completed cells never change - last quarter's number is comparable forever. Only the current month updates, visibly marked. Moving history = ask why.</span></div>
+      <div class="cheat-item"><b>Three scans</b><span>Across a row = one class aging. Down a column = are newer classes better (the cleanest product-improvement read). Diagonal = calendar shocks.</span></div>
+      <div class="cheat-item"><b>Three shapes</b><span>Slide to zero = leaky bucket, no PMF. Flatten above zero = durable base; the higher the floor the better. Smile = resurrection - rare, best.</span></div>
+      <div class="cheat-item"><b>The spend gate</b><span>Invest in scaling acquisition only AFTER the curve flattens. Traffic poured onto a sliding curve is a treadmill, not growth.</span></div>
+      <div class="cheat-item"><b>Benchmark hygiene</b><span>Never accept a benchmark without its year and source population. 40/20/10 = legacy top-quartile folklore; GA 2025 medians: D1 22-27%, D7 3.4-3.9%, 75% of games D28 under 3%.</span></div>
+      <div class="cheat-item"><b>Ecommerce yardsticks</b><span>Repeat purchase rate averages ~28% across industries; ~76% of second orders land within 90 days. Purchase-based cohorts, never login-based.</span></div>
+      <div class="cheat-item"><b>The kill gate</b><span>Supercell killed Spooky Pop and Smash Land in soft launch (2015) against live-hit retention bars - 30+ titles total. Retention gates the spend.</span></div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <span>Stakeholder session 2 of 4 · learn-customer-retention-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="s1-retention-is-the-money-metric.html">← Prev: Retention is the money metric</a> &nbsp;·&nbsp; <a href="s3-levers-that-move-retention.html">Next: Levers that move retention →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>

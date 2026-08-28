@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Stakeholder session 4 of 4. The three questions every retention readout must answer - which cohort, what changed, how much money - plus a live mix-shift simulator where the blended number rises while every channel falls, and the full trap list with one-line antidotes.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Asking the right questions of your DA - learn customer retention with phoebe">
+<meta property="og:description" content="Stakeholder session 4 of 4. Which cohort, what changed, how much money - plus the live mix-shift trap and the send-it-back checklist.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-customer-retention-with-phoebe/courses/s4-asking-the-right-questions.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-customer-retention-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Asking the right questions of your DA - learn customer retention with phoebe">
+<meta name="twitter:description" content="Which cohort, what changed, how much money - plus the live mix-shift trap and the send-it-back checklist.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-customer-retention-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Stakeholder session 4 · Asking the right questions of your DA - learn customer retention with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-customer-retention-with-phoebe</a> / Stakeholder session 4 of 4</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Customer Retention with Phoebe · Stakeholder track · Session 4 of 4</div>
+    <h1>Asking the right questions <span class="accent">of your DA</span></h1>
+    <p class="sub">You now know why retention is the money metric (s1), how to read the charts (s2), and which levers move them (s3). The last session is about the conversation itself: what to demand from every retention readout your data analyst brings you, and the traps that make confident-looking charts lie. The centerpiece is a trap you will drive yourself - a dashboard where retention rises four quarters straight while every single channel gets worse.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Stakeholder track</span>
+      <span class="chip audience">Leaders · PMs · no code</span>
+      <span class="chip audience">▶ Live mix-shift trap</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:3">3-18 · The three questions</span>
+      <span class="a3" style="flex:5">18-40 · The traps, live</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Where this session sits</h2>
+    </div>
+    <p class="lede">This is the capstone of the stakeholder track, and it is deliberately the most practical. Nothing new to memorize about retention math - instead, a repeatable script for the meeting where retention numbers get presented. You will leave with three questions that turn any readout into a decision, a trap list that catches the most common ways good analysts accidentally mislead good leaders, and one visceral experience of the worst trap of all. If your analysts take the analyst track (a1-a8), the two tracks meet in the middle: they learn to build readouts that survive these questions, you learn to ask them.</p>
+    <div class="legend">
+      <span class="pill solid">Live - presented in session</span>
+      <span class="pill light">Self-study - read after class</span>
+      <span class="pill peach">▶ Trap simulator - drive it yourself</span>
+      <span class="pill inkpill">Sources covered</span>
+    </div>
+    <div class="callout win">
+      <strong>★ What you walk out with today</strong>
+      The three questions every retention readout must answer (which cohort, what changed, how much money), a felt understanding of the mix-shift trap - you will watch a blended number rise while both channels underneath it fall - the full trap list with one-line antidotes, and a send-it-back checklist you can run in any meeting in under a minute.
+    </div>
+  </section>
+
+  <!-- ============ PART 1: THE THREE QUESTIONS ============ -->
+  <section class="section" id="three-questions">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the readout discipline (which / what / money)</span>
+      <h2>Every readout answers three things <span class="tag concept">15 min live</span></h2>
+    </div>
+    <p class="lede">A retention readout is not a chart - it is an argument for a decision. And the argument has exactly three load-bearing parts: <strong>WHICH cohort</strong> are we talking about (which month, which channel, which product), <strong>WHAT changed</strong> versus the comparison cohort, and <strong>HOW MUCH money</strong> that change is worth (delta retention x cohort size x average revenue per customer). Duolingo's sensitivity ranking from s3 is the model: they did not ask "is retention good", they asked "which movable number is worth the most" - and that question has all three parts built in.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A mock one-page retention readout with three labeled boxes: which cohort names March signups from paid social with the cohort size, what changed compares month-1 retention of 34 percent against February's 29 percent after an onboarding change, and how much money multiplies the 5 point delta by cohort size and revenue per customer. Side annotations explain what goes wrong when each box is missing.">
+        <style>
+          .s4rdT { font: 700 14px Inter, sans-serif; fill: #241A12; }
+          .s4rdH { font: 700 12px Inter, sans-serif; fill: #FFFFFF; }
+          .s4rdK { font: 700 11.5px Inter, sans-serif; fill: #7C2D12; }
+          .s4rdB { font: 400 11.5px Inter, sans-serif; fill: #241A12; }
+          .s4rdN { font: 400 11px Inter, sans-serif; fill: #6B5D52; }
+          .s4rdLd { stroke: #6B5D52; stroke-width: 1; fill: none; }
+        </style>
+        <rect x="0" y="0" width="880" height="340" fill="#FDF9F5"/>
+        <text class="s4rdT" x="40" y="28">The readout template: three boxes, or it goes back</text>
+
+        <rect x="40" y="48" width="470" height="264" rx="10" fill="#FFFFFF" stroke="#EFE2D6"/>
+        <rect x="40" y="48" width="470" height="36" rx="10" fill="#7C2D12"/>
+        <text class="s4rdH" x="58" y="71">Retention readout - March cohort (illustrative)</text>
+
+        <rect x="58" y="98" width="434" height="56" rx="8" fill="#F8EADD"/>
+        <text class="s4rdK" x="72" y="118">1 · WHICH cohort</text>
+        <text class="s4rdB" x="72" y="138">March signups · paid social · mobile app · 12,400 users</text>
+
+        <rect x="58" y="166" width="434" height="56" rx="8" fill="#F8EADD"/>
+        <text class="s4rdK" x="72" y="186">2 · WHAT changed</text>
+        <text class="s4rdB" x="72" y="206">M1 retention 34% vs 29% for February - after new onboarding</text>
+
+        <rect x="58" y="234" width="434" height="56" rx="8" fill="#FBE3D2"/>
+        <text class="s4rdK" x="72" y="254">3 · HOW MUCH money</text>
+        <text class="s4rdB" x="72" y="274">+5 pts x 12,400 users x $18 ARPU = ~$11k more monthly revenue</text>
+
+        <line class="s4rdLd" x1="492" y1="126" x2="556" y2="112"/>
+        <text class="s4rdN" x="560" y="104">No cohort named = no denominator.</text>
+        <text class="s4rdN" x="560" y="119">"Retention is 34%" of whom, since when?</text>
+
+        <line class="s4rdLd" x1="492" y1="194" x2="556" y2="188"/>
+        <text class="s4rdN" x="560" y="180">No comparison = no story. A number</text>
+        <text class="s4rdN" x="560" y="195">alone is neither good nor bad news.</text>
+
+        <line class="s4rdLd" x1="492" y1="262" x2="556" y2="266"/>
+        <text class="s4rdN" x="560" y="258">No money = no decision. This line is</text>
+        <text class="s4rdN" x="560" y="273">what makes the readout actionable.</text>
+
+        <text class="s4rdN" x="560" y="304">Numbers here are illustrative -</text>
+        <text class="s4rdN" x="560" y="319">the SHAPE is the standard.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the one-pager your analyst should hand you: cohort, comparison, money</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The three questions, with the dialogue that goes wrong<span class="mini">8 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Here is the same finding presented twice. The first version happens in real meetings every week; the second is what you should insist on.</p>
+        <ul>
+          <li><strong>Bad readout:</strong> "Good news - retention improved to 34% this quarter." Sounds like progress. But 34% of WHOM? All signups or activated users? Which months? Compared to what baseline, measured at what cohort age? And is 5 points worth one engineer-week or twenty? None of it is answerable from the sentence, so the meeting fills the gap with mood.</li>
+          <li><strong>Good readout:</strong> "The March signup cohort from paid social - 12,400 users - hit 34% month-1 retention versus 29% for February's cohort at the same age, after the new onboarding shipped. That 5-point gain, times cohort size, times $18 average monthly revenue, is worth about $11k per month if it holds. We will know it holds when April's cohort matures." Every clause answers one of the three questions, and the last sentence pre-registers the evidence.</li>
+        </ul>
+        <p>Notice what the good version makes possible: you can now DECIDE something - roll the onboarding change to other channels, or wait for April. The bad version only lets you feel something. The three questions are how you convert charts into decisions:</p>
+        <ul>
+          <li><strong>WHICH cohort:</strong> month, channel, product, and the denominator rule (all signups or activated users). This pins the number to a population that cannot quietly change.</li>
+          <li><strong>WHAT changed:</strong> versus the comparison cohort at the SAME age, and what event explains the gap. No comparison, no story.</li>
+          <li><strong>HOW MUCH money:</strong> delta retention x cohort size x ARPU. This is what ranks the finding against everything else competing for the roadmap - exactly how Duolingo decided CURR was the metric worth four years of work.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why the money question is the kindest one you can ask<span class="mini">3 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Analysts sometimes hear the money question as an attack. It is the opposite - it is what gets their work funded. A retention finding without a dollar figure competes for attention against every loud opinion in the room; a finding WITH one competes on the roadmap, where analysis usually wins.</p>
+        <ul>
+          <li><strong>The formula is deliberately crude.</strong> Delta x cohort size x ARPU ignores compounding, margins, and second-order effects - and that is fine. It is a ranking device, not an accounting entry. Two significant figures is plenty.</li>
+          <li><strong>Ask for the range, not the point.</strong> "Worth $8k-14k a month depending on whether the lift holds at month 3" is more honest and more useful than false precision.</li>
+          <li><strong>Make it standard, not personal.</strong> The healthiest version is a template your team always uses (the one-pager above), so no analyst feels singled out when you ask where box 3 went.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2: THE MIX-SHIFT TRAP ============ -->
+  <section class="section" id="mixshift">
+    <div class="section-kicker">
+      <span class="klabel">Demo · the trap you drive yourself</span>
+      <h2>The mix-shift trap - drive it yourself <span class="tag demo">▶ 12 min · everyone drives</span></h2>
+    </div>
+    <p class="lede">Below is a live dashboard showing blended month-1 retention over four quarters. It rises every single quarter: 24%, 27%, 29%, 30%. The product team is celebrating. Before you read another word, look at the rising bars and ask yourself honestly: would you have shipped the victory slide?</p>
+
+    <div id="rl-mixshift"></div>
+
+    <div class="steps">
+      <div class="step"><p>Look at the blended line first. Four quarters of steady improvement, 24% to 30%. In most companies this chart goes straight into the board deck with the word "momentum" on it.</p></div>
+      <div class="step"><p>Now press <strong>Decompose by channel</strong>. Organic retention: 42% falling to 38%. Paid retention: 16% falling to 12%. <strong>Both channels got worse every quarter.</strong> There is no version of this where the product improved.</p></div>
+      <div class="step"><p>So how did the blend rise? The acquisition mix shifted: organic went from 30% to 70% of signups. Organic users retain at roughly triple the paid rate, so as their share grew, the weighted average climbed - while every ingredient in it declined.</p></div>
+      <div class="step"><p>Say the rule out loud, because you will need it in a meeting within the month: <strong>a blended average follows the mix, not the product</strong>. The only defense is the question "can you decompose that by segment?" - asked BEFORE you celebrate, every time.</p></div>
+    </div>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Debrief: why averages follow the mix<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>What you just drove is <strong>Simpson's paradox</strong> wearing a business suit: a trend that appears in a combined number can reverse when you split the number into the groups that make it up. Nothing in the dashboard was wrong - every figure was computed correctly. The lie was structural, not arithmetic.</p>
+        <ul>
+          <li><strong>The mechanism in one line:</strong> blended retention is a weighted average, and the weights are the acquisition mix. Change the weights and the average moves - no user behavior required.</li>
+          <li><strong>It cuts both ways.</strong> A genuinely improving product can show FALLING blended retention if acquisition shifts toward a weaker channel - so the trap punishes good teams too, not just credulous ones. Decomposition is protection in both directions.</li>
+          <li><strong>The question to institutionalize:</strong> no retention trend gets reported without its decomposition by the segments that could plausibly have shifted - channel, geography, platform, plan. Your analyst can produce this in minutes; they mostly are not asked.</li>
+          <li><strong>Connect it to the three questions:</strong> "WHICH cohort" already contains the antidote. A readout that names "March, paid social" cannot mix-shift on you, because it is a single segment. Blends are where the trap lives.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3: THE TRAP LIST ============ -->
+  <section class="section" id="traps">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers the rest of the trap list + the send-it-back flow</span>
+      <h2>The rest of the trap list <span class="tag concept">10 min live</span></h2>
+    </div>
+    <p class="lede">Mix shift is the most cinematic trap, but its four siblings do more total damage because they are quieter. Each one below comes with the one-line antidote - the question that defuses it. None of them requires you to touch data; they only require you to ask.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A gallery of four retention traps, each panel with a tiny illustration and a one-line antidote. Mix shift: two falling segment lines under a rising blended line - decompose by segment before celebrating. Denominator swap: two bars, all signups at 22 percent versus activated users at 41 percent - same name, different question. Calendar versus cohort: comparing March actives to January actives is not retention - compare cohorts at the same age. Restating history: a point on a line that moved since last quarter - the metric is rolling, replace it.">
+        <style>
+          .s4tgT { font: 700 14px Inter, sans-serif; fill: #241A12; }
+          .s4tgH { font: 700 12px Inter, sans-serif; fill: #241A12; }
+          .s4tgB { font: 400 11px Inter, sans-serif; fill: #6B5D52; }
+          .s4tgG { font: 700 11px Inter, sans-serif; fill: #0F766E; }
+          .s4tgR { font: 400 11px Inter, sans-serif; fill: #991B1B; }
+        </style>
+        <rect x="0" y="0" width="880" height="340" fill="#FDF9F5"/>
+        <text class="s4tgT" x="40" y="28">Trap gallery: four quiet ways a correct chart misleads</text>
+
+        <rect x="40" y="48" width="390" height="128" rx="10" fill="#FFFFFF" stroke="#EFE2D6"/>
+        <text class="s4tgH" x="58" y="72">Mix shift</text>
+        <path d="M70,130 L120,124 L170,118 L220,112" fill="none" stroke="#C2410C" stroke-width="2.5"/>
+        <path d="M70,102 L120,106 L170,110 L220,114" fill="none" stroke="#0F766E" stroke-width="2"/>
+        <path d="M70,146 L120,149 L170,152 L220,155" fill="none" stroke="#6B5D52" stroke-width="2"/>
+        <text class="s4tgB" x="232" y="108">blend up,</text>
+        <text class="s4tgB" x="232" y="122">segments down</text>
+        <text class="s4tgG" x="58" y="162">Antidote: decompose by segment before celebrating.</text>
+
+        <rect x="450" y="48" width="390" height="128" rx="10" fill="#FFFFFF" stroke="#EFE2D6"/>
+        <text class="s4tgH" x="468" y="72">Denominator swap</text>
+        <rect x="480" y="118" width="70" height="32" fill="#F6C39E"/>
+        <text class="s4tgB" x="480" y="112">all signups 22%</text>
+        <rect x="620" y="94" width="70" height="56" fill="#C2410C"/>
+        <text class="s4tgB" x="620" y="88">activated 41%</text>
+        <text class="s4tgG" x="468" y="162">Antidote: same name, different question - make them say which.</text>
+
+        <rect x="40" y="184" width="390" height="128" rx="10" fill="#FFFFFF" stroke="#EFE2D6"/>
+        <text class="s4tgH" x="58" y="208">Calendar vs cohort</text>
+        <rect x="70" y="222" width="130" height="30" rx="6" fill="#F8EADD"/>
+        <text class="s4tgB" x="84" y="241">"March actives"</text>
+        <text class="s4tgR" x="212" y="241">is NOT vs</text>
+        <rect x="278" y="222" width="130" height="30" rx="6" fill="#F8EADD"/>
+        <text class="s4tgB" x="288" y="241">"January actives"</text>
+        <text class="s4tgG" x="58" y="280">Antidote: compare cohorts at the same AGE,</text>
+        <text class="s4tgG" x="58" y="296">never calendar months head to head.</text>
+
+        <rect x="450" y="184" width="390" height="128" rx="10" fill="#FFFFFF" stroke="#EFE2D6"/>
+        <text class="s4tgH" x="468" y="208">Restating history</text>
+        <path d="M480,268 L540,262 L600,258 L660,250" fill="none" stroke="#C2410C" stroke-width="2.5"/>
+        <circle cx="540" cy="262" r="5" fill="#C2410C"/>
+        <circle cx="540" cy="240" r="5" fill="#FCA5A5"/>
+        <text class="s4tgR" x="554" y="238">last quarter's dot moved up</text>
+        <text class="s4tgG" x="468" y="280">Antidote: if history moved, the metric is rolling or</text>
+        <text class="s4tgG" x="468" y="296">trailing - replace it with frozen cohorts.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - four traps, four antidotes: every one is a question, not a query</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The trap list, one by one<span class="mini">6 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Denominator games.</strong> "Retention" computed on all signups and "retention" computed on activated users (people who completed a first core action) are DIFFERENT questions - the second reads far higher and measures product stickiness, while the first measures funnel plus product together. Both are legitimate; swapping between them silently is not. The ask: "which denominator, and has it changed since last quarter?"</li>
+          <li><strong>Calendar periods vs cohort ages.</strong> "March actives vs January actives" is not retention - it mixes cohorts of every age with seasonality and acquisition volume. Retention compares cohorts at the SAME age: January's month-2 versus February's month-2. If the chart's x-axis is calendar months and it is being called retention, send it back.</li>
+          <li><strong>D1 lifts that do not propagate.</strong> A new welcome screen lifts day-1 retention - lovely. But if the D30 curve is unchanged, you moved the greeting, not the habit. The ask: "does the lift survive to day 30, or do the curves reconverge?"</li>
+          <li><strong>Dashboards whose history restates - the frozen-history law.</strong> Pull up last quarter's number. If it is different from what you reported last quarter, the metric is rolling or trailing: its definition re-anchors every day, so it can never be trended, compared, or targeted against. This one is not a caveat - the metric should be replaced with frozen forward-looking cohorts.</li>
+          <li><strong>Immature cells read as decline.</strong> The newest cohort always looks worst, because its later windows have not happened yet. "Not yet" is not "churned". The ask: "are the youngest cells marked partial, and are they excluded from averages?"</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Spotting the traps from the chart alone<span class="mini">4 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>You can catch most of the list without asking a single question, just from how the chart is drawn. A pocket field guide:</p>
+        <ul>
+          <li><strong>The y-axis label says "retention" with no cohort or age in sight:</strong> suspect calendar-vs-cohort or a trailing window. A trustworthy retention chart names the cohort dimension somewhere.</li>
+          <li><strong>The trend is suspiciously smooth and only goes up:</strong> suspect a blend hiding a mix shift, or a rolling metric quietly restating its own past upward. Real segment-level retention is lumpy.</li>
+          <li><strong>The newest period is the lowest bar on the chart:</strong> almost always an immature cell being read as decline. Check whether it is marked partial.</li>
+          <li><strong>Footnotes changed but the metric name did not:</strong> denominator swap. This is why the readout template makes the denominator part of "WHICH cohort".</li>
+          <li><strong>The healthiest habit of all:</strong> keep one old readout in a drawer. Any time a dashboard shows the same period, compare. If history moved, you have caught a restating metric red-handed - no analytics skills required.</li>
+        </ul>
+      </div>
+    </details>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The question checklist as a decision flow. A readout arrives, then passes through three question gates in sequence: which cohort, what changed, how much money. If all three are answered it reaches the decide step. A strip below shows that if any answer is missing the readout is sent back with the question attached.">
+        <style>
+          .s4cfT { font: 700 14px Inter, sans-serif; fill: #241A12; }
+          .s4cfH { font: 700 11.5px Inter, sans-serif; fill: #FFFFFF; }
+          .s4cfR { font: 700 11.5px Inter, sans-serif; fill: #991B1B; }
+          .s4cfN { font: 400 11.5px Inter, sans-serif; fill: #6B5D52; }
+          .s4cfA { stroke: #C2410C; stroke-width: 2.2; fill: none; marker-end: url(#s4cfArr); }
+          .s4cfD { stroke: #991B1B; stroke-width: 1.8; fill: none; stroke-dasharray: 5 4; marker-end: url(#s4cfArd); }
+        </style>
+        <defs>
+          <marker id="s4cfArr" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L8,4.5 L0,9 z" fill="#C2410C"/></marker>
+          <marker id="s4cfArd" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L8,4.5 L0,9 z" fill="#991B1B"/></marker>
+        </defs>
+        <rect x="0" y="0" width="880" height="300" fill="#FDF9F5"/>
+        <text class="s4cfT" x="40" y="28">The send-it-back flow: three gates between a chart and a decision</text>
+
+        <rect x="40" y="90" width="140" height="60" rx="10" fill="#E06A2E"/>
+        <text class="s4cfH" x="110" y="116" text-anchor="middle">Readout</text>
+        <text class="s4cfH" x="110" y="134" text-anchor="middle">arrives</text>
+
+        <rect x="220" y="90" width="150" height="60" rx="10" fill="#C2410C"/>
+        <text class="s4cfH" x="295" y="116" text-anchor="middle">WHICH</text>
+        <text class="s4cfH" x="295" y="134" text-anchor="middle">cohort?</text>
+
+        <rect x="410" y="90" width="150" height="60" rx="10" fill="#C2410C"/>
+        <text class="s4cfH" x="485" y="116" text-anchor="middle">WHAT</text>
+        <text class="s4cfH" x="485" y="134" text-anchor="middle">changed?</text>
+
+        <rect x="600" y="90" width="150" height="60" rx="10" fill="#C2410C"/>
+        <text class="s4cfH" x="675" y="116" text-anchor="middle">HOW MUCH</text>
+        <text class="s4cfH" x="675" y="134" text-anchor="middle">money?</text>
+
+        <rect x="782" y="90" width="70" height="60" rx="10" fill="#0F766E"/>
+        <text class="s4cfH" x="817" y="126" text-anchor="middle">Decide</text>
+
+        <path class="s4cfA" d="M180,120 L216,120"/>
+        <path class="s4cfA" d="M370,120 L406,120"/>
+        <path class="s4cfA" d="M560,120 L596,120"/>
+        <path class="s4cfA" d="M750,120 L778,120"/>
+
+        <path class="s4cfD" d="M295,150 L295,196"/>
+        <path class="s4cfD" d="M485,150 L485,196"/>
+        <path class="s4cfD" d="M675,150 L675,196"/>
+
+        <rect x="220" y="200" width="530" height="56" rx="10" fill="#FEF2F2" stroke="#FCA5A5"/>
+        <text class="s4cfR" x="238" y="224">Any answer missing: send it back with the question attached.</text>
+        <text class="s4cfR" x="238" y="242">A readout without all three is a chart, not a decision.</text>
+
+        <text class="s4cfN" x="40" y="284">Under a minute per readout - and after the third send-back, readouts start arriving complete.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the checklist as a flow: three gates, one polite rejection path</figcaption>
+    </figure>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>The mix-shift trap in ecommerce clothes.</strong> A shop leans into a paid social surge before the holidays: cheap installs, big signup numbers, and paid's share of new customers jumps from a third to two thirds. Paid buyers repeat-purchase at a fraction of the organic rate - so blended repeat-purchase retention CAN look flat or even up while both channels individually soften, purely because acquisition got bigger and the chart is a blend. Meanwhile the board deck celebrates "record acquisition AND stable retention". The decomposition question - repeat rate by channel, cohort by cohort - is the only thing standing between that deck and next quarter's surprise. This is the trap you drove above, wearing a discount code.</p>
+    </div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Try it yourself - this week <span class="tag exercise">◐ 30 min total</span></h2>
+    </div>
+    <ul>
+      <li>Take the most recent retention readout you received and run the three-question checklist: which cohort, what changed, how much money. Score it out of 3, kindly.</li>
+      <li>Ask your analyst for ONE decomposition: your headline retention trend split by acquisition channel. You are looking for the mix-shift pattern you drove today - a blend moving differently from its segments.</li>
+      <li>Find one trap in the wild: a calendar-vs-cohort comparison, a denominator that changed silently, an immature cell read as decline, or a dashboard whose history has moved. Bring it (anonymized) to the next team meeting as a teaching example, not a blame example.</li>
+      <li>Put the send-it-back flow somewhere visible - the point is not to reject work, it is that after the third gentle send-back, readouts start arriving complete.</li>
+    </ul>
+  </section>
+
+  <!-- ============ SOURCES ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session draws on</h2>
+    </div>
+    <p class="lede">The questions and traps above are the stakeholder-communication discipline of this course's verified course map, standing on a small set of published caveats:</p>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The course's stakeholder-communication discipline (which / what / money + trap list)</span><span class="note">Parts 1-3 · taught in full, with the live mix-shift trap</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Mode's magic-number caveat (correlational thresholds chosen for communicability)</span><span class="note">Part 1 · the pre-register-the-evidence habit; the full folklore scorecard is in s3</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Amplitude's lifecycle framing (new / current / resurrected, immature buckets)</span><span class="note">Part 3 · behind the immature-cell and frozen-history traps; built hands-on in a1-a2</span></div>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions before you go 🎯 <span class="tag exercise">◐ 90 seconds</span></h2>
+    </div>
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">1 · Your analyst says "retention improved to 34% this quarter." What are the three questions that turn this into a decision?</p>
+      <button class="qopt" type="button">A · Who computed it, which tool, and is the query reviewed</button>
+      <button class="qopt" type="button">B · Is it D1 or D30, is it above benchmark, and is it statistically significant</button>
+      <button class="qopt" type="button">C · WHICH cohort, WHAT changed vs the comparison cohort, and HOW MUCH money (delta x cohort size x ARPU)</button>
+      <p class="qwhy">The other options have their place, but the readout discipline is cohort, comparison, money. Those three pin the population, establish the story, and rank the finding against everything else on the roadmap - exactly the shape of Duolingo's sensitivity ranking.</p>
+    </div>
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">2 · In the simulator, organic retention fell 42% to 38% and paid fell 16% to 12% - yet blended retention rose 24% to 30%. How?</p>
+      <button class="qopt" type="button">A · The acquisition mix shifted toward organic (30% to 70% of signups), the stickier channel - the weighted average followed the weights</button>
+      <button class="qopt" type="button">B · Rounding error - the segment numbers must be wrong</button>
+      <button class="qopt" type="button">C · Organic users improved enough to offset paid's decline</button>
+      <p class="qwhy">Simpson's paradox: blended retention is a weighted average and the weights are the mix. Organic retains at roughly triple the paid rate, so growing its share lifts the blend even while BOTH channels decline. Every figure was computed correctly; the lie was structural. Always decompose before celebrating.</p>
+    </div>
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">3 · You compare last quarter's dashboard printout to today's dashboard, and last quarter's retention number has changed. What does that tell you?</p>
+      <button class="qopt" type="button">A · The data team fixed a bug - restatements mean quality control is working</button>
+      <button class="qopt" type="button">B · The metric is rolling or trailing - its definition re-anchors over time, so it cannot be trended or targeted, and should be replaced with frozen cohorts</button>
+      <button class="qopt" type="button">C · Nothing - all live dashboards drift a little</button>
+      <p class="qwhy">The frozen-history law: a forward-looking cohort number is immutable once its window completes, so completed history that moves is a definitional smell, not a data bug. Rolling ("returned on day N or later") and trailing look-back metrics restate by construction - which is exactly why this course bans them from reporting.</p>
+    </div>
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Stakeholder session 4 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>The three questions</b><span>WHICH cohort (month, channel, product, denominator) · WHAT changed vs the comparison cohort at the same age · HOW MUCH money.</span></div>
+      <div class="cheat-item"><b>The money math</b><span>Delta retention x cohort size x ARPU. Crude on purpose - it is a ranking device for the roadmap, not an accounting entry. Ask for a range.</span></div>
+      <div class="cheat-item"><b>Mix-shift trap</b><span>A blended average follows the MIX, not the product: both channels can fall while the blend rises. Decompose by segment before celebrating.</span></div>
+      <div class="cheat-item"><b>Denominator games</b><span>All signups vs activated users are different questions with the same name. Make every readout say which - and flag silent changes.</span></div>
+      <div class="cheat-item"><b>Calendar vs cohort</b><span>"March actives vs January actives" is not retention. Compare cohorts at the same AGE: January's month-2 vs February's month-2.</span></div>
+      <div class="cheat-item"><b>D1 lifts must propagate</b><span>A welcome-screen bump that leaves D30 unchanged moved the greeting, not the habit. Ask whether the curves reconverge.</span></div>
+      <div class="cheat-item"><b>The frozen-history law</b><span>Completed cohort windows never restate. If last quarter's number moved, the metric is rolling/trailing - replace it, don't footnote it.</span></div>
+      <div class="cheat-item"><b>Immature cells</b><span>The newest cohort's late windows have not happened yet. "Not yet" is never "churned": blank and marked partial, excluded from averages.</span></div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <span>Stakeholder session 4 of 4 · learn-customer-retention-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="s3-levers-that-move-retention.html">← s3: Levers that move retention</a> &nbsp;·&nbsp; <a href="a1-retention-metrics-precisely.html">Go deeper: the analyst track →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/retention-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>

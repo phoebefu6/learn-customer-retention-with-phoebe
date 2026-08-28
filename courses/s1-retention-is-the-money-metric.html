@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Stakeholder session 1 of 4. Why retention is the money metric: the leaky bucket arithmetic, the real numbers behind the famous claims (Reichheld 1990, the honest version of the 5-25x line), and three plain-language money translations - LTV:CAC, quick ratio, NRR. No code, all business.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Retention is the money metric - learn customer retention with phoebe">
+<meta property="og:description" content="Stakeholder session 1 of 4. The leaky bucket arithmetic, the documented Reichheld 1990 numbers vs the folklore 5-25x line, and three money translations every leader should know. No code.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-customer-retention-with-phoebe/courses/s1-retention-is-the-money-metric.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-customer-retention-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Retention is the money metric - learn customer retention with phoebe">
+<meta name="twitter:description" content="The leaky bucket arithmetic, the documented Reichheld 1990 numbers vs the folklore 5-25x line, and three money translations every leader should know. No code.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-customer-retention-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Stakeholder session 1 · Retention is the money metric - learn customer retention with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-customer-retention-with-phoebe</a> / Stakeholder session 1 of 4</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Customer Retention with Phoebe · Stakeholder track · Session 1 of 4</div>
+    <h1>Retention is the <span class="accent">money</span> metric</h1>
+    <p class="sub">Acquisition gets the budget meetings, the dashboards, the applause. Retention quietly decides whether any of that spend compounds or evaporates. In 45 minutes, with zero code, you will walk through the arithmetic of leaky buckets, meet the real study behind the famous "keep 5% more, earn 25-85% more" claim (and the famous claim that has no study at all), and pick up three plain-language translations that turn a retention point into a dollar figure.</p>
+    <div class="chip-row">
+      <span class="chip level">🟢 Stakeholder track</span>
+      <span class="chip audience">Leaders · PMs · no code</span>
+      <span class="chip audience">Value focus</span>
+      <span class="chip time">Start here</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:5">3-18 · The leaky bucket</span>
+      <span class="a3" style="flex:8">18-42 · The economics</span>
+      <span class="a4" style="flex:1">42-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>What the stakeholder track does</h2>
+    </div>
+    <p class="lede">Four sessions, no Python, all leverage. Today makes the money case: why retention is the metric your P&amp;L actually runs on. Session s2 teaches you to read the charts your analysts bring (the cohort triangle, the retention curve, the benchmark). Session s3 tours the levers that actually move retention, with the receipts. Session s4 arms you with the exact questions to ask your data analyst so every readout ends in a decision. Your analysts have a parallel track (a1-a8) where they build all of this in code - this track makes you the sharpest consumer of their work in the room.</p>
+    <div class="legend">
+      <span class="pill solid">Live - presented in session</span>
+      <span class="pill light">Self-study - read after class</span>
+      <span class="pill inkpill">Sources covered</span>
+    </div>
+    <div class="callout win">
+      <strong>★ What you walk out with today</strong>
+      The leaky-bucket arithmetic that explains why growth stalls despite record ad spend, the honest version of the two most-quoted retention claims in business (one documented, one directional), and three money translations - LTV:CAC, quick ratio, NRR - each in one sentence, with the moment in a meeting when you should reach for it.
+    </div>
+  </section>
+
+  <!-- ============ PART 1: THE LEAKY BUCKET ============ -->
+  <section class="section" id="leaky-bucket">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the leaky bucket and the compounding base</span>
+      <h2>The leaky bucket vs the compounding base <span class="tag concept">15 min live</span></h2>
+    </div>
+    <p class="lede">Picture your active customers as water in a bucket. Acquisition pours in at the top; churn leaks out the bottom. The uncomfortable physics: <strong>the leak rate, not the pour rate, sets how full the bucket can ever get</strong>. A business acquiring furiously with weak retention is not growing - it is running on a treadmill, paying every month to replace the customers it lost last month. A business with strong retention turns the same acquisition spend into a base that stacks, layer on layer.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 350" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two panels comparing the same acquisition rate under different retention. Left: a leaky bucket keeping 80 percent of users each month stalls near 47 thousand monthly active users against a ceiling of 50 thousand. Right: a compounding base keeping 95 percent each month reaches about 92 thousand after a year and is still climbing toward a ceiling of 200 thousand.">
+        <style>
+          .s1lbT { font: 700 14px Inter, sans-serif; fill: #241A12; }
+          .s1lbH { font: 700 12.5px Inter, sans-serif; fill: #241A12; }
+          .s1lbB { font: 400 11.5px Inter, sans-serif; fill: #241A12; }
+          .s1lbN { font: 400 11px Inter, sans-serif; fill: #6B5D52; }
+          .s1lbR { font: 700 11px Inter, sans-serif; fill: #991B1B; }
+          .s1lbA { stroke: #0F766E; stroke-width: 2.2; fill: none; marker-end: url(#s1lbArr); }
+        </style>
+        <defs>
+          <marker id="s1lbArr" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+            <path d="M0,0 L8,4.5 L0,9 z" fill="#0F766E"/>
+          </marker>
+        </defs>
+        <rect x="0" y="0" width="880" height="350" fill="#FDF9F5"/>
+        <text class="s1lbT" x="40" y="28">Same acquisition, two futures: the leak decides the ceiling</text>
+
+        <rect x="40" y="52" width="390" height="240" rx="10" fill="#FFFFFF" stroke="#EFE2D6"/>
+        <text class="s1lbH" x="60" y="78">Leaky bucket - keeps 80% each month</text>
+        <path class="s1lbA" d="M215,92 L215,114"/>
+        <text class="s1lbN" x="232" y="106">10k new users/mo</text>
+        <path d="M150,120 L280,120 L265,215 L165,215 Z" fill="#FBE3D2" stroke="#C2410C" stroke-width="2"/>
+        <path d="M160,170 L270,170 L263,212 L167,212 Z" fill="#EE9A66"/>
+        <text class="s1lbB" x="215" y="192" text-anchor="middle">stalls ~47k</text>
+        <circle cx="192" cy="228" r="4" fill="#FCA5A5"/>
+        <circle cx="215" cy="237" r="4" fill="#FCA5A5"/>
+        <circle cx="238" cy="228" r="4" fill="#FCA5A5"/>
+        <text class="s1lbR" x="215" y="258" text-anchor="middle">20% leaks out every month</text>
+        <text class="s1lbN" x="60" y="280">Ceiling: 10k / 20% = 50k MAU. After a year: ~47k and flat.</text>
+
+        <rect x="450" y="52" width="390" height="240" rx="10" fill="#FFFFFF" stroke="#EFE2D6"/>
+        <text class="s1lbH" x="470" y="78">Compounding base - keeps 95% each month</text>
+        <rect x="470" y="90" width="10" height="10" fill="#C2410C"/>
+        <text class="s1lbN" x="486" y="99">retained base</text>
+        <rect x="580" y="90" width="10" height="10" fill="#F6C39E"/>
+        <text class="s1lbN" x="596" y="99">new this month</text>
+        <rect x="480" y="218" width="48" height="32" fill="#F6C39E"/>
+        <rect x="536" y="224" width="48" height="26" fill="#C2410C"/>
+        <rect x="536" y="192" width="48" height="32" fill="#F6C39E"/>
+        <rect x="592" y="202" width="48" height="48" fill="#C2410C"/>
+        <rect x="592" y="170" width="48" height="32" fill="#F6C39E"/>
+        <rect x="648" y="182" width="48" height="68" fill="#C2410C"/>
+        <rect x="648" y="150" width="48" height="32" fill="#F6C39E"/>
+        <rect x="704" y="165" width="48" height="85" fill="#C2410C"/>
+        <rect x="704" y="133" width="48" height="32" fill="#F6C39E"/>
+        <rect x="760" y="150" width="48" height="100" fill="#C2410C"/>
+        <rect x="760" y="118" width="48" height="32" fill="#F6C39E"/>
+        <text class="s1lbN" x="784" y="110" text-anchor="middle" fill="#0F766E">still climbing</text>
+        <text class="s1lbN" x="470" y="280">Ceiling: 10k / 5% = 200k MAU. After a year: ~92k and rising.</text>
+
+        <text class="s1lbN" x="40" y="330">Same acquisition both sides. Retention sets the ceiling: steady-state MAU = new users per month / churn rate.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the pour rate is identical; only the leak differs, and the leak sets the ceiling</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The arithmetic of leaks: same spend, opposite trajectories<span class="mini">6 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Two companies each acquire <strong>10,000 new users every month</strong>, at the same cost. Company L keeps 80% of its base month over month; Company C keeps 95%. That 15-point gap sounds modest. Run it forward and it is the whole story:</p>
+        <ul>
+          <li><strong>The ceiling is fixed by the leak.</strong> A bucket fills until outflow equals inflow: steady-state MAU = monthly new users divided by monthly churn rate. Company L tops out at 10,000 / 0.20 = <strong>50,000 users, forever</strong>, no matter how long it keeps spending. Company C's ceiling is 10,000 / 0.05 = <strong>200,000</strong>. Same pour, 4x the pond.</li>
+          <li><strong>After 12 months</strong> Company L sits near 47,000 - already 93% of everything it will ever be. Company C is near 92,000 and still climbing steeply, with years of growth left on the same budget.</li>
+          <li><strong>The treadmill test:</strong> if next quarter's growth plan is "raise acquisition," ask what the churn rate is first. Pouring faster into a bucket that leaks 20% a month buys a higher plateau, not growth - and the moment spend pauses, the water line falls.</li>
+        </ul>
+        <p>This is why retention is the money metric: it is the multiplier on every acquisition dollar you will ever spend. The numbers above are illustrative arithmetic - in session s2 you will read this exact story off a real cohort chart.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Retention precedes monetization: the free-to-play lesson<span class="mini">4 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Mobile games make the sequencing brutally clear, because their revenue is voluntary. In free-to-play, <strong>only 2-5% of players ever pay anything at all</strong>. And the money is astonishingly concentrated: the top 10% of paying players generate roughly <strong>64% of revenue</strong>, and the top 1% about 29% (Swrve's payer analysis).</p>
+        <ul>
+          <li><strong>Whales are not found, they are grown.</strong> A big spender is almost never big in week one. High-value players emerge over weeks and months of play - which means they can only emerge from the pool of players who stayed. Kill retention and you have mathematically capped monetization before the first offer is shown.</li>
+          <li><strong>The ecommerce echo:</strong> the same concentration shows up in shops. Returning customers are typically around 21% of a store's customers but around 44% of its revenue. The repeat buyer is the business.</li>
+          <li><strong>The sequencing rule for your roadmap:</strong> monetization work multiplies the retained base; it cannot substitute for one. When a team proposes squeezing more revenue from a shrinking base, the arithmetic of Part 1 already told you how that ends.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2: THE FAMOUS CLAIMS ============ -->
+  <section class="section" id="famous-claims">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers Reichheld 1990 + the honest 5-25x</span>
+      <h2>The real numbers behind the famous claims <span class="tag concept">12 min live</span></h2>
+    </div>
+    <p class="lede">Two lines appear in nearly every retention deck ever written: "improving retention 5% raises profits 25-95%" and "keeping a customer is 5-25x cheaper than acquiring one." One of these has a landmark study behind it. The other has a blog post. Knowing which is which - and quoting each accordingly - is the cheapest credibility upgrade available to a leader.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Horizontal bar chart of the Reichheld and Sasser 1990 findings: the profit lift from cutting customer defections by 5 percentage points was 30 percent for an auto service chain, 50 percent for an insurance brokerage, and 85 percent for bank branch deposits. The study range across industries was 25 to 85 percent.">
+        <style>
+          .s1rbT { font: 700 14px Inter, sans-serif; fill: #241A12; }
+          .s1rbL { font: 600 12px Inter, sans-serif; fill: #241A12; }
+          .s1rbV { font: 700 12.5px Inter, sans-serif; fill: #241A12; }
+          .s1rbN { font: 400 11px Inter, sans-serif; fill: #6B5D52; }
+        </style>
+        <rect x="0" y="0" width="880" height="300" fill="#FDF9F5"/>
+        <text class="s1rbT" x="40" y="28">Cut defections by 5 points, profits rose 25-85%: Reichheld &amp; Sasser, HBR 1990</text>
+        <text class="s1rbN" x="40" y="52">Profit lift from a 5 percentage point cut in customer defections, by industry studied</text>
+
+        <text class="s1rbL" x="200" y="92" text-anchor="end">Auto service chain</text>
+        <rect x="210" y="70" width="195" height="34" rx="5" fill="#EE9A66"/>
+        <text class="s1rbV" x="415" y="92">+30% profit</text>
+
+        <text class="s1rbL" x="200" y="152" text-anchor="end">Insurance brokerage</text>
+        <rect x="210" y="130" width="325" height="34" rx="5" fill="#E06A2E"/>
+        <text class="s1rbV" x="545" y="152">+50% profit</text>
+
+        <text class="s1rbL" x="200" y="212" text-anchor="end">Bank branch deposits</text>
+        <rect x="210" y="190" width="552" height="34" rx="5" fill="#7C2D12"/>
+        <text class="s1rbV" x="772" y="212">+85%</text>
+
+        <text class="s1rbN" x="40" y="258">Why so large: customers who stay cost less to serve, buy more over time, and refer others - profit compounds with tenure.</text>
+        <text class="s1rbN" x="40" y="278">Later Bain work stretched the range to 25-95%. Quote the range, name the year, and it holds up in any boardroom.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - a real 1990 study, industry by industry: this is the claim with receipts</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>One claim is documented, the other is directional - treat them differently<span class="mini">6 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>The documented one.</strong> Reichheld &amp; Sasser, Harvard Business Review, 1990 ("Zero Defections"). They measured what happened to per-customer profit as tenure grew, across service industries, and found that cutting customer defections by 5 percentage points raised profits <strong>25-85%</strong> depending on the industry (later Bain &amp; Company work stretched the range to 25-95%). The mechanism is boring and durable: long-tenured customers cost less to serve, spend more, and refer. This claim you can quote with a straight face - with its year attached.</p>
+        <p><strong>The soft one.</strong> "It is 5-25x cheaper to retain a customer than to acquire one" traces to a 2014 HBR piece that <strong>cites no underlying study</strong>. A range that wide is a shrug in numeric clothing. The direction is almost certainly right - acquisition has a real, rising price tag and retention work is often cheaper - but it is folklore wearing a lab coat. Teach your teams to use it as a directional prior, never as a measured constant in a business case.</p>
+        <div class="callout tip">
+          <strong>The one-sentence versions for your next deck</strong>
+          Documented: "Reichheld and Sasser, 1990: a 5-point cut in defections raised profits 25-85% across the industries studied." Directional: "Retaining is usually far cheaper than acquiring - the popular 5-25x figure is a directional range, not a measured constant." Saying the second sentence honestly makes people trust your first one more. That is the whole trick of evidence hygiene.
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3: THE MONEY TRANSLATIONS ============ -->
+  <section class="section" id="money-translations">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers LTV:CAC, quick ratio, NRR + the envelope math</span>
+      <h2>The three money translations <span class="tag concept">12 min live</span></h2>
+    </div>
+    <p class="lede">Retention percentages do not move budgets; dollar figures do. Three ratios translate retention into money, and each has a specific moment in a meeting when it is the right thing to ask about. You do not need to compute any of them - you need to know what they mean and when to summon them.</p>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>LTV:CAC, quick ratio, NRR - one sentence each<span class="mini">6 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>LTV:CAC</strong> - for every dollar spent acquiring a customer, how many dollars of lifetime value come back; the classic healthy benchmark is <strong>3:1</strong> (David Skok). Retention is the engine of the LTV half: customers who stay longer are worth more, so every retention point raises the ratio without touching ad spend. <em>When to ask:</em> the moment anyone proposes scaling acquisition - "what is LTV:CAC on that channel, and what retention assumption is inside the LTV?"</li>
+          <li><strong>Quick ratio</strong> - users gained for every user lost: (new + resurrected) / churned. For consumer products, <strong>1.5-2.0 is very good</strong>. It is the leaky bucket as a single number: below 1 the bucket is draining even if the top line looks busy. <em>When to ask:</em> whenever MAU is flat and nobody can say why - the quick ratio splits "not filling" from "leaking".</li>
+          <li><strong>NRR (net revenue retention)</strong> - revenue this period from last period's customers, as a percent of what they paid before. <strong>Above 100%</strong> means the existing base grows by itself: the business would grow with zero new sales. <em>When to ask:</em> any subscription or B2B review - "if we hired no salespeople next year, does revenue rise or fall?"</li>
+        </ul>
+        <p>Notice what all three have in common: acquisition can flatter each of them for a quarter, but only retention can hold them up for years.</p>
+      </div>
+    </details>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="An annotated equation showing the back-of-envelope money translation: a retention delta of plus 5 points, times a cohort size of 10,000 joiners per month, times ARPU of 30 dollars per month, equals 15,000 dollars per month from one cohort, with a question to ask under each term.">
+        <style>
+          .s1eqH { font: 700 12.5px Inter, sans-serif; fill: #FFFFFF; }
+          .s1eqV { font: 700 19px Inter, sans-serif; fill: #FFFFFF; }
+          .s1eqO { font: 700 24px Inter, sans-serif; fill: #6B5D52; }
+          .s1eqN { font: 400 11px Inter, sans-serif; fill: #6B5D52; }
+          .s1eqB { font: 400 11.5px Inter, sans-serif; fill: #241A12; }
+          .s1eqT { font: 700 14px Inter, sans-serif; fill: #241A12; }
+        </style>
+        <rect x="0" y="0" width="880" height="300" fill="#FDF9F5"/>
+        <text class="s1eqT" x="40" y="28">The back-of-envelope translation - do it in the meeting, refine it with your DA later</text>
+
+        <rect x="40" y="60" width="170" height="90" rx="10" fill="#C2410C"/>
+        <text class="s1eqH" x="125" y="88" text-anchor="middle">Retention delta</text>
+        <text class="s1eqV" x="125" y="122" text-anchor="middle">+5 pts</text>
+        <text class="s1eqN" x="125" y="172" text-anchor="middle">which definition?</text>
+        <text class="s1eqO" x="226" y="115" text-anchor="middle">×</text>
+
+        <rect x="242" y="60" width="190" height="90" rx="10" fill="#C2410C"/>
+        <text class="s1eqH" x="337" y="88" text-anchor="middle">Cohort size</text>
+        <text class="s1eqV" x="337" y="122" text-anchor="middle">10,000 / mo</text>
+        <text class="s1eqN" x="337" y="172" text-anchor="middle">which cohort?</text>
+        <text class="s1eqO" x="448" y="115" text-anchor="middle">×</text>
+
+        <rect x="464" y="60" width="150" height="90" rx="10" fill="#C2410C"/>
+        <text class="s1eqH" x="539" y="88" text-anchor="middle">ARPU</text>
+        <text class="s1eqV" x="539" y="122" text-anchor="middle">$30 / mo</text>
+        <text class="s1eqN" x="539" y="172" text-anchor="middle">revenue or margin?</text>
+        <text class="s1eqO" x="630" y="115" text-anchor="middle">=</text>
+
+        <rect x="646" y="60" width="194" height="90" rx="10" fill="#7C2D12"/>
+        <text class="s1eqH" x="743" y="88" text-anchor="middle">Money impact</text>
+        <text class="s1eqV" x="743" y="122" text-anchor="middle">+$15,000 / mo</text>
+        <text class="s1eqN" x="743" y="172" text-anchor="middle">from ONE cohort</text>
+
+        <rect x="40" y="196" width="800" height="76" rx="10" fill="#F8EADD"/>
+        <text class="s1eqB" x="58" y="222">+5 points on a 10,000-person monthly cohort = 500 extra customers still active. At $30 ARPU that is $15,000</text>
+        <text class="s1eqB" x="58" y="240">every month - and every NEW monthly cohort stacks its own $15,000 layer on top as long as the lift holds.</text>
+        <text class="s1eqN" x="58" y="260">The three questions under the boxes are session s4 in miniature: definition, cohort, margin. Ask them every time.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - delta retention × cohort size × ARPU: the fastest credible dollar figure in the building</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step"><p>Find the retention number your company already reports. Ask which definition it uses and whether historical values ever restate (session s2 explains why that question matters so much).</p></div>
+      <div class="step"><p>Get the size of one recent monthly cohort - new customers or new players in a single month.</p></div>
+      <div class="step"><p>Multiply: 5 points × cohort size × ARPU. Write the monthly dollar figure down before the meeting ends.</p></div>
+      <div class="step"><p>Open your next planning conversation with it: "a retention point is worth roughly $X a month per cohort - what would it cost to buy one?"</p></div>
+    </div>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>Amazon Prime: the retention machine, quoted honestly.</strong> CIRP estimates that roughly 93% of Prime members renew after their first year, and about 98% renew after two - and that members spend around twice what non-members do. Two caveats, and the caveats are the teaching: these are <strong>third-party survey estimates</strong> (Amazon does not publish them), and the 2x spend is <strong>partly a selection effect</strong> - heavy shoppers are the ones who join Prime in the first place. Retention numbers that good always deserve the question "who selected in?" Ask it even when - especially when - the number supports your case.</p>
+    </div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Try it yourself - this week <span class="tag exercise">◐ 20 min total</span></h2>
+    </div>
+    <ul>
+      <li>Find your company's headline retention number and ask its owner one question: which definition is this - who is in the base, and over what window? Write the answer down; bring it to session s2.</li>
+      <li>Run the envelope math: what would +5 retention points be worth per month, using one real cohort's size and your real ARPU? A rough number is fine - rough and yours beats precise and nobody's.</li>
+      <li>Spot one "5-25x cheaper" style claim in a deck or article this week and check: does it carry a year and a source, or is it floating free?</li>
+    </ul>
+  </section>
+
+  <!-- ============ SOURCES ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session draws on</h2>
+    </div>
+    <p class="lede">Retention economics has one landmark study, several useful ratios, and a lot of folklore. This session covers the working core of:</p>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Reichheld &amp; Sasser - "Zero Defections" (HBR 1990) + later Bain range</span><span class="note">Part 2 · the documented 25-85% (to 25-95%) profit lift</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">HBR 2014 - the "5-25x cheaper to retain" line and its missing study</span><span class="note">Part 2 · taught as directional, never as a constant</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">David Skok - LTV:CAC and the 3:1 benchmark</span><span class="note">Part 3 · plain-language only; your analysts build the math in a6</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">CIRP - Amazon Prime renewal and spend estimates</span><span class="note">Real world · third-party survey, selection-effect caveat included</span></div>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions before you go 🎯 <span class="tag exercise">◐ 90 seconds</span></h2>
+    </div>
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">1 · What did the Reichheld &amp; Sasser 1990 study actually find?</p>
+      <button class="qopt" type="button">A · Retaining a customer is exactly 5x cheaper than acquiring one</button>
+      <button class="qopt" type="button">B · Cutting customer defections by 5 points raised profits 25-85%, varying by industry</button>
+      <button class="qopt" type="button">C · Loyal customers always spend twice as much as new ones</button>
+      <p class="qwhy">The 1990 HBR study measured profit against customer tenure across service industries: a 5-point cut in defections lifted profits 25-85% (bank deposits at the top, auto service near the bottom; later Bain work stretched to 25-95%). The "5x cheaper" line is a different, unsourced claim - and "always 2x spend" is the Prime estimate, which is partly selection effect.</p>
+    </div>
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">2 · Why should the famous "5-25x cheaper to retain than acquire" be quoted carefully?</p>
+      <button class="qopt" type="button">A · Because the true multiple is actually higher than 25x</button>
+      <button class="qopt" type="button">B · Because it only applies to subscription businesses</button>
+      <button class="qopt" type="button">C · Because the 2014 HBR piece it comes from cites no underlying study - it is a directional range, not a measured constant</button>
+      <p class="qwhy">The direction (retention is usually cheaper) is almost certainly right, but the number has no study behind it and a range that wide is a shrug. Quote it as a directional prior; build business cases on your own cohort math instead - delta retention × cohort size × ARPU.</p>
+    </div>
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">3 · Why does retention precede monetization in free-to-play games?</p>
+      <button class="qopt" type="button">A · Only 2-5% of players ever pay, and the big spenders emerge over time - they can only emerge from players who stayed</button>
+      <button class="qopt" type="button">B · Because games are legally required to delay purchases for new players</button>
+      <button class="qopt" type="button">C · Because paying players never churn, so retention only matters for free players</button>
+      <p class="qwhy">F2P revenue is voluntary and concentrated: 2-5% pay at all, and the top 10% of payers drive ~64% of revenue (Swrve). High-value players are grown over weeks of play, not found on day one - so a leaky base mathematically caps monetization before any offer is shown.</p>
+    </div>
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Stakeholder session 1 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>The leaky bucket</b><span>Acquisition pours in, churn leaks out. Growth with bad retention is a treadmill: you pay monthly to replace what you lost.</span></div>
+      <div class="cheat-item"><b>The ceiling formula</b><span>Steady-state MAU = new users per month / monthly churn rate. 10k/mo at 20% churn caps at 50k; at 5% churn, 200k. Same spend.</span></div>
+      <div class="cheat-item"><b>Reichheld &amp; Sasser 1990</b><span>Cutting defections 5 points raised profits 25-85% by industry (later Bain: 25-95%). The retention claim with receipts - quote with year.</span></div>
+      <div class="cheat-item"><b>The "5-25x" caveat</b><span>HBR 2014, cites no study. Directionally useful, empirically soft: a range, not a constant. Never load-bearing in a business case.</span></div>
+      <div class="cheat-item"><b>LTV:CAC</b><span>Lifetime value returned per acquisition dollar; 3:1 is the classic healthy benchmark (Skok). Ask for it before any spend scale-up.</span></div>
+      <div class="cheat-item"><b>Quick ratio &amp; NRR</b><span>(New + resurrected) / churned; 1.5-2.0 very good for consumer. NRR above 100% = the base grows with zero new sales.</span></div>
+      <div class="cheat-item"><b>The money translation</b><span>Delta retention × cohort size × ARPU = monthly dollars per cohort - and each new cohort stacks another layer. Envelope math wins meetings.</span></div>
+      <div class="cheat-item"><b>Retention precedes monetization</b><span>F2P: 2-5% ever pay; top 10% of payers ~64% of revenue (Swrve). Whales are grown from stayers. Monetization multiplies a base, never replaces one.</span></div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <span>Stakeholder session 1 of 4 · learn-customer-retention-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="../index.html">← All sessions</a> &nbsp;·&nbsp; <a href="s2-read-the-chart-read-the-business.html">Next: Read the chart, read the business →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>

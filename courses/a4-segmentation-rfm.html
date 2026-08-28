@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Analyst session 4 of 8. Averages hide who is actually retained. Build RFM quintile scores and personas in pandas, split acquisition cohorts by behavior to find WHY people churn, and read the L28 power-user curve that DAU/MAU cannot show you.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Segmentation: who is retained - learn customer retention with phoebe">
+<meta property="og:description" content="Analyst session 4 of 8. RFM scoring and personas via pd.qcut, acquisition vs behavioral cohorts, and the L28 power-user curve - the anti-average toolkit.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-customer-retention-with-phoebe/courses/a4-segmentation-rfm.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-customer-retention-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Segmentation: who is retained - learn customer retention with phoebe">
+<meta name="twitter:description" content="RFM scoring and personas via pd.qcut, acquisition vs behavioral cohorts, and the L28 power-user curve - the anti-average toolkit.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-customer-retention-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Analyst session 4 · Segmentation: who is retained - learn customer retention with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-customer-retention-with-phoebe</a> / Analyst session 4 of 8</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Customer Retention with Phoebe · Analyst track · Session 4 of 8</div>
+    <h1>Segmentation: <span class="accent">who</span> is retained</h1>
+    <p class="sub">a2's triangle told you WHEN people churn. It cannot tell you WHO stays or WHY - a 30% blended retention rate can hide a devoted daily core and a sea of one-and-done visitors. Today you split the average three ways: RFM scores that rank every customer by recency, frequency, and spend; behavioral cohorts that turn a retention dip into a testable cause; and the L28 power-user curve, the histogram that shows what DAU/MAU averages away.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Analyst track</span>
+      <span class="chip audience">Data analysts · Python</span>
+      <span class="chip audience">Build-along: RFM + L28</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:3">3-18 · RFM</span>
+      <span class="a3" style="flex:5">18-40 · Behavioral cohorts &amp; L28</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>From when to who and why</h2>
+    </div>
+    <p class="lede">Halfway through the track, the artifacts start feeding each other. The cohort table (a2) and viz gallery (a3) answer "are we retaining?" Today's segments answer "retaining whom?" - and the RFM table you build this session becomes the direct input for a6's buy-till-you-die CLV models, while the behavioral-cohort workflow becomes the hypothesis engine for a7's churn features. Everything runs on the repo's synthetic ecommerce orders first, then on Online Retail II. Work along in the companion notebook <code>notebooks/a4_segmentation.ipynb</code>.</p>
+    <div class="legend">
+      <span class="pill solid">Live - presented in session</span>
+      <span class="pill light">Self-study - read after class</span>
+      <span class="pill peach">★ Build-along - run the code yourself</span>
+      <span class="pill inkpill">Sources covered</span>
+    </div>
+    <div class="callout win">
+      <strong>★ What you walk out with today</strong>
+      A working RFM pipeline - quintile scores via pd.qcut, 555-style codes, four personas - with the pitfalls that bite on real data; the acquisition-vs-behavioral cohort workflow that turns "retention dipped" into "here is the lever"; and the L28 power-user curve with its two shapes and their verdicts. All three go into your running retention report.
+    </div>
+  </section>
+
+  <!-- ============ PART 1: RFM ============ -->
+  <section class="section" id="rfm">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers RFM scoring and personas (Hughes 1994)</span>
+      <h2>RFM: the classic that still ships <span class="tag concept">15 min live</span></h2>
+    </div>
+    <p class="lede">RFM is direct-marketing technology from Arthur Hughes' 1994 playbook, and it survives because it is honest and cheap: score every customer on <strong>Recency</strong> (days since last purchase), <strong>Frequency</strong> (order count), and <strong>Monetary</strong> (total spend), each cut into quintiles, 5 best. Concatenate the three digits and a 555 is your best customer, a 111 your most gone. Personas make the codes speakable: <strong>Champions</strong> (555/554), <strong>Loyal</strong>, <strong>At-Risk</strong> (155/144 - were frequent and valuable, going quiet), <strong>Hibernating</strong>. And the same table is the exact input a6's BTYD models want: recency, frequency, and tenure per customer.</p>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>★ Build-along: R, F, M from raw orders to personas<span class="mini">9 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Three prompt-boxes, one pipeline. The snapshot date is fixed and written down - the frozen-history law applies to segments too: an RFM table recomputed against a drifting "today" is a segment view that quietly restates.</p>
+        <div class="prompt-box good"><span class="label">★ Step 1 · one row per customer: recency, frequency, monetary</span>import pandas as pd
+
+orders = pd.read_csv("data/ecommerce_orders.csv", parse_dates=["order_date"])
+snapshot = pd.Timestamp("2026-07-01")          # FIXED date - never a moving "today"
+
+rfm = orders.groupby("customer_id").agg(
+    last_order=("order_date", "max"),
+    frequency=("order_date", "count"),          # order count
+    monetary=("revenue", "sum"),                # total spend
+)
+rfm["recency"] = (snapshot - rfm["last_order"]).dt.days   # days since last purchase</div>
+        <div class="prompt-box good"><span class="label">★ Step 2 · quintile scores via qcut - note recency is scored REVERSED</span>rfm["R"] = pd.qcut(rfm["recency"], 5, labels=[5, 4, 3, 2, 1]).astype(int)   # small = recent = best
+rfm["F"] = pd.qcut(rfm["frequency"].rank(method="first"), 5,
+                   labels=[1, 2, 3, 4, 5]).astype(int)     # rank first: spiky counts break qcut
+rfm["M"] = pd.qcut(rfm["monetary"], 5, labels=[1, 2, 3, 4, 5]).astype(int)
+rfm["code"] = rfm["R"].astype(str) + rfm["F"].astype(str) + rfm["M"].astype(str)</div>
+        <div class="prompt-box good"><span class="label">★ Step 3 · map codes to speakable personas</span>def persona(row):
+    if row["R"] &gt;= 5 and row["F"] &gt;= 4: return "Champions"      # 555, 554, ...
+    if row["R"] &gt;= 3 and row["F"] &gt;= 3: return "Loyal"
+    if row["R"] &lt;= 2 and row["F"] &gt;= 4: return "At-Risk"        # 155, 144: valuable, going quiet
+    if row["R"] &lt;= 2 and row["F"] &lt;= 2: return "Hibernating"
+    return "Everyone else"
+
+rfm["persona"] = rfm.apply(persona, axis=1)
+rfm["persona"].value_counts()</div>
+        <p>Read the At-Risk group first, always: high frequency, low recency means proven customers drifting away - the one segment where a winback message has both a reason and an audience.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>RFM pitfalls: what bites on real data<span class="mini">4 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>qcut chokes on spiky data.</strong> When half your customers have frequency = 1, quintile edges collide and <code>pd.qcut</code> raises duplicate-bin-edge errors. The fix is in step 2 above: rank first (<code>rank(method="first")</code>), then cut the ranks. You trade exactness of ties for a working pipeline.</li>
+          <li><strong>Wholesalers land in Champions and eat your averages.</strong> The Online Retail II lesson from a2 returns: a handful of trade buyers who order weekly will occupy the top of every quintile and drag every per-segment average toward themselves. Inspect the top of the Champions list by hand before you report it - some of your "best customers" are businesses, not fans.</li>
+          <li><strong>The snapshot date must be fixed.</strong> Recency computed against a moving "today" makes every customer drift one score-point downward per quiet week, so last month's segment counts are not comparable to this month's. Freeze the snapshot, version the table, and recompute on a declared cadence - frozen history, again.</li>
+        </ul>
+      </div>
+    </details>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="An RFM grid with recency scores 1 to 5 across the horizontal axis and frequency scores 1 to 5 up the vertical axis. Champions occupy the top right corner at recency 5 and high frequency. Loyal sits in the middle. At-Risk occupies high frequency but low recency at the top left. Hibernating occupies the bottom left. Monetary is the third digit, flattened out of this view.">
+        <style>
+          .a4rfT { font: 700 14px Inter, sans-serif; fill: #241A12; }
+          .a4rfH { font: 700 11px Inter, sans-serif; fill: #241A12; }
+          .a4rfW { font: 700 11px Inter, sans-serif; fill: #FFFFFF; }
+          .a4rfR { font: 700 11px Inter, sans-serif; fill: #991B1B; }
+          .a4rfB { font: 400 11.5px Inter, sans-serif; fill: #6B5D52; }
+        </style>
+        <rect x="0" y="0" width="880" height="340" fill="#FDF9F5"/>
+        <text class="a4rfT" x="40" y="28">The RFM grid: R across, F up - personas live in the corners</text>
+
+        <g>
+          <rect x="110" y="60" width="64" height="44" rx="5" fill="#FCA5A5"/>
+          <rect x="178" y="60" width="64" height="44" rx="5" fill="#F8EADD"/>
+          <rect x="246" y="60" width="64" height="44" rx="5" fill="#F8EADD"/>
+          <rect x="314" y="60" width="64" height="44" rx="5" fill="#C2410C"/>
+          <rect x="382" y="60" width="64" height="44" rx="5" fill="#7C2D12"/>
+          <rect x="110" y="108" width="64" height="44" rx="5" fill="#FCA5A5"/>
+          <rect x="178" y="108" width="64" height="44" rx="5" fill="#F8EADD"/>
+          <rect x="246" y="108" width="64" height="44" rx="5" fill="#E06A2E"/>
+          <rect x="314" y="108" width="64" height="44" rx="5" fill="#E06A2E"/>
+          <rect x="382" y="108" width="64" height="44" rx="5" fill="#7C2D12"/>
+          <rect x="110" y="156" width="64" height="44" rx="5" fill="#F8EADD"/>
+          <rect x="178" y="156" width="64" height="44" rx="5" fill="#F8EADD"/>
+          <rect x="246" y="156" width="64" height="44" rx="5" fill="#E06A2E"/>
+          <rect x="314" y="156" width="64" height="44" rx="5" fill="#E06A2E"/>
+          <rect x="382" y="156" width="64" height="44" rx="5" fill="#EE9A66"/>
+          <rect x="110" y="204" width="64" height="44" rx="5" fill="#FEF2F2" stroke="#FCA5A5"/>
+          <rect x="178" y="204" width="64" height="44" rx="5" fill="#FEF2F2" stroke="#FCA5A5"/>
+          <rect x="246" y="204" width="64" height="44" rx="5" fill="#F8EADD"/>
+          <rect x="314" y="204" width="64" height="44" rx="5" fill="#F6C39E"/>
+          <rect x="382" y="204" width="64" height="44" rx="5" fill="#F6C39E"/>
+          <rect x="110" y="252" width="64" height="44" rx="5" fill="#FEF2F2" stroke="#FCA5A5"/>
+          <rect x="178" y="252" width="64" height="44" rx="5" fill="#FEF2F2" stroke="#FCA5A5"/>
+          <rect x="246" y="252" width="64" height="44" rx="5" fill="#F8EADD"/>
+          <rect x="314" y="252" width="64" height="44" rx="5" fill="#F6C39E"/>
+          <rect x="382" y="252" width="64" height="44" rx="5" fill="#F6C39E"/>
+        </g>
+
+        <text class="a4rfW" x="414" y="88" text-anchor="middle">Champ.</text>
+        <text class="a4rfW" x="414" y="136" text-anchor="middle">Champ.</text>
+        <text class="a4rfR" x="142" y="88" text-anchor="middle">At-Risk</text>
+        <text class="a4rfR" x="142" y="136" text-anchor="middle">At-Risk</text>
+        <text class="a4rfW" x="314" y="136" text-anchor="middle">Loyal</text>
+        <text class="a4rfW" x="314" y="184" text-anchor="middle">Loyal</text>
+        <text class="a4rfR" x="176" y="232" text-anchor="middle">Hibernating</text>
+
+        <text class="a4rfH" x="96" y="88" text-anchor="end">F5</text>
+        <text class="a4rfH" x="96" y="136" text-anchor="end">F4</text>
+        <text class="a4rfH" x="96" y="184" text-anchor="end">F3</text>
+        <text class="a4rfH" x="96" y="232" text-anchor="end">F2</text>
+        <text class="a4rfH" x="96" y="280" text-anchor="end">F1</text>
+        <text class="a4rfH" x="142" y="316" text-anchor="middle">R1</text>
+        <text class="a4rfH" x="210" y="316" text-anchor="middle">R2</text>
+        <text class="a4rfH" x="278" y="316" text-anchor="middle">R3</text>
+        <text class="a4rfH" x="346" y="316" text-anchor="middle">R4</text>
+        <text class="a4rfH" x="414" y="316" text-anchor="middle">R5</text>
+
+        <rect x="490" y="60" width="350" height="196" rx="10" fill="#F8EADD"/>
+        <text class="a4rfH" x="508" y="86">Champions (555/554): recent, frequent, big.</text>
+        <text class="a4rfB" x="508" y="104">Protect them; they are a6's high-P(alive) set.</text>
+        <text class="a4rfH" x="508" y="132">At-Risk (155/144): frequent but going quiet.</text>
+        <text class="a4rfB" x="508" y="150">The winback audience - proven value, fading.</text>
+        <text class="a4rfH" x="508" y="178">Hibernating: low on everything.</text>
+        <text class="a4rfB" x="508" y="196">Cheap to ignore, expensive to chase.</text>
+        <text class="a4rfH" x="508" y="224">M is the third digit, flattened here.</text>
+        <text class="a4rfB" x="508" y="242">The full cube is 5x5x5 = 125 cells.</text>
+
+        <text class="a4rfB" x="40" y="336">Recency runs right = more recent. At-Risk sits at high F, low R: your most valuable customers going quiet.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - Champions top-right, At-Risk top-left, Hibernating bottom-left: the corners are the strategy</figcaption>
+    </figure>
+  </section>
+
+  <!-- ============ PART 2: BEHAVIORAL COHORTS ============ -->
+  <section class="section" id="behavioral">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers acquisition vs behavioral cohorts (Amplitude framing)</span>
+      <h2>Acquisition tells when, behavior tells why <span class="tag concept">12 min live</span></h2>
+    </div>
+    <p class="lede">a2's triangle groups users by WHEN they joined - an <strong>acquisition cohort</strong> - and it is superb at spotting that month 2 is where everyone leaves. It says nothing about why. A <strong>behavioral cohort</strong> groups by an action taken: used feature X in week 1, made a second purchase within 30 days. Compare the retention curves of the did-it and did-not groups and the dip acquires a suspect. The workflow is always the same pair: <strong>the acquisition cohort spots the dip, the behavioral cohort explains it.</strong></p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A four stage workflow. Stage one: the acquisition triangle shows a retention dip. Stage two: split the cohort by a behavior, such as second purchase within 30 days, yes or no. Stage three: overlay the two retention curves and see the gap between them. Stage four: the gap times cohort size times revenue per user is the business case for the lever.">
+        <style>
+          .a4wfT { font: 700 14px Inter, sans-serif; fill: #241A12; }
+          .a4wfH { font: 700 12px Inter, sans-serif; fill: #FFFFFF; }
+          .a4wfB { font: 400 11px Inter, sans-serif; fill: #241A12; }
+          .a4wfN { font: 400 11.5px Inter, sans-serif; fill: #6B5D52; }
+          .a4wfA { stroke: #EA580C; stroke-width: 2.2; fill: none; marker-end: url(#a4wfArr); }
+        </style>
+        <defs>
+          <marker id="a4wfArr" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+            <path d="M0,0 L8,4.5 L0,9 z" fill="#EA580C"/>
+          </marker>
+        </defs>
+        <rect x="0" y="0" width="880" height="320" fill="#FDF9F5"/>
+        <text class="a4wfT" x="40" y="28">The two-cohort workflow: spot the dip, split by behavior, price the gap</text>
+
+        <rect x="40" y="52" width="185" height="130" rx="10" fill="#C2410C"/>
+        <text class="a4wfH" x="132" y="76" text-anchor="middle">1 · Triangle spots a dip</text>
+        <rect x="52" y="88" width="161" height="82" rx="6" fill="#FDF9F5"/>
+        <g>
+          <rect x="62" y="98" width="28" height="16" rx="3" fill="#7C2D12"/>
+          <rect x="94" y="98" width="28" height="16" rx="3" fill="#E06A2E"/>
+          <rect x="126" y="98" width="28" height="16" rx="3" fill="#FBE3D2"/>
+          <rect x="62" y="118" width="28" height="16" rx="3" fill="#7C2D12"/>
+          <rect x="94" y="118" width="28" height="16" rx="3" fill="#E06A2E"/>
+          <rect x="62" y="138" width="28" height="16" rx="3" fill="#7C2D12"/>
+        </g>
+        <text class="a4wfB" x="160" y="130">month-1</text>
+        <text class="a4wfB" x="160" y="144">cliff</text>
+
+        <rect x="255" y="52" width="185" height="130" rx="10" fill="#C2410C"/>
+        <text class="a4wfH" x="347" y="76" text-anchor="middle">2 · Split by behavior</text>
+        <rect x="267" y="88" width="161" height="82" rx="6" fill="#FDF9F5"/>
+        <text class="a4wfB" x="277" y="110">2nd purchase in 30d?</text>
+        <rect x="277" y="122" width="60" height="20" rx="4" fill="#0F766E"/>
+        <text class="a4wfH" x="307" y="136" text-anchor="middle">yes</text>
+        <rect x="345" y="122" width="60" height="20" rx="4" fill="#EE9A66"/>
+        <text class="a4wfB" x="375" y="136" text-anchor="middle">no</text>
+        <text class="a4wfB" x="277" y="160">two groups, same month</text>
+
+        <rect x="470" y="52" width="185" height="130" rx="10" fill="#C2410C"/>
+        <text class="a4wfH" x="562" y="76" text-anchor="middle">3 · Overlay - the gap</text>
+        <rect x="482" y="88" width="161" height="82" rx="6" fill="#FDF9F5"/>
+        <path d="M492,110 C520,120 560,126 633,128" fill="none" stroke="#0F766E" stroke-width="2.5"/>
+        <path d="M492,112 C516,140 550,154 633,160" fill="none" stroke="#EE9A66" stroke-width="2.5"/>
+        <line x1="600" y1="128" x2="600" y2="158" stroke="#991B1B" stroke-width="2" stroke-dasharray="3 3"/>
+        <text class="a4wfB" x="492" y="164">the gap = the story</text>
+
+        <rect x="685" y="52" width="155" height="130" rx="10" fill="#7C2D12"/>
+        <text class="a4wfH" x="762" y="76" text-anchor="middle">4 · The lever</text>
+        <rect x="697" y="88" width="131" height="82" rx="6" fill="#FDF9F5"/>
+        <text class="a4wfB" x="707" y="110">gap x cohort size</text>
+        <text class="a4wfB" x="707" y="126">x ARPU =</text>
+        <text class="a4wfB" x="707" y="142">the business case</text>
+        <text class="a4wfB" x="707" y="158">for the nudge</text>
+
+        <path class="a4wfA" d="M225,117 L251,117"/>
+        <path class="a4wfA" d="M440,117 L466,117"/>
+        <path class="a4wfA" d="M655,117 L681,117"/>
+
+        <rect x="40" y="210" width="800" height="72" rx="10" fill="#F8EADD"/>
+        <text class="a4wfB" x="58" y="236"><tspan style="font-weight:700">Correlation caveat, said out loud:</tspan> the gap shows association, not proof - maybe committed people both buy twice AND stay.</text>
+        <text class="a4wfB" x="58" y="254">The behavioral cohort's job is to generate the hypothesis and size the prize; the experiment (drive second purchases,</text>
+        <text class="a4wfB" x="58" y="272">measure the curves move) is what confirms it. a7 turns these same splits into churn-model features.</text>
+        <text class="a4wfN" x="40" y="306">Acquisition cohorts answer WHEN people churn; behavioral cohorts answer WHY. You need both, in that order.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - dip, split, gap, lever: the workflow that turns a triangle into a roadmap item</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>★ Build-along: one behavioral split, two overlaid curves<span class="mini">7 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The ecommerce classic: does a second purchase within 30 days predict long-run retention? Flag each customer, then run a2's recipe once per group and overlay.</p>
+        <div class="prompt-box good"><span class="label">★ Flag the behavior, then compare retention curves per group</span>first = orders.groupby("customer_id")["order_date"].min().rename("first_order")
+o = orders.join(first, on="customer_id")
+o["days_since_first"] = (o["order_date"] - o["first_order"]).dt.days
+
+second_in_30 = (o[o["days_since_first"].between(1, 30)]
+                .groupby("customer_id").size() &gt; 0)
+o["repeat30"] = o["customer_id"].map(second_in_30).fillna(False)
+
+o["order_month"] = o["order_date"].dt.to_period("M")
+o["cohort"] = o["first_order"].dt.to_period("M")
+o["period"] = (o["order_month"] - o["cohort"]).apply(lambda d: d.n)
+
+curves = (o.groupby(["repeat30", "period"])["customer_id"]
+            .nunique().unstack(0))
+curves = curves.divide(curves.iloc[0], axis=1)       # period 0 = 100% per group
+curves.plot(figsize=(10, 5), ylim=(0, 1),
+            title="Retention: second purchase within 30d - yes vs no")</div>
+        <p>The vertical distance between the two lines at month 6 IS the business case for driving second purchases: multiply the gap by cohort size and ARPU and you have the number that gets the email flow funded. The gap sizes the prize; the experiment proves the mechanism.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3: L28 ============ -->
+  <section class="section" id="l28">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers the L28 power-user curve (Facebook growth via a16z)</span>
+      <h2>L28: the power-user curve <span class="tag concept">10 min live</span></h2>
+    </div>
+    <p class="lede">Take one 28-day window and plot a histogram: how many users were active exactly 1 day, 2 days, up to all 28. Why 28 and not 30? <strong>Four exact weeks, so every user sees the same weekday mix</strong> - this is the same trick behind games reporting D28, and the fix previewed in a1 for stickiness averages. Invented on Facebook's growth team, popularized through a16z's "power user curve" essay, and the shape is the whole verdict.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two L28 histograms side by side. Left: a smile shape with mass at one active day and again at 25 to 28 active days, meaning a hardcore daily segment exists alongside casual users. Right: a slumped left shape where nearly all users have only a few active days and the right side is empty, meaning shallow engagement whatever the DAU over MAU ratio says.">
+        <style>
+          .a4l2T { font: 700 14px Inter, sans-serif; fill: #241A12; }
+          .a4l2H { font: 700 12.5px Inter, sans-serif; fill: #241A12; }
+          .a4l2B { font: 400 11.5px Inter, sans-serif; fill: #6B5D52; }
+          .a4l2Ax { stroke: #D3C4B8; stroke-width: 1.5; }
+        </style>
+        <rect x="0" y="0" width="880" height="320" fill="#FDF9F5"/>
+        <text class="a4l2T" x="40" y="28">Two L28 shapes, two verdicts</text>
+
+        <rect x="40" y="48" width="390" height="200" rx="10" fill="#FFFFFF" stroke="#EFE2D6"/>
+        <line class="a4l2Ax" x1="66" y1="210" x2="404" y2="210"/>
+        <g>
+          <rect x="70" y="90" width="26" height="120" fill="#C2410C"/>
+          <rect x="103" y="140" width="26" height="70" fill="#E06A2E"/>
+          <rect x="136" y="170" width="26" height="40" fill="#EE9A66"/>
+          <rect x="169" y="182" width="26" height="28" fill="#F6C39E"/>
+          <rect x="202" y="188" width="26" height="22" fill="#F6C39E"/>
+          <rect x="235" y="186" width="26" height="24" fill="#F6C39E"/>
+          <rect x="268" y="178" width="26" height="32" fill="#EE9A66"/>
+          <rect x="301" y="164" width="26" height="46" fill="#E06A2E"/>
+          <rect x="334" y="138" width="26" height="72" fill="#C2410C"/>
+          <rect x="367" y="115" width="26" height="95" fill="#7C2D12"/>
+        </g>
+        <text class="a4l2B" x="70" y="228">1 day</text>
+        <text class="a4l2B" x="352" y="228">28 days</text>
+        <text class="a4l2H" x="60" y="272">The smile</text>
+        <text class="a4l2B" x="60" y="292">A hardcore daily segment exists. Verdict: hooked core.</text>
+
+        <rect x="460" y="48" width="390" height="200" rx="10" fill="#FFFFFF" stroke="#EFE2D6"/>
+        <line class="a4l2Ax" x1="486" y1="210" x2="824" y2="210"/>
+        <g>
+          <rect x="490" y="80" width="26" height="130" fill="#C2410C"/>
+          <rect x="523" y="125" width="26" height="85" fill="#E06A2E"/>
+          <rect x="556" y="155" width="26" height="55" fill="#EE9A66"/>
+          <rect x="589" y="174" width="26" height="36" fill="#F6C39E"/>
+          <rect x="622" y="186" width="26" height="24" fill="#F6C39E"/>
+          <rect x="655" y="194" width="26" height="16" fill="#FBE3D2"/>
+          <rect x="688" y="200" width="26" height="10" fill="#FBE3D2"/>
+          <rect x="721" y="203" width="26" height="7" fill="#FBE3D2"/>
+          <rect x="754" y="205" width="26" height="5" fill="#FBE3D2"/>
+          <rect x="787" y="206" width="26" height="4" fill="#FBE3D2"/>
+        </g>
+        <text class="a4l2B" x="490" y="228">1 day</text>
+        <text class="a4l2B" x="772" y="228">28 days</text>
+        <text class="a4l2H" x="480" y="272">Slumped left</text>
+        <text class="a4l2B" x="480" y="292">Shallow engagement, whatever DAU/MAU says. No core.</text>
+
+        <text class="a4l2B" x="40" y="314">Same DAU/MAU ratio can produce either picture - the histogram is the anti-average.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - smile = a daily core exists; slumped-left = nobody is hooked, whatever the ratio says</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>★ Build-along: the L28 histogram and stickiness by persona<span class="mini">6 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <div class="prompt-box good"><span class="label">★ L28 in four lines - one fixed 28-day window</span>window = sessions[sessions["date"].between("2026-06-01", "2026-06-28")]
+days_active = window.groupby("user_id")["date"].nunique()
+days_active.value_counts().sort_index().plot.bar(
+    figsize=(10, 4), color="#C2410C", title="L28: users by active days")</div>
+        <p>Then close the loop with Part 1: compute stickiness per RFM persona instead of one blended ratio. One small table replaces a quarter of arguments:</p>
+        <div class="prompt-box good"><span class="label">★ DAU/MAU per persona - the blended ratio, decomposed</span>sess = sessions.join(rfm["persona"], on="user_id")
+month = sess[sess["date"].between("2026-06-01", "2026-06-28")]
+by_seg = month.groupby("persona").agg(
+    mau=("user_id", "nunique"),
+    user_days=("user_id", "count"),
+)
+by_seg["dau_avg"] = by_seg["user_days"] / 28
+by_seg["stickiness"] = by_seg["dau_avg"] / by_seg["mau"]
+by_seg.sort_values("stickiness", ascending=False)</div>
+        <table>
+          <tr><th>Persona</th><th>What the stickiness row typically shows</th></tr>
+          <tr><td>Champions</td><td>Highest by far - the daily-habit end of the histogram lives here</td></tr>
+          <tr><td>Loyal</td><td>Healthy, steady - the middle of the smile</td></tr>
+          <tr><td>At-Risk</td><td>Falling month over month - the early-warning row</td></tr>
+          <tr><td>Hibernating</td><td>Near zero - they are the tall day-1 bar on the left</td></tr>
+        </table>
+        <p>One blended DAU/MAU hides all four rows. The segment table is the honest version - and the At-Risk row falling is a churn alarm you get months before it shows in the triangle.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>Same chart, two industries.</strong> For a mobile game, the L28 smile IS the whale pipeline: only 2-5% of players ever pay, and payers emerge from the hardcore daily core on the right of the histogram - retention precedes monetization, so a studio with no smile has no monetization future either. For ecommerce the segmentation punchline is concentration: returning customers are roughly 21% of the customer base but drive about 44% of revenue - which is why the Champions and At-Risk corners of the RFM grid, a quarter of your customers, deserve most of your retention budget.</p>
+    </div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Try it yourself - this week <span class="tag exercise">◐ 30 min total</span></h2>
+    </div>
+    <ul>
+      <li>Run the full RFM pipeline on Online Retail II (after a2's clean-up gate). Then inspect the Champions list by hand and count how many are actually wholesalers - report the number, because it will surprise you.</li>
+      <li>Build your own product's L28 histogram for one fixed 28-day window and name its shape out loud: smile, slumped-left, or something in between. Add it to your running retention report next to the triangle.</li>
+      <li>Pick one behavior you believe drives retention, run the two-curve overlay, and write the one-sentence business case: gap x cohort size x ARPU.</li>
+    </ul>
+  </section>
+
+  <!-- ============ SOURCES ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session draws on</h2>
+    </div>
+    <p class="lede">Segmentation is the oldest craft in this course - RFM predates the web - standardized by a few durable sources. This page teaches the working core of:</p>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Arthur Hughes - RFM quintile scoring and personas (1994 heritage)</span><span class="note">Part 1 · codes, personas, the qcut build</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Amplitude - behavioral cohorting (acquisition spots, behavior explains)</span><span class="note">Part 2 · the two-cohort workflow</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">a16z "The Power User Curve" (Li Jin) - the L28 reading</span><span class="note">Part 3 · smile vs slumped-left</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Course-map ecommerce benchmarks (repeat-customer concentration, payer economics)</span><span class="note">Real-world callout · full money framing in a6 and s1</span></div>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions before you go 🎯 <span class="tag exercise">◐ 90 seconds</span></h2>
+    </div>
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">1 · Why is recency the one RFM dimension scored in reverse?</p>
+      <button class="qopt" type="button">A · Tradition - Hughes wrote it that way in 1994 and nobody dared change it</button>
+      <button class="qopt" type="button">B · Because smaller is better: 3 days since last purchase beats 300, so the smallest quintile gets score 5 to keep 555 = best</button>
+      <button class="qopt" type="button">C · Because qcut cannot sort descending values</button>
+      <p class="qwhy">Frequency and monetary reward big numbers; recency rewards small ones - a customer seen 3 days ago is more alive than one seen 300 days ago. Reversing the labels (labels=[5,4,3,2,1]) keeps all three digits pointing the same way, so 555 reads as best on every axis.</p>
+    </div>
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">2 · Acquisition cohorts vs behavioral cohorts: which one answers WHY retention dipped?</p>
+      <button class="qopt" type="button">A · Acquisition - the join-month grouping isolates the cause</button>
+      <button class="qopt" type="button">B · Both equally - they are the same table sliced differently</button>
+      <button class="qopt" type="button">C · Behavioral - grouping by an action taken lets you compare did-it vs did-not curves, turning the dip into a testable hypothesis</button>
+      <p class="qwhy">Acquisition cohorts group by WHEN users joined, so they locate the dip in time. Behavioral cohorts group by WHAT users did, so the curve gap points at a candidate cause - and its size prices the fix. The workflow is always: acquisition spots it, behavioral explains it, an experiment confirms it.</p>
+    </div>
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">3 · Your L28 histogram is a smile: tall at 1 active day, tall again at 25-28. What does it mean?</p>
+      <button class="qopt" type="button">A · A hardcore daily segment exists alongside the casual mass - there is a hooked core to build on</button>
+      <button class="qopt" type="button">B · A data bug - engagement histograms should always slope one way</button>
+      <button class="qopt" type="button">C · The product is failing - most users are barely active</button>
+      <p class="qwhy">The right-hand hump is the point: a real population of users shows up nearly every day. Most products only have the left hump (slumped-left = no core). For a game, that daily core is where the 2-5% of payers come from; for any product it is the segment worth studying, protecting, and growing.</p>
+    </div>
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Analyst session 4 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>RFM</b><span>Recency / Frequency / Monetary, each qcut into quintiles, 5 best, codes concatenated: 555 = Champions. Hughes 1994, still shipping.</span></div>
+      <div class="cheat-item"><b>Recency is reversed</b><span>Smaller = better, so labels run [5,4,3,2,1]. Keeps every digit pointing the same way; 555 reads best on all three axes.</span></div>
+      <div class="cheat-item"><b>The personas</b><span>Champions (555/554) protect; At-Risk (155/144) = frequent but fading, the winback audience; Hibernating = low everything; Loyal = the middle.</span></div>
+      <div class="cheat-item"><b>RFM pitfalls</b><span>Spiky counts break qcut - rank first. Wholesalers invade Champions - inspect by hand. Snapshot date fixed, never a moving "today".</span></div>
+      <div class="cheat-item"><b>Two cohort types</b><span>Acquisition (when they joined) tells WHEN churn happens; behavioral (what they did) tells WHY. Spot the dip, then split by behavior.</span></div>
+      <div class="cheat-item"><b>The gap is the case</b><span>Overlay did-it vs did-not curves: gap x cohort size x ARPU = the funded roadmap item. Association only - the experiment confirms.</span></div>
+      <div class="cheat-item"><b>L28</b><span>Histogram of active days per 28-day window (4 exact weeks kills weekday mix). Smile = daily core exists; slumped-left = shallow, whatever DAU/MAU says.</span></div>
+      <div class="cheat-item"><b>Feeds forward</b><span>The RFM table is a6's BTYD input (recency/frequency/tenure); behavioral splits become a7's churn features. Segment once, reuse twice.</span></div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <span>Analyst session 4 of 8 · learn-customer-retention-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="a3-retention-viz-gallery.html">← a3: The viz gallery</a> &nbsp;·&nbsp; <a href="a5-survival-analysis.html">Next: Survival analysis →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>

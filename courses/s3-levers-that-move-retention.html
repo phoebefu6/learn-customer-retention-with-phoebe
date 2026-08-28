@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Stakeholder session 3 of 4. The levers that actually move retention, told through the best-published cases: Duolingo's CURR north star end to end, Supercell's soft-launch kill gate, and the loyalty and winback economics of Prime, Sephora, and Dollar Shave Club - every story carrying its honesty label.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Levers that move retention - learn customer retention with phoebe">
+<meta property="og:description" content="Stakeholder session 3 of 4. Duolingo's growth state machine and CURR, Supercell's kill gate, loyalty and winback economics - the folklore-checked lever menu.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-customer-retention-with-phoebe/courses/s3-levers-that-move-retention.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-customer-retention-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Levers that move retention - learn customer retention with phoebe">
+<meta name="twitter:description" content="Duolingo's growth state machine and CURR, Supercell's kill gate, loyalty and winback economics - the folklore-checked lever menu.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-customer-retention-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Stakeholder session 3 · Levers that move retention - learn customer retention with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-customer-retention-with-phoebe</a> / Stakeholder session 3 of 4</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Customer Retention with Phoebe · Stakeholder track · Session 3 of 4</div>
+    <h1>Levers that <span class="accent">move retention</span></h1>
+    <p class="sub">Sessions 1 and 2 taught you why retention is the money metric and how to read the charts. Today is the fun part: what actually moves the number. We walk the best-published case in the industry end to end - Duolingo's four-year climb - then visit the studio that kills its own games for missing a retention bar, and finish with the loyalty and winback economics of ecommerce. Every story on this page carries an honesty label, because retention lore is full of numbers nobody can source.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Stakeholder track</span>
+      <span class="chip audience">Leaders · PMs · no code</span>
+      <span class="chip audience">Case studies, folklore-checked</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-20 · Duolingo end to end</span>
+      <span class="a3" style="flex:5">20-40 · More levers</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Where this session sits</h2>
+    </div>
+    <p class="lede">Four stakeholder sessions, no code, one goal: make you the person in the room who asks the right retention questions. s1 made the money case, s2 taught you to read the cohort chart. Today is the lever menu - what teams actually pull, with the published evidence for each pull. s4 closes the loop with the questions to ask your data analyst. One rule holds all session: a case only counts if we can say who published it and how it was measured. The labels DOCUMENTED and SEMI-FOLKLORE appear next to every story, and learning to demand those labels is half of today's value.</p>
+    <div class="legend">
+      <span class="pill solid">Live - presented in session</span>
+      <span class="pill light">Self-study - read after class</span>
+      <span class="pill peach">✓ Documented vs ~ folklore - every case is labeled</span>
+      <span class="pill inkpill">Sources covered</span>
+    </div>
+    <div class="callout win">
+      <strong>★ What you walk out with today</strong>
+      Duolingo's growth state machine and why one metric (CURR) beat every other candidate, the Supercell kill gate and what it says about retention versus monetization order, a lever menu sorted by which part of the retention curve each lever moves, and a folklore scorecard so you can tell a documented case from a conference legend in ten seconds.
+    </div>
+  </section>
+
+  <!-- ============ PART 1: DUOLINGO ============ -->
+  <section class="section" id="duolingo">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the Duolingo CURR case (Jorge Mazal, Lenny's Newsletter - DOCUMENTED)</span>
+      <h2>Duolingo: the best-published retention case <span class="tag concept">17 min live</span></h2>
+    </div>
+    <p class="lede">Most retention stories are one sentence and a suspiciously round number. Duolingo's is different: Jorge Mazal, the former Chief Product Officer, wrote the whole playbook up in Lenny's Newsletter - the model, the metric contest, the levers, the results. It starts with a decision that sounds boring and turns out to be everything: <strong>stop treating users as one blended pool, and model them as a state machine</strong>. Seven buckets, and every user is in exactly one.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Duolingo's seven-bucket growth state machine. Four states count into DAU: New, Current, Reactivated, and Resurrected. Three states leak out of DAU: At-risk WAU, At-risk MAU, and Dormant. Arrows show users flowing from New into Current, leaking from Current into the at-risk states and Dormant, and returning as Reactivated or Resurrected. The highlighted self-loop on Current is CURR, the current-user retention rate that became the north star.">
+        <style>
+          .s3smT { font: 700 14px Inter, sans-serif; fill: #241A12; }
+          .s3smH { font: 600 11px Inter, sans-serif; fill: #6B5D52; }
+          .s3smW { font: 700 12px Inter, sans-serif; fill: #FFFFFF; }
+          .s3smC { font: 700 12px Inter, sans-serif; fill: #241A12; }
+          .s3smR { font: 700 12px Inter, sans-serif; fill: #991B1B; }
+          .s3smG { font: 700 12px Inter, sans-serif; fill: #0F766E; }
+          .s3smN { font: 400 11.5px Inter, sans-serif; fill: #6B5D52; }
+          .s3smF { stroke: #C2410C; stroke-width: 2.2; fill: none; marker-end: url(#s3smAf); }
+          .s3smL { stroke: #991B1B; stroke-width: 2.2; fill: none; marker-end: url(#s3smAl); }
+          .s3smB { stroke: #0F766E; stroke-width: 2.2; fill: none; stroke-dasharray: 6 4; marker-end: url(#s3smAb); }
+        </style>
+        <defs>
+          <marker id="s3smAf" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L8,4.5 L0,9 z" fill="#C2410C"/></marker>
+          <marker id="s3smAl" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L8,4.5 L0,9 z" fill="#991B1B"/></marker>
+          <marker id="s3smAb" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L8,4.5 L0,9 z" fill="#0F766E"/></marker>
+        </defs>
+        <rect x="0" y="0" width="880" height="400" fill="#FDF9F5"/>
+        <text class="s3smT" x="40" y="28">The 7-bucket growth state machine: four buckets fill DAU, three states leak</text>
+
+        <rect x="40" y="52" width="430" height="250" rx="12" fill="#F8EADD"/>
+        <text class="s3smH" x="58" y="74">Counted in today's DAU</text>
+
+        <rect x="62" y="92" width="130" height="40" rx="8" fill="#E06A2E"/>
+        <text class="s3smW" x="127" y="117" text-anchor="middle">New</text>
+
+        <rect x="280" y="92" width="170" height="56" rx="8" fill="#7C2D12"/>
+        <text class="s3smW" x="365" y="126" text-anchor="middle">Current</text>
+
+        <rect x="62" y="190" width="130" height="40" rx="8" fill="#EE9A66"/>
+        <text class="s3smC" x="127" y="215" text-anchor="middle">Reactivated</text>
+
+        <rect x="62" y="248" width="130" height="40" rx="8" fill="#F6C39E"/>
+        <text class="s3smC" x="127" y="273" text-anchor="middle">Resurrected</text>
+
+        <path class="s3smF" d="M192,112 L274,112"/>
+        <path class="s3smF" d="M192,210 C240,210 270,180 296,152"/>
+        <path class="s3smF" d="M192,268 C260,268 300,205 328,152"/>
+
+        <path class="s3smB" d="M330,92 C330,62 400,62 398,88"/>
+        <text class="s3smG" x="478" y="66">CURR - the north star</text>
+        <text class="s3smN" x="478" y="82">Current users who stay Current</text>
+
+        <text class="s3smH" x="660" y="60">Leaking out of DAU</text>
+        <rect x="660" y="70" width="170" height="44" rx="8" fill="#FEF2F2" stroke="#FCA5A5"/>
+        <text class="s3smR" x="745" y="97" text-anchor="middle">At-risk WAU</text>
+        <rect x="660" y="150" width="170" height="44" rx="8" fill="#FEF2F2" stroke="#FCA5A5"/>
+        <text class="s3smR" x="745" y="177" text-anchor="middle">At-risk MAU</text>
+        <rect x="660" y="230" width="170" height="44" rx="8" fill="#FEF2F2" stroke="#FCA5A5"/>
+        <text class="s3smR" x="745" y="257" text-anchor="middle">Dormant</text>
+
+        <path class="s3smL" d="M450,110 C540,110 600,96 654,92"/>
+        <path class="s3smL" d="M745,114 L745,146"/>
+        <path class="s3smL" d="M745,194 L745,226"/>
+
+        <path class="s3smB" d="M660,110 C540,180 380,212 198,211"/>
+        <path class="s3smB" d="M660,262 C500,292 350,286 198,271"/>
+
+        <text class="s3smN" x="40" y="336">Dark red arrows are the leak; dashed teal arrows are the comebacks (Reactivated, Resurrected).</text>
+        <text class="s3smN" x="40" y="358">Sensitivity analysis ranked every arrow: moving CURR had ~5x the DAU impact of the next-best metric.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - seven buckets, one highlighted loop: keep Current users Current and everything downstream compounds</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Walk the machine: seven buckets, one loop that matters<span class="mini">7 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Every Duolingo user sits in exactly one bucket on any given day. Four buckets are active today and sum to DAU: <strong>New</strong> (first day ever), <strong>Current</strong> (active today and recently active), <strong>Reactivated</strong> (back after a short absence), and <strong>Resurrected</strong> (back after a long absence, 30+ days away). Three states are the leak: <strong>At-risk WAU</strong> (slipping this week), <strong>At-risk MAU</strong> (gone for weeks), and <strong>Dormant</strong> (gone a month or more). Users flow along the arrows every day.</p>
+        <ul>
+          <li><strong>Why this beats "our retention is 34%":</strong> a single blended number cannot tell you where the leak is. The machine can - it shows exactly which arrow is too thick and which comeback arrow is too thin.</li>
+          <li><strong>The metric contest:</strong> the growth team ran a sensitivity analysis - nudge each transition rate, watch what happens to DAU. One rate crushed the field: <strong>CURR, the current-user retention rate</strong> (the self-loop on Current). Moving it had roughly <strong>5x the DAU impact of the next-best metric</strong>. It became the north star not by opinion but by arithmetic.</li>
+          <li><strong>Why CURR wins mechanically:</strong> Current is the biggest bucket, and a user kept Current today is exposed to being kept again tomorrow. Small gains to the self-loop compound daily. Reactivation flows, by contrast, act on smaller populations and only once per lapse.</li>
+          <li><strong>The result:</strong> about four years of focused work later, <strong>CURR was up 21% and DAU roughly 4.5x - with acquisition spend flat</strong>. Nobody bought that growth. They kept it.</li>
+        </ul>
+        <p>The levers behind those four years, per Mazal: <strong>leaderboards and leagues</strong> (a documented +17% lift in learning time), <strong>streaks with the streak freeze</strong> (the habit loop, plus forgiveness so one missed day does not destroy the habit), and <strong>notification discipline</strong> (fewer, smarter pushes rather than more).</p>
+        <div class="callout tip">
+          <strong>Folklore flag on this very case 🚩</strong>
+          Two things circulate about Duolingo that are NOT first-party. The "gamification took retention from 12% to 55%" stat comes from third-party blog posts, not from Duolingo - Mazal's writeup never says it, so we do not repeat it. And "The Growth Handbook" often cited as Duolingo's playbook is actually Intercom's book. The documented case is impressive enough; it does not need the legends.
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why a state machine beats one blended number<span class="mini">4 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Imagine your product reports "monthly retention: 34%" and it dips to 32%. What do you do? You genuinely cannot answer - the blended number mixes brand-new users, loyal regulars, and returners, and each responds to different levers. The state machine splits the one number into named flows, and that buys you three things:</p>
+        <ul>
+          <li><strong>Diagnosis:</strong> a DAU dip decomposes into "the New inflow slowed" (a marketing problem) versus "the Current self-loop weakened" (a product problem) versus "comebacks dried up" (a winback problem). Three different owners, three different fixes.</li>
+          <li><strong>Prioritization:</strong> once flows are separate you can rank them by impact, which is exactly the sensitivity analysis that crowned CURR. A blended metric cannot be ranked against itself.</li>
+          <li><strong>Honest targets:</strong> each team owns one arrow. The winback team is not blamed for an onboarding leak, and nobody claims credit for a mix shift (s4 shows you how that trick works).</li>
+        </ul>
+        <p>You do not need Duolingo's scale to use this. Amplitude's lifecycle framing - every active user is new, current, or resurrected; every loss is churn - is the same idea, available in most analytics tools your team already runs.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2: SUPERCELL ============ -->
+  <section class="section" id="supercell">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers the soft-launch kill gate (Supercell, PocketGamer coverage - DOCUMENTED)</span>
+      <h2>The go/no-go gate: games <span class="tag concept">9 min live</span></h2>
+    </div>
+    <p class="lede">Duolingo shows retention as a lever to pull. The game industry shows it as a gate to pass. Supercell - the studio behind Clash of Clans - is famous for the second: it launches every new game quietly in a few test markets, watches the retention cohorts, and kills the game if they miss the bar. Not "iterates on". Kills.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 310" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The Supercell soft-launch gate as a flow: soft launch in test markets, then watch D1 and D7 cohort retention against the bars set by live hit games, then a decision node that leads either up to scale with a global launch or down to killing the title. A note lists Spooky Pop and Smash Land among more than thirty killed titles.">
+        <style>
+          .s3gtT { font: 700 14px Inter, sans-serif; fill: #241A12; }
+          .s3gtH { font: 700 12.5px Inter, sans-serif; fill: #FFFFFF; }
+          .s3gtB { font: 400 11.5px Inter, sans-serif; fill: #241A12; }
+          .s3gtM { font: 400 11.5px Inter, sans-serif; fill: #6B5D52; }
+          .s3gtR { font: 700 12px Inter, sans-serif; fill: #991B1B; }
+          .s3gtA { stroke: #C2410C; stroke-width: 2.2; fill: none; marker-end: url(#s3gtArr); }
+        </style>
+        <defs>
+          <marker id="s3gtArr" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L8,4.5 L0,9 z" fill="#C2410C"/></marker>
+        </defs>
+        <rect x="0" y="0" width="880" height="310" fill="#FDF9F5"/>
+        <text class="s3gtT" x="40" y="28">The Supercell gate: soft launch, measure, then scale or kill</text>
+
+        <rect x="40" y="60" width="190" height="90" rx="10" fill="#C2410C"/>
+        <text class="s3gtH" x="135" y="84" text-anchor="middle">1 · Soft launch</text>
+        <rect x="52" y="96" width="166" height="44" rx="6" fill="#FDF9F5"/>
+        <text class="s3gtB" x="60" y="113">Test markets only,</text>
+        <text class="s3gtB" x="60" y="130">small UA budget</text>
+
+        <rect x="270" y="60" width="210" height="90" rx="10" fill="#C2410C"/>
+        <text class="s3gtH" x="375" y="84" text-anchor="middle">2 · Watch the cohorts</text>
+        <rect x="282" y="96" width="186" height="44" rx="6" fill="#FDF9F5"/>
+        <text class="s3gtB" x="290" y="113">D1 / D7 retention vs the</text>
+        <text class="s3gtB" x="290" y="130">bars set by live hits</text>
+
+        <rect x="520" y="60" width="150" height="90" rx="10" fill="#7C2D12"/>
+        <text class="s3gtH" x="595" y="98" text-anchor="middle">3 · The bar</text>
+        <text class="s3gtH" x="595" y="120" text-anchor="middle">beat it or not?</text>
+
+        <path class="s3gtA" d="M230,105 L266,105"/>
+        <path class="s3gtA" d="M480,105 L516,105"/>
+        <path class="s3gtA" d="M670,85 C700,75 720,68 736,62"/>
+        <path class="s3gtA" d="M670,125 C700,140 720,155 736,168"/>
+
+        <rect x="740" y="40" width="110" height="64" rx="10" fill="#0F766E"/>
+        <text class="s3gtH" x="795" y="66" text-anchor="middle">Scale</text>
+        <text class="s3gtH" x="795" y="86" text-anchor="middle">global + UA</text>
+
+        <rect x="740" y="160" width="110" height="64" rx="10" fill="#FEF2F2" stroke="#FCA5A5"/>
+        <text class="s3gtR" x="795" y="186" text-anchor="middle">Kill</text>
+        <text class="s3gtR" x="795" y="206" text-anchor="middle">fast, no rescue</text>
+
+        <rect x="40" y="180" width="650" height="90" rx="10" fill="#F8EADD"/>
+        <text class="s3gtB" x="58" y="206">Killed at this gate: Spooky Pop (Mar 2015), Smash Land (Sept 2015 - despite players</text>
+        <text class="s3gtB" x="58" y="224">saying they liked it), and 30+ titles in total across the studio's history.</text>
+        <text class="s3gtM" x="58" y="252">Why so brutal: only 2-5% of players ever pay, and whales emerge from stayers.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the gate is the strategy: retention decides whether acquisition money ever gets spent</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Why a studio kills a game its players say they like<span class="mini">6 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Spooky Pop</strong> died in March 2015. <strong>Smash Land</strong> died in September 2015 - and the team openly noted that player feedback was positive. Across its history Supercell has killed <strong>30+ titles</strong> this way, against a handful it has ever shipped globally. The pattern, as covered by PocketGamer and the studio's own communications, is always the same: soft launch in small test markets, judge the retention cohorts against the bars set by the live hits, and kill fast when the bar is missed.</p>
+        <ul>
+          <li><strong>Feedback is not behavior.</strong> Players said nice things about Smash Land and then did not come back. The cohort table saw what the reviews could not. When words and retention curves disagree, believe the curves.</li>
+          <li><strong>Retention gates UA spend.</strong> Free-to-play economics are ruthless: only <strong>2-5% of players ever pay</strong>, and the big spenders emerge over months from the pool of people who stayed. Pour acquisition money into a leaky game and you are renting traffic that leaves before it can pay - the leaky bucket from s1, at industrial scale.</li>
+          <li><strong>The order is fixed: retention first, monetization second.</strong> A game that retains can always be monetized later. A game that monetizes early but leaks cannot be saved by more spend - the arithmetic only gets worse as you scale it.</li>
+          <li><strong>The stakeholder lesson travels.</strong> You may never kill a product, but every launch decision has the same shape: is the cohort evidence above the bar we set BEFORE we looked? If your organization has no pre-agreed bar, the launch decision will be made by whoever tells the best story.</li>
+        </ul>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p><strong>DOCUMENTED, and worth copying at any scale.</strong> An ecommerce equivalent: pilot the new subscription box in two cities, pre-commit the repeat-purchase bar it must clear by day 90, and let the cohort table - not the pilot team's enthusiasm - make the rollout call. The discipline is the transferable part, not the genre.</p>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3: LOYALTY & WINBACK ============ -->
+  <section class="section" id="loyalty">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers loyalty economics + winback (CIRP, Second Measure, McKinsey - labels in text)</span>
+      <h2>Loyalty and winback: ecommerce <span class="tag concept">11 min live</span></h2>
+    </div>
+    <p class="lede">Games gate on retention; ecommerce buys it with economics. The published numbers here are strong - but this is also where honesty labels matter most, because several of the famous figures are third-party estimates with a selection effect baked in. We will use them AND name the caveat, because naming the caveat is exactly the skill s4 trains.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A retention curve with the lever menu mapped onto it. A pale baseline curve slides toward zero. A stronger curve sits above it: onboarding slows the early cliff, habit loops hold the middle, loyalty economics raise the flat floor, and a dashed winback segment bends the tail upward at the end. The gap between the two curves is labeled as the money.">
+        <style>
+          .s3lvT { font: 700 14px Inter, sans-serif; fill: #241A12; }
+          .s3lvH { font: 700 12px Inter, sans-serif; fill: #241A12; }
+          .s3lvG { font: 700 12px Inter, sans-serif; fill: #0F766E; }
+          .s3lvB { font: 400 11px Inter, sans-serif; fill: #6B5D52; }
+          .s3lvAx { stroke: #D3C4B8; stroke-width: 1.5; }
+          .s3lvLd { stroke: #6B5D52; stroke-width: 1; fill: none; }
+        </style>
+        <rect x="0" y="0" width="880" height="340" fill="#FDF9F5"/>
+        <text class="s3lvT" x="40" y="28">The lever menu, mapped onto the curve each lever moves</text>
+
+        <rect x="40" y="48" width="800" height="240" rx="10" fill="#FFFFFF" stroke="#EFE2D6"/>
+        <line class="s3lvAx" x1="80" y1="256" x2="810" y2="256"/>
+        <line class="s3lvAx" x1="80" y1="70" x2="80" y2="256"/>
+
+        <path d="M80,100 C170,205 260,232 380,240 C520,247 660,249 800,250" fill="none" stroke="#F6C39E" stroke-width="2.5"/>
+        <path d="M80,100 C180,160 280,182 400,188 C500,192 580,193 680,193" fill="none" stroke="#C2410C" stroke-width="3"/>
+        <path d="M680,193 C720,192 770,184 800,174" fill="none" stroke="#0F766E" stroke-width="3" stroke-dasharray="6 4"/>
+
+        <line class="s3lvLd" x1="560" y1="193" x2="560" y2="247"/>
+        <text class="s3lvB" x="572" y="226">this gap, x customers, x</text>
+        <text class="s3lvB" x="572" y="240">spend = the money</text>
+
+        <text class="s3lvH" x="120" y="92">Onboarding</text>
+        <text class="s3lvB" x="120" y="107">slow the early cliff</text>
+        <line class="s3lvLd" x1="150" y1="112" x2="165" y2="152"/>
+
+        <text class="s3lvH" x="300" y="130">Habit loops</text>
+        <text class="s3lvB" x="300" y="145">keep the middle alive</text>
+        <line class="s3lvLd" x1="330" y1="150" x2="345" y2="178"/>
+
+        <text class="s3lvH" x="480" y="150">Loyalty economics</text>
+        <text class="s3lvB" x="480" y="165">raise the flat floor</text>
+        <line class="s3lvLd" x1="510" y1="170" x2="500" y2="186"/>
+
+        <text class="s3lvG" x="676" y="140">Winback</text>
+        <text class="s3lvB" x="676" y="155">bend the tail up</text>
+        <line class="s3lvLd" x1="710" y1="160" x2="740" y2="184"/>
+
+        <text class="s3lvB" x="96" y="276">months since first purchase</text>
+        <text class="s3lvB" x="40" y="316">Raise the asymptote (onboarding, habit, loyalty) or bend the tail (winback) - every lever is one of two moves.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the menu is short: three levers raise the floor, one bends the tail</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The lever menu, by mechanism<span class="mini">8 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Every retention lever ever proposed does one of two things to the curve: <strong>raise the asymptote</strong> (get more of each cohort into the durable core) or <strong>bend the tail up</strong> (bring the churned back). Sort the famous cases by mechanism and the menu writes itself:</p>
+        <ul>
+          <li><strong>Raise the asymptote - onboarding:</strong> get new customers to the core value fast, before the early cliff takes them. Duolingo's first-session design and streak seeding are this lever; so is a first-order-to-second-order nudge in ecommerce.</li>
+          <li><strong>Raise the asymptote - habit loops:</strong> streaks, leagues, replenishment reminders - anything that gives the product a natural revisit rhythm. Duolingo's +17% learning-time lift from leaderboards lives here. DOCUMENTED.</li>
+          <li><strong>Raise the asymptote - loyalty economics:</strong> make staying financially rational. <strong>Amazon Prime</strong> renews at roughly 93% after year one and about 98% after year two, and members spend about 2x what non-members do - per CIRP, which is a THIRD-PARTY survey, and partly a selection effect: the heaviest shoppers are exactly who joins Prime. Quote it, and quote the caveat. <strong>Sephora Beauty Insider</strong>: about 46M members driving roughly 80% of North America sales. <strong>Dollar Shave Club</strong>: about 50% six-month retention in Second Measure's transaction data - category-leading, and the durability story behind its $1B acquisition.</li>
+          <li><strong>Bend the tail - winback:</strong> the only lever that acts on people already gone. McKinsey pegs subscription-box reality at about <strong>40% of subscribers cancelling</strong>, with a median lifetime around <strong>125 days</strong> - so a winback motion is not optional in that business. Realistic winback email reactivation runs <strong>10-30%</strong>. Not a miracle, but applied to a large churned pool it is real money.</li>
+        </ul>
+        <div class="callout tip">
+          <strong>How to cost a lever in one line</strong>
+          Money impact = delta retention x cohort size x average revenue per customer. A 3-point retention gain on a 10,000-customer monthly cohort is 300 extra retained customers - multiply by what a retained customer spends and you have the number that belongs in the business case. s4 makes this your standard demand for every readout.
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Reading loyalty numbers without getting fooled<span class="mini">4 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The Prime caveat deserves its own card, because it is the single most useful skeptical habit in this course. "Members spend 2x" is true AND mostly not caused by the membership - people who already shop constantly are the ones who buy the membership. Three questions to ask of any loyalty stat:</p>
+        <ul>
+          <li><strong>Who measured it?</strong> First-party disclosure, third-party panel (CIRP, Second Measure), or a conference slide? Each is a different grade of evidence. CIRP is survey-based estimates; Second Measure is transaction data - stronger.</li>
+          <li><strong>Selection or causation?</strong> Did the program make members loyal, or did loyal customers join the program? Usually both; the honest answer is "we cannot fully split them without an experiment".</li>
+          <li><strong>Would we act differently either way?</strong> Often yes: a program that merely identifies your best customers is still worth having - but you should not project the 2x spend gap onto marginal joiners in the business case.</li>
+        </ul>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>The folklore scorecard - grade the classics before you quote them.</strong> Facebook's "7 friends in 10 days": DOCUMENTED (Chamath Palihapitiya, 2013) - but Mode's caveat applies: it was a correlational threshold chosen for communicability, not a proven causal switch. Slack's "customers who send 2,000 team messages: 93% stayed": DOCUMENTED (Stewart Butterfield, First Round Review). Dropbox's "get one file into one folder": SEMI-FOLKLORE - no first-party writeup exists, so it is a plausible story, not evidence. The habit to build: every case you repeat in a meeting should carry its label out loud.</p>
+    </div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Try it yourself - this week <span class="tag exercise">◐ 30 min total</span></h2>
+    </div>
+    <ul>
+      <li>Pick ONE lever from the menu (onboarding, habit loop, loyalty economics, or winback) that fits your product's weakest part of the curve - use s2's chart-reading to find where the leak is.</li>
+      <li>Estimate its money impact with the one-liner: delta retention x cohort size x average revenue per customer. Use a modest delta - a 2-3 point gain is already a strong result for most levers.</li>
+      <li>Write down, before anyone builds anything, what evidence would convince you the lever worked: which cohorts, compared to which baseline, at what age. (If you cannot name it now, you will accept a victory slide later.)</li>
+      <li>Grade one retention case you have heard quoted at your company: DOCUMENTED or SEMI-FOLKLORE? Who published it, and how was it measured?</li>
+    </ul>
+  </section>
+
+  <!-- ============ SOURCES ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session draws on</h2>
+    </div>
+    <p class="lede">Every case above carries its label in the text. The underlying sources, and how far this session takes each one:</p>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Jorge Mazal - "How Duolingo reignited user growth" (Lenny's Newsletter)</span><span class="note">Part 1 · the state machine, CURR, and the four-year result, end to end</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">PocketGamer coverage of Supercell's soft-launch kills</span><span class="note">Part 2 · Spooky Pop, Smash Land, the 30+ pattern</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">CIRP - Amazon Prime renewal and member-spend surveys</span><span class="note">Part 3 · quoted with the third-party + selection-effect caveat</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Second Measure - Dollar Shave Club transaction data</span><span class="note">Part 3 · the ~50% six-month figure; full chart treatment in a2/a3</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">McKinsey - subscription ecommerce churn study</span><span class="note">Part 3 · the ~40% cancel / ~125-day median behind the winback case</span></div>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions before you go 🎯 <span class="tag exercise">◐ 90 seconds</span></h2>
+    </div>
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">1 · Duolingo's growth team had a dozen candidate metrics. Why did CURR win the north-star contest?</p>
+      <button class="qopt" type="button">A · It was the easiest metric to move quickly</button>
+      <button class="qopt" type="button">B · Sensitivity analysis showed moving it had ~5x the DAU impact of the next-best metric - and gains to it compound daily</button>
+      <button class="qopt" type="button">C · Leadership preferred a retention metric over an acquisition one</button>
+      <p class="qwhy">The choice was arithmetic, not taste: nudge each transition rate in the state machine, watch DAU. CURR crushed the field because Current is the biggest bucket and a user kept today is exposed to being kept again tomorrow - the gain compounds. Four years later: CURR +21%, DAU ~4.5x, flat acquisition spend.</p>
+    </div>
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">2 · Supercell killed Smash Land even though player feedback was positive. What does the kill pattern teach about the order of retention and monetization?</p>
+      <button class="qopt" type="button">A · Monetize first - revenue proves demand, retention follows</button>
+      <button class="qopt" type="button">B · Player feedback should outweigh early cohort data</button>
+      <button class="qopt" type="button">C · Retention comes first: only 2-5% of players ever pay, whales emerge from stayers, so a leaky game cannot earn its acquisition spend</button>
+      <p class="qwhy">Retention gates everything downstream. The paying few surface over months from the pool of people who stayed, so scaling UA into a game below the retention bar is renting traffic that leaves before it pays. That is why the gate kills fast - and why feedback lost to the cohort table.</p>
+    </div>
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">3 · Which of these famous retention stories is semi-folklore rather than documented?</p>
+      <button class="qopt" type="button">A · Dropbox: "get one file into one folder" as the activation moment</button>
+      <button class="qopt" type="button">B · Slack: customers who sent 2,000 team messages - 93% stayed</button>
+      <button class="qopt" type="button">C · Facebook: 7 friends in 10 days</button>
+      <p class="qwhy">The Dropbox story has no first-party writeup - plausible, but a legend. Slack's number is documented (Stewart Butterfield, First Round Review). Facebook's is documented too (Chamath, 2013), though with Mode's caveat: a correlational threshold chosen for communicability, not a proven causal switch.</p>
+    </div>
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Stakeholder session 3 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>The 7-bucket machine</b><span>New + Current + Reactivated + Resurrected = DAU. At-risk WAU, At-risk MAU, Dormant are the leak. Model flows, not one blended number.</span></div>
+      <div class="cheat-item"><b>CURR, the north star</b><span>Current-user retention rate. Sensitivity analysis: ~5x the DAU impact of the next metric. Result: CURR +21%, DAU ~4.5x in ~4 years, flat spend.</span></div>
+      <div class="cheat-item"><b>Duolingo's levers</b><span>Leaderboards/leagues (learning time +17%), streaks + streak freeze, notification discipline. All documented via Mazal in Lenny's Newsletter.</span></div>
+      <div class="cheat-item"><b>Folklore filter</b><span>"12% to 55% from gamification" is third-party, not Duolingo's. "The Growth Handbook" is Intercom's book. Dropbox "one file" has no first-party source.</span></div>
+      <div class="cheat-item"><b>The Supercell gate</b><span>Soft launch in test markets, judge D1/D7 vs live-hit bars, kill fast. Spooky Pop (Mar 2015), Smash Land (Sept 2015, liked but leaky), 30+ total.</span></div>
+      <div class="cheat-item"><b>Retention before monetization</b><span>Only 2-5% of players ever pay; whales emerge from stayers. Retention decides whether acquisition money gets spent at all.</span></div>
+      <div class="cheat-item"><b>Loyalty economics</b><span>Prime ~93% then ~98% renewal, ~2x spend (CIRP - third-party, selection effect). Sephora ~46M members, ~80% of NA sales. DSC ~50% at 6 months.</span></div>
+      <div class="cheat-item"><b>Winback + the money math</b><span>~40% of subscription-box subs cancel, median ~125 days (McKinsey); winback emails reactivate 10-30%. Cost a lever: delta x cohort size x ARPU.</span></div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <span>Stakeholder session 3 of 4 · learn-customer-retention-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="s2-read-the-chart-read-the-business.html">← s2: Read the chart</a> &nbsp;·&nbsp; <a href="s4-asking-the-right-questions.html">Next: Asking the right questions →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>

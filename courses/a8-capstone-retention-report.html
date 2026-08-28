@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Analyst session 8 of 8. The capstone: assemble everything from a1-a7 into the stakeholder retention report - which cohort, what changed, how much money - built end to end on Online Retail II, with the frozen-history snapshot contract as code and a strict ship-or-not scorecard.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Capstone: the retention report - learn customer retention with phoebe">
+<meta property="og:description" content="Analyst session 8 of 8. Build the stakeholder one-pager end to end on Online Retail II: the three questions, the one-chart rule, the snapshot-assert frozen-history contract, and the 8-row ship-or-not scorecard.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-customer-retention-with-phoebe/courses/a8-capstone-retention-report.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-customer-retention-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Capstone: the retention report - learn customer retention with phoebe">
+<meta name="twitter:description" content="Assemble a1-a7 into one shippable retention report: three questions, one chart upstairs, frozen history as code, and an 8-row scorecard.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-customer-retention-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Analyst session 8 · Capstone: the retention report - learn customer retention with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-customer-retention-with-phoebe</a> / Analyst session 8 of 8</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Customer Retention with Phoebe · Analyst track · Session 8 of 8</div>
+    <h1>Capstone: the <span class="accent">retention report</span></h1>
+    <p class="sub">Seven sessions of parts become one machine. Today you build the deliverable this whole track has been rehearsing: a stakeholder retention report on Online Retail II that names WHICH cohort changed, WHAT it changed against, and HOW MUCH money that is worth - with frozen history enforced in code, immature cells marked, one chart upstairs and the triangle in the appendix. Then you run it through a strict ship-or-not scorecard. No partial credit: a report either passes all eight rows or it does not leave the building.</p>
+    <div class="chip-row">
+      <span class="chip level">🔴 Analyst track</span>
+      <span class="chip audience">Data analysts · Python</span>
+      <span class="chip audience">Capstone · ship it</span>
+      <span class="chip time">60 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:2">3-15 · The spec</span>
+      <span class="a3" style="flex:6">15-50 · Build the report</span>
+      <span class="a4" style="flex:2">50-60 · Present &amp; score</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Where this session sits</h2>
+    </div>
+    <p class="lede">Everything converges here. a2's cohort triangle is the report's data spine, a3's gallery decides which chart goes upstairs, a4's segments explain who moved, a5's survival curves and a6's P(alive) price the lifetimes, and a7's risk scores name who to act on. Today they become ONE deliverable: the stakeholder one-pager plus its analyst appendix, built end to end on the real Online Retail II dataset in the companion notebook <code>notebooks/a8_capstone.ipynb</code>. This is the artifact you were promised in a1 - and the one you ship at work next week.</p>
+    <div class="legend">
+      <span class="pill solid">Live - presented in session</span>
+      <span class="pill light">Self-study - read after class</span>
+      <span class="pill peach">★ Build-along - run the code yourself</span>
+      <span class="pill inkpill">Sources covered</span>
+    </div>
+    <div class="callout win">
+      <strong>★ What you walk out with today</strong>
+      A finished retention report on Online Retail II: the three-questions one-pager, the frozen-history snapshot contract written as an assert that fails the build if completed cells restate, the one-chart rule applied (trend line upstairs, triangle in the appendix), and an 8-row ship-or-not scorecard you can run against any retention readout for the rest of your career.
+    </div>
+  </section>
+
+  <!-- ============ PART 1: THE SPEC ============ -->
+  <section class="section" id="spec">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the three questions + the one-chart rule</span>
+      <h2>The spec: what a retention report must answer <span class="tag concept">10 min live</span></h2>
+    </div>
+    <p class="lede">A retention report is not a chart dump. It is a one-page answer to three questions, backed by an appendix, bound by one contract. Write the spec before touching pandas - the spec is what stops the notebook from becoming forty cells of exploration with no verdict.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Wireframe of the retention one-pager. From top to bottom: a headline verdict sentence, the one chart which is the D30 by cohort trend line, a three-questions box naming which cohort, what changed and versus what, a money line, and a pointer to the appendix where the full triangle lives. Annotations on the right explain each zone.">
+        <style>
+          .a8wfT { font: 700 14px Inter, sans-serif; fill: #241A12; }
+          .a8wfH { font: 700 12px Inter, sans-serif; fill: #241A12; }
+          .a8wfW { font: 700 11.5px Inter, sans-serif; fill: #FFFFFF; }
+          .a8wfB { font: 400 11px Inter, sans-serif; fill: #241A12; }
+          .a8wfN { font: 400 11.5px Inter, sans-serif; fill: #6B5D52; }
+          .a8wfL { stroke: #6B5D52; stroke-width: 1.3; stroke-dasharray: 4 4; }
+        </style>
+        <rect x="0" y="0" width="880" height="380" fill="#FDF9F5"/>
+        <text class="a8wfT" x="40" y="28">The one-pager wireframe: verdict, one chart, three questions, money, appendix</text>
+
+        <rect x="60" y="52" width="320" height="296" rx="12" fill="#FFFFFF" stroke="#EFE2D6" stroke-width="2"/>
+
+        <rect x="76" y="68" width="288" height="32" rx="6" fill="#7C2D12"/>
+        <text class="a8wfW" x="88" y="88">Headline verdict - one sentence</text>
+
+        <rect x="76" y="110" width="288" height="104" rx="6" fill="#F8EADD"/>
+        <polyline points="92,196 132,188 172,178 212,172 252,160 292,150 332,138" fill="none" stroke="#C2410C" stroke-width="3"/>
+        <text class="a8wfB" x="92" y="130">THE one chart: D30-by-cohort trend</text>
+
+        <rect x="76" y="224" width="288" height="56" rx="6" fill="#FBE3D2"/>
+        <text class="a8wfB" x="92" y="244">WHICH cohort · WHAT changed</text>
+        <text class="a8wfB" x="92" y="262">· vs WHICH comparison cohort</text>
+
+        <rect x="76" y="290" width="184" height="28" rx="6" fill="#E06A2E"/>
+        <text class="a8wfW" x="88" y="309">$ money line</text>
+        <text class="a8wfN" x="272" y="309">appendix p.2 →</text>
+
+        <line class="a8wfL" x1="380" y1="84" x2="470" y2="84"/>
+        <rect x="474" y="60" width="366" height="48" rx="8" fill="#F8EADD"/>
+        <text class="a8wfH" x="488" y="80">The verdict leads. Nobody hunts for it.</text>
+        <text class="a8wfB" x="488" y="97">"Feb-May cohorts retain 4 pts better at month 3."</text>
+
+        <line class="a8wfL" x1="380" y1="162" x2="470" y2="162"/>
+        <rect x="474" y="120" width="366" height="66" rx="8" fill="#F8EADD"/>
+        <text class="a8wfH" x="488" y="140">One chart upstairs - NEVER the triangle.</text>
+        <text class="a8wfB" x="488" y="158">D30-by-cohort trend or the layer-cake (a3's rules).</text>
+        <text class="a8wfB" x="488" y="175">The raw triangle is analyst food: appendix only.</text>
+
+        <line class="a8wfL" x1="380" y1="252" x2="470" y2="252"/>
+        <rect x="474" y="198" width="366" height="66" rx="8" fill="#F8EADD"/>
+        <text class="a8wfH" x="488" y="218">The three questions, answered in writing.</text>
+        <text class="a8wfB" x="488" y="236">Which cohort. What changed vs the comparison.</text>
+        <text class="a8wfB" x="488" y="253">Denominator definition written down, not implied.</text>
+
+        <line class="a8wfL" x1="380" y1="304" x2="470" y2="304"/>
+        <rect x="474" y="276" width="366" height="48" rx="8" fill="#F8EADD"/>
+        <text class="a8wfH" x="488" y="296">Money = delta retention x cohort size x ARPU.</text>
+        <text class="a8wfB" x="488" y="313">No money line, no meeting. This is the whole point.</text>
+
+        <text class="a8wfN" x="60" y="368">Completed months on this page must match last quarter's report exactly - only the current partial month updates, marked.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the one-pager: verdict on top, one chart, three questions, a money line, triangle exiled to the appendix</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The three questions, the frozen contract, the one-chart rule<span class="mini">8 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Every retention readout in this course answers exactly three questions, in this order:</p>
+        <ul>
+          <li><strong>WHICH cohort?</strong> Named precisely: "customers whose first purchase was Feb-May 2011", not "recent customers". The denominator definition (all signups vs activated; purchase-based for ecommerce) is written on the page.</li>
+          <li><strong>WHAT changed, vs what?</strong> A number is meaningless without its comparison cohort: "month-3 retention 31% vs 27% for the Dec-Jan cohorts". Cohort ages compared, never calendar periods.</li>
+          <li><strong>HOW MUCH money?</strong> Delta retention x cohort size x ARPU. Four points of month-3 retention on 4,000 customers at $30 monthly gross profit is a real number executives can rank against other projects.</li>
+        </ul>
+        <p>And two standing rules bind the whole document:</p>
+        <ul>
+          <li><strong>The frozen-history contract:</strong> completed months are immutable - this quarter's report must show the SAME numbers for them as last quarter's report, provably. Only the current partial month updates, and it is visibly marked partial. A report whose history restates cannot be trusted, compared, or targeted against. In Part 2 this contract becomes an assert.</li>
+          <li><strong>The one-chart rule:</strong> executives get ONE chart - the D30-by-cohort trend line ("are we improving?") or the layer-cake ("is revenue durable?"). The raw triangle, the KM curves, the SHAP beeswarm: appendix. Upstairs answers a question; the appendix proves you did the work.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2: BUILD ============ -->
+  <section class="section" id="build">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers the full pipeline on Online Retail II</span>
+      <h2>Build it end to end <span class="tag demo">★ 25 min · everyone builds</span></h2>
+    </div>
+    <p class="lede">Six steps from raw invoices to a shippable report. Steps 1-2 are a2's recipe verbatim - if any step feels new, that session is the reference. The new muscle today is steps 5 and 6: translating a finding into money, and writing the frozen-history contract as code that fails loudly.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The six-step capstone pipeline as a flow: clean the data, build the cohort table, find the story, segment the finding, translate to money, snapshot and assert. Arrows connect each step to the next.">
+        <style>
+          .a8plT { font: 700 14px Inter, sans-serif; fill: #241A12; }
+          .a8plH { font: 700 12px Inter, sans-serif; fill: #FFFFFF; }
+          .a8plB { font: 400 10.5px Inter, sans-serif; fill: #241A12; }
+          .a8plN { font: 400 11.5px Inter, sans-serif; fill: #6B5D52; }
+          .a8plA { stroke: #EA580C; stroke-width: 2.2; fill: none; marker-end: url(#a8plArr); }
+        </style>
+        <defs>
+          <marker id="a8plArr" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+            <path d="M0,0 L8,4.5 L0,9 z" fill="#EA580C"/>
+          </marker>
+        </defs>
+        <rect x="0" y="0" width="880" height="250" fill="#FDF9F5"/>
+        <text class="a8plT" x="40" y="28">The capstone pipeline: six steps, one report</text>
+
+        <rect x="28" y="52" width="122" height="98" rx="10" fill="#C2410C"/>
+        <text class="a8plH" x="40" y="76">1 · Clean</text>
+        <rect x="38" y="88" width="102" height="52" rx="6" fill="#FDF9F5"/>
+        <text class="a8plB" x="46" y="104">drop C-invoices,</text>
+        <text class="a8plB" x="46" y="118">no CustomerID,</text>
+        <text class="a8plB" x="46" y="132">negative qty</text>
+
+        <rect x="168" y="52" width="122" height="98" rx="10" fill="#C2410C"/>
+        <text class="a8plH" x="180" y="76">2 · Table</text>
+        <rect x="178" y="88" width="102" height="52" rx="6" fill="#FDF9F5"/>
+        <text class="a8plB" x="186" y="104">a2's recipe +</text>
+        <text class="a8plB" x="186" y="118">masked heatmap,</text>
+        <text class="a8plB" x="186" y="132">verbatim</text>
+
+        <rect x="308" y="52" width="122" height="98" rx="10" fill="#C2410C"/>
+        <text class="a8plH" x="320" y="76">3 · Find</text>
+        <rect x="318" y="88" width="102" height="52" rx="6" fill="#FDF9F5"/>
+        <text class="a8plB" x="326" y="104">read columns</text>
+        <text class="a8plB" x="326" y="118">down, check the</text>
+        <text class="a8plB" x="326" y="132">diagonals</text>
+
+        <rect x="448" y="52" width="122" height="98" rx="10" fill="#C2410C"/>
+        <text class="a8plH" x="460" y="76">4 · Segment</text>
+        <rect x="458" y="88" width="102" height="52" rx="6" fill="#FDF9F5"/>
+        <text class="a8plB" x="466" y="104">a4's RFM or</text>
+        <text class="a8plB" x="466" y="118">behavior split,</text>
+        <text class="a8plB" x="466" y="132">wholesalers out</text>
+
+        <rect x="588" y="52" width="122" height="98" rx="10" fill="#C2410C"/>
+        <text class="a8plH" x="600" y="76">5 · Money</text>
+        <rect x="598" y="88" width="102" height="52" rx="6" fill="#FDF9F5"/>
+        <text class="a8plB" x="606" y="104">delta x size</text>
+        <text class="a8plB" x="606" y="118">x ARPU, from</text>
+        <text class="a8plB" x="606" y="132">a6's profit</text>
+
+        <rect x="728" y="52" width="122" height="98" rx="10" fill="#7C2D12"/>
+        <text class="a8plH" x="740" y="76">6 · Snapshot</text>
+        <rect x="738" y="88" width="102" height="52" rx="6" fill="#FDF9F5"/>
+        <text class="a8plB" x="746" y="104">dated CSV +</text>
+        <text class="a8plB" x="746" y="118">assert history</text>
+        <text class="a8plB" x="746" y="132">unchanged</text>
+
+        <path class="a8plA" d="M150,101 L164,101"/>
+        <path class="a8plA" d="M290,101 L304,101"/>
+        <path class="a8plA" d="M430,101 L444,101"/>
+        <path class="a8plA" d="M570,101 L584,101"/>
+        <path class="a8plA" d="M710,101 L724,101"/>
+
+        <rect x="28" y="172" width="822" height="56" rx="10" fill="#F8EADD"/>
+        <text class="a8plB" x="46" y="196" style="font-size:11.5px">Steps 1-4 are sessions a2 and a4 replayed on real data. Steps 5-6 are today's new muscle: the money translation</text>
+        <text class="a8plB" x="46" y="214" style="font-size:11.5px">that earns the meeting, and the snapshot-assert that makes frozen history a build failure instead of a promise.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - clean, table, find, segment, money, snapshot: the whole course as one pipeline</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step"><p><strong>Clean-up gate.</strong> Drop C-prefix invoices (cancellations with negative Quantity), rows missing CustomerID (~135k guest checkouts - despite the metadata claiming none missing), and any remaining negative quantities. Annotate the left-censored first cohort: December 2009 sweeps in pre-existing customers as if new.</p></div>
+      <div class="step"><p><strong>Cohort table + masked heatmap.</strong> a2's recipe verbatim: stamp, age, count, divide - then the four heatmap choices: annot, mask the future, anchor vmin/vmax, single-hue safe cmap.</p></div>
+      <div class="step"><p><strong>Pick the finding.</strong> Read down the columns for cohort-over-cohort improvement or deterioration; check the diagonals for calendar shocks (a December spike is seasonality, not genius). One finding. The report is a verdict, not a tour.</p></div>
+      <div class="step"><p><strong>Segment the finding.</strong> a4's split: is the improvement everyone, or one RFM tier, one channel, one behavior? Wholesalers out first - a handful of weekly trade buyers will dominate any average.</p></div>
+      <div class="step"><p><strong>Translate to money.</strong> Delta retention x cohort size x ARPU, with ARPU from a6's cumulative cohort gross profit, not a hopeful LTV formula. This line is why the meeting happens.</p></div>
+      <div class="step"><p><strong>Snapshot.</strong> Write the frozen numbers to a dated CSV and assert that every completed cell matches the prior quarter's snapshot. History restating is now a crash, not a surprise.</p></div>
+    </div>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>★ Build-along: the three code moments (steps 2, 5, 6)<span class="mini">12 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <div class="prompt-box good"><span class="label">★ Step 2 · a2's recipe verbatim, on the cleaned Online Retail II frame</span>retail["order_month"] = retail["InvoiceDate"].dt.to_period("M")
+retail["cohort"] = (retail.groupby("Customer ID")["InvoiceDate"]
+                          .transform("min").dt.to_period("M"))
+retail["period"] = (retail["order_month"] - retail["cohort"]).apply(lambda d: d.n)
+
+counts = retail.pivot_table(index="cohort", columns="period",
+                            values="Customer ID", aggfunc="nunique")
+retention = counts.divide(counts.iloc[:, 0], axis=0)
+
+sns.heatmap(retention, annot=True, fmt=".0%", mask=retention.isnull(),
+            vmin=0, vmax=0.5, cmap="Oranges")   # the four choices, always</div>
+        <div class="prompt-box good"><span class="label">★ Step 5 · the money line: delta x size x ARPU</span>improved   = retention.loc["2011-02":"2011-05", 3].mean()   # month-3, new cohorts
+comparison = retention.loc["2010-12":"2011-01", 3].mean()    # month-3, old cohorts
+delta = improved - comparison
+
+size = counts.loc["2011-02":"2011-05", 0].sum()     # customers in improved cohorts
+arpu = 30.0    # monthly gross profit per retained customer, from a6's frame
+
+impact = delta * size * arpu * 6                     # months left in the horizon
+print(f"{delta:+.1%} at month 3 x {size:,} customers -&gt; ~${impact:,.0f}")</div>
+        <div class="prompt-box good"><span class="label">★ Step 6 · snapshot the frozen numbers for next quarter's proof</span>retention.round(4).to_csv("reports/retention_snapshot_2011Q4.csv")</div>
+        <p>The snapshot is half the contract. The other half - the assert that reads it back next quarter - gets its own card below, because it is the single most transferable pattern on this page.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The snapshot-assert: the frozen-history contract as code<span class="mini">6 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>a2 taught frozen history as a law; today it becomes machinery. Before this quarter's report renders, re-read the PRIOR quarter's snapshot and assert that every cell whose window had already completed then is bit-identical now. If the assert fires, something upstream changed - a silent filter edit, a timezone shift, a redefined denominator - and the report must not ship until you know why.</p>
+        <div class="prompt-box good"><span class="label">★ The re-read assert - history restating becomes a build failure</span>prior = pd.read_csv("reports/retention_snapshot_2011Q3.csv", index_col=0)
+prior.columns = prior.columns.astype(int)
+
+completed = [c for c in prior.columns if c &lt; prior.shape[1] - 1]  # elapsed windows
+rows = prior.index.intersection(retention.index.astype(str))
+
+new = retention.copy(); new.index = new.index.astype(str)
+assert new.loc[rows, completed].round(4).equals(
+       prior.loc[rows, completed].round(4)), \
+       "HISTORY RESTATED - completed cells changed since Q3. Do not ship."</div>
+        <p>Notice what this buys you politically, not just technically: when a stakeholder asks "why is January's number different from last quarter's deck?", your answer is "it cannot be - the build fails if it is". That sentence is worth more than any model in this course.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3: THE SCORECARD ============ -->
+  <section class="section" id="scorecard">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers the ship gate + presenting the verdict</span>
+      <h2>The ship-or-not scorecard <span class="tag concept">10 min live</span></h2>
+    </div>
+    <p class="lede">A report that fails one row fails. There is no seven-out-of-eight: a missing denominator definition or a restated January quietly poisons every other number on the page. Run the scorecard before every send - on your own report today, and on every retention readout anyone hands you from now on.</p>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Eight rows, pass or do-not-ship<span class="mini">6 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ol>
+          <li><strong>Which-cohort named</strong> - the cohort under discussion is identified by anchor date and definition, not "recent users".</li>
+          <li><strong>Comparison cohort named</strong> - the delta has an explicit baseline cohort, compared at the same age.</li>
+          <li><strong>Money line present</strong> - delta x size x ARPU appears on the page, in currency.</li>
+          <li><strong>Denominator definition written</strong> - all signups vs activated; purchase-based for ecommerce; stated, not assumed.</li>
+          <li><strong>History matches prior snapshot</strong> - the assert ran and passed; completed cells identical to last quarter's report.</li>
+          <li><strong>Immature cells masked and marked</strong> - the current partial month is visibly partial; NaN never rendered as low retention.</li>
+          <li><strong>Benchmark carries year + source</strong> - "GameAnalytics 2025 median D7 ~3.4-3.9%", never a naked "industry says".</li>
+          <li><strong>One chart upstairs, triangle in appendix</strong> - the exec page has exactly one chart; the triangle and diagnostics live behind it.</li>
+        </ol>
+        <p>Frame it exactly this way with your team: <strong>ship or do-not-ship</strong>. Partial credit is how restated dashboards and unmarked partial months get normalized.</p>
+      </div>
+    </details>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 470" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The ship-or-not scorecard drawn as a stamped checklist: eight rows, each with a pass stamp - which cohort named, comparison named, money line present, denominator written, history matches snapshot, immature cells masked, benchmark carries year and source, one chart upstairs with the triangle in the appendix. A large ship stamp sits at the right.">
+        <style>
+          .a8scT { font: 700 14px Inter, sans-serif; fill: #241A12; }
+          .a8scB { font: 600 12.5px Inter, sans-serif; fill: #241A12; }
+          .a8scS { font: 700 11px Inter, sans-serif; fill: #FFFFFF; }
+          .a8scN { font: 400 11.5px Inter, sans-serif; fill: #6B5D52; }
+          .a8scG { font: 800 20px Inter, sans-serif; fill: #0F766E; }
+        </style>
+        <rect x="0" y="0" width="880" height="470" fill="#FDF9F5"/>
+        <text class="a8scT" x="40" y="28">The scorecard: eight stamps or it does not ship</text>
+
+        <rect x="40" y="48" width="620" height="40" rx="8" fill="#FFFFFF" stroke="#EFE2D6"/>
+        <text class="a8scB" x="58" y="73">1 · Which cohort - named, with anchor date + definition</text>
+        <circle cx="620" cy="68" r="13" fill="#0F766E"/><text class="a8scS" x="620" y="72" text-anchor="middle">✓</text>
+
+        <rect x="40" y="94" width="620" height="40" rx="8" fill="#F8EADD"/>
+        <text class="a8scB" x="58" y="119">2 · Comparison cohort - named, same age compared</text>
+        <circle cx="620" cy="114" r="13" fill="#0F766E"/><text class="a8scS" x="620" y="118" text-anchor="middle">✓</text>
+
+        <rect x="40" y="140" width="620" height="40" rx="8" fill="#FFFFFF" stroke="#EFE2D6"/>
+        <text class="a8scB" x="58" y="165">3 · Money line - delta x size x ARPU, in currency</text>
+        <circle cx="620" cy="160" r="13" fill="#0F766E"/><text class="a8scS" x="620" y="164" text-anchor="middle">✓</text>
+
+        <rect x="40" y="186" width="620" height="40" rx="8" fill="#F8EADD"/>
+        <text class="a8scB" x="58" y="211">4 · Denominator definition - written on the page</text>
+        <circle cx="620" cy="206" r="13" fill="#0F766E"/><text class="a8scS" x="620" y="210" text-anchor="middle">✓</text>
+
+        <rect x="40" y="232" width="620" height="40" rx="8" fill="#FFFFFF" stroke="#EFE2D6"/>
+        <text class="a8scB" x="58" y="257">5 · History matches prior snapshot - assert passed</text>
+        <circle cx="620" cy="252" r="13" fill="#0F766E"/><text class="a8scS" x="620" y="256" text-anchor="middle">✓</text>
+
+        <rect x="40" y="278" width="620" height="40" rx="8" fill="#F8EADD"/>
+        <text class="a8scB" x="58" y="303">6 · Immature cells masked AND marked partial</text>
+        <circle cx="620" cy="298" r="13" fill="#0F766E"/><text class="a8scS" x="620" y="302" text-anchor="middle">✓</text>
+
+        <rect x="40" y="324" width="620" height="40" rx="8" fill="#FFFFFF" stroke="#EFE2D6"/>
+        <text class="a8scB" x="58" y="349">7 · Benchmark carries its year + source</text>
+        <circle cx="620" cy="344" r="13" fill="#0F766E"/><text class="a8scS" x="620" y="348" text-anchor="middle">✓</text>
+
+        <rect x="40" y="370" width="620" height="40" rx="8" fill="#F8EADD"/>
+        <text class="a8scB" x="58" y="395">8 · One chart upstairs, triangle in the appendix</text>
+        <circle cx="620" cy="390" r="13" fill="#0F766E"/><text class="a8scS" x="620" y="394" text-anchor="middle">✓</text>
+
+        <g transform="rotate(-12 770 220)">
+          <rect x="694" y="184" width="152" height="72" rx="10" fill="none" stroke="#0F766E" stroke-width="4"/>
+          <text class="a8scG" x="770" y="230" text-anchor="middle">SHIP</text>
+        </g>
+        <text class="a8scN" x="694" y="290">8 of 8, or the stamp</text>
+        <text class="a8scN" x="694" y="308">does not come out.</text>
+
+        <text class="a8scN" x="40" y="446">One failed row fails the report - a missing denominator or a restated January poisons every other number.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - eight rows, eight stamps: ship or do-not-ship, no partial credit</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Presenting it: the verdict sentence and the two hard questions<span class="mini">5 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Lead with the verdict sentence.</strong> Not the methodology, not the caveats: "February-May cohorts retain 4 points better at month 3; worth roughly $X by year end if it holds." Everything else on the page exists to survive the questions that sentence provokes.</p>
+        <ul>
+          <li><strong>Anticipate the mix-shift question (s4's trap).</strong> "Did retention improve, or did we just acquire stickier customers?" Blended retention can rise while every segment falls if acquisition shifts toward a stickier channel. Your step-4 segment split is the answer - have the by-segment view in the appendix before anyone asks.</li>
+          <li><strong>Keep the answer to WHY honest.</strong> Cohort data shows WHEN and WHERE retention changed - it cannot prove why. The behavioral splits and a7's SHAP drivers are hypotheses, and hypotheses get tested with experiments: that handoff belongs to learn-experimentation-with-phoebe, and saying so out loud is what separates a report from a story.</li>
+        </ul>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>This deliverable is the Duolingo discipline in miniature.</strong> Jorge Mazal's team (in Lenny's Newsletter) ranked candidate metrics by sensitivity analysis, found CURR - current-user retention rate - had roughly 5x the DAU impact of the next metric, made it the north star, and drove decisions from cohort movements against it: CURR +21% and ~4.5x DAU over about four years. One metric chosen deliberately, one chart watched, decisions traced to cohort movements - exactly the shape of the one-pager you just built, at a few thousand times the headcount.</p>
+    </div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Ship it for real - this month <span class="tag exercise">◐ the real capstone</span></h2>
+    </div>
+    <ul>
+      <li>Build the full report on YOUR product's data: clean-up gate, cohort table, one finding, segment split, money line, dated snapshot with the re-read assert.</li>
+      <li>Present it to one real stakeholder - a PM, a founder, your manager. Lead with the verdict sentence and stop talking.</li>
+      <li>Record which of the 8 scorecard rows they pushed on. (It is almost always the denominator or the money line - the two rows analysts most often skip.)</li>
+      <li>Next quarter, re-run the report and let the snapshot-assert do its job. The first time it catches a silent upstream change, this course has paid for itself.</li>
+    </ul>
+  </section>
+
+  <!-- ============ SOURCES ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session draws on</h2>
+    </div>
+    <p class="lede">The capstone invents nothing new - it enforces everything the track already taught, on real data, under a ship gate:</p>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">a2's cohort recipe + heatmap craft, replayed verbatim on Online Retail II</span><span class="note">Part 2 · steps 1-2</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">a3's exec-chart rules - one chart upstairs (trend or layer-cake), triangle in the appendix</span><span class="note">Part 1 · the one-chart rule</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">s4's stakeholder discipline - which cohort / what changed / money impact, mix-shift trap</span><span class="note">Parts 1 and 3 · the three questions</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The frozen-history law as a snapshot contract in code (dated CSV + re-read assert)</span><span class="note">Part 2 · step 6</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Duolingo CURR case (Mazal, Lenny's Newsletter) - the deliverable pattern at scale</span><span class="note">Real world callout · full case in s3</span></div>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions before you go 🎯 <span class="tag exercise">◐ 90 seconds</span></h2>
+    </div>
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">1 · Which chart goes on the executive page, and where does the cohort triangle live?</p>
+      <button class="qopt" type="button">A · The triangle upstairs - it is the most information-dense artifact we have</button>
+      <button class="qopt" type="button">B · Whichever chart shows the most data; the appendix is for footnotes</button>
+      <button class="qopt" type="button">C · ONE chart upstairs - the D30-by-cohort trend or the layer-cake - and the triangle in the appendix</button>
+      <p class="qwhy">The triangle is analyst food: it answers twenty questions at once, which is exactly why it answers none for an executive. Upstairs gets the single chart matched to the question at hand ("are we improving?" = trend line; "is revenue durable?" = layer-cake), with the so-what annotated on the chart itself. The triangle proves the work - in the appendix.</p>
+    </div>
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">2 · What does the snapshot-assert in step 6 actually protect against?</p>
+      <button class="qopt" type="button">A · Data loss - it is a backup of the retention table</button>
+      <button class="qopt" type="button">B · History restating - completed cells silently changing between this quarter's report and the last</button>
+      <button class="qopt" type="button">C · Overfitting - it keeps the model honest on held-out data</button>
+      <p class="qwhy">Completed windows are immutable by the course law, so if a completed cell differs from the prior snapshot, something upstream changed - a filter, a timezone, a denominator - and every trend in the report is suspect. The assert turns that silent poison into a loud build failure, and turns "why did January change?" into "it cannot - the build fails if it does".</p>
+    </div>
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">3 · Your report shows Feb-May cohorts retaining 4 points better after the new onboarding launched. What can the cohort data claim?</p>
+      <button class="qopt" type="button">A · WHEN and WHERE retention changed - the WHY is a hypothesis that needs an experiment</button>
+      <button class="qopt" type="button">B · That the onboarding caused the lift - the timing lines up</button>
+      <button class="qopt" type="button">C · Nothing - observational data is useless for decisions</button>
+      <p class="qwhy">Cohort tables are observational: they localize the change precisely in time and segment, which is enormously useful - but the acquisition mix, seasonality, or pricing may have moved too. Behavioral splits and a7's SHAP drivers generate the WHY hypotheses; testing them is experiment design, handed off to learn-experimentation-with-phoebe.</p>
+    </div>
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>The whole course on one card <span>· pin this forever</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>The law</b><span>Forward-looking cohort retention with frozen history: fix the base, look forward, completed windows never restate, current window marked partial.</span></div>
+      <div class="cheat-item"><b>The recipe</b><span>cohort = groupby(customer).transform("min") -&gt; period = order_month - cohort -&gt; pivot_table nunique -&gt; divide by column 0.</span></div>
+      <div class="cheat-item"><b>Four heatmap choices</b><span>annot every cell · mask the future · anchor vmin/vmax · single-hue colorblind-safe cmap. Break one and the chart lies.</span></div>
+      <div class="cheat-item"><b>Three scans</b><span>Across a row = one cohort aging. Down a column = product improving? Diagonal = calendar shock (vertical stripe = lifecycle event).</span></div>
+      <div class="cheat-item"><b>Three curve shapes</b><span>Flattens to an asymptote = durable base. Smile = resurrection, best case. Slopes to zero = leaky bucket, no PMF.</span></div>
+      <div class="cheat-item"><b>Three questions</b><span>WHICH cohort (named + denominator) · WHAT changed vs the comparison cohort · HOW MUCH money = delta x size x ARPU.</span></div>
+      <div class="cheat-item"><b>The scorecard</b><span>8 rows: cohort named, comparison named, money line, denominator written, history matches snapshot, immature marked, benchmark dated, one chart upstairs. Ship or do-not-ship.</span></div>
+      <div class="cheat-item"><b>The handoff</b><span>Cohort data shows when and where, never why. Drivers and splits are hypotheses - experiments answer them: learn-experimentation-with-phoebe.</span></div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <span>Analyst session 8 of 8 · learn-customer-retention-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="a7-churn-prediction.html">← Prev: Churn prediction that helps</a> &nbsp;·&nbsp; <a href="../index.html">Back to all sessions →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>

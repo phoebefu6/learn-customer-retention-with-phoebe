@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="A stakeholder track that teaches why retention is the money metric, how to read a cohort heatmap in three scan directions, and which levers actually move the number. An analyst track that builds the whole toolkit in Python: D1/7/14/30 metrics done right, the cohort triangle, survival analysis, CLV models, and churn prediction - with a live flatten-the-curve simulator.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="learn customer retention with phoebe - a two-track course you run in your browser">
+<meta property="og:description" content="Cohort-based retention done right: frozen history, forward-looking windows, the heatmap, curve shapes, survival analysis, CLV, churn prediction - plus the business case studies, folklore-checked.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-customer-retention-with-phoebe/">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-customer-retention-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="learn customer retention with phoebe - a two-track course you run in your browser">
+<meta name="twitter:description" content="Cohort-based retention done right: frozen history, forward-looking windows, the heatmap, curve shapes, survival analysis, CLV, churn prediction - plus the business case studies, folklore-checked.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-customer-retention-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>learn customer retention with phoebe - a two-track course you run in your browser</title>
+<link rel="stylesheet" href="assets/style.css?v=1">
+<style>
+  .stats-row { display: flex; gap: 2.4rem; margin-top: 1.5rem; flex-wrap: wrap; }
+  .stat b { display: block; font-size: 2.1rem; font-weight: 800; line-height: 1.05; font-variant-numeric: tabular-nums; }
+  .stat span { font-size: .72rem; opacity: .85; text-transform: uppercase; letter-spacing: .09em; font-weight: 600; }
+
+  .course-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+  .course-card {
+    border: 1px solid var(--hairline);
+    border-top: 4px solid var(--diff, var(--indigo));
+    border-radius: var(--radius);
+    padding: 1.2rem 1.3rem 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    text-decoration: none;
+    color: var(--ink);
+    background: #fff;
+    transition: box-shadow .15s ease, border-color .15s ease, transform .15s ease;
+    position: relative;
+  }
+  .course-card:hover { border-color: var(--indigo-soft); border-top-color: var(--diff, var(--indigo)); box-shadow: 0 8px 28px rgba(194,65,12,.14); transform: translateY(-3px); }
+  .course-card .cicon { font-size: 1.7rem; line-height: 1; }
+  .course-card .cnum { font-size: .72rem; font-weight: 700; color: var(--indigo); text-transform: uppercase; letter-spacing: .1em; }
+  .course-card h3 { font-size: 1.05rem; font-weight: 800; line-height: 1.3; }
+  .course-card p { font-size: .85rem; color: var(--muted); flex: 1; }
+  .course-card .meta { display: flex; gap: .4rem; flex-wrap: wrap; }
+
+  .diff-legend { display: flex; gap: 1rem; margin-top: 1.6rem; font-size: .74rem; color: var(--muted); font-weight: 600; flex-wrap: wrap; }
+  .diff-legend i { display: inline-block; width: .85rem; height: .35rem; border-radius: 999px; margin-right: .35rem; vertical-align: middle; }
+
+  .prereq-line { margin-top: 1.4rem; font-size: .85rem; color: var(--muted); border-left: 3px solid var(--amber); padding: .5rem .9rem; background: var(--indigo-50); border-radius: 0 var(--radius) var(--radius) 0; }
+  .prereq-line a { color: var(--indigo); font-weight: 700; }
+  .sources-line { margin-top: .8rem; font-size: .8rem; color: var(--muted); }
+
+  .paths { margin-top: 2.6rem; }
+  .paths h2 { font-size: 1.3rem; font-weight: 800; margin-bottom: .3rem; }
+  .paths .plede { color: var(--muted); font-size: .92rem; margin-bottom: .8rem; }
+  .path { display: flex; gap: .55rem; align-items: center; padding: .75rem 0; border-bottom: .5px solid var(--hairline); flex-wrap: wrap; }
+  .path:last-child { border-bottom: none; }
+  .path b { min-width: 15.5rem; font-size: .9rem; }
+  .path .pstep { background: var(--indigo-50); color: var(--indigo); border-radius: 999px; padding: .16rem .68rem; font-weight: 700; font-size: .8rem; text-decoration: none; transition: all .12s ease; }
+  .path .pstep:hover { background: var(--indigo); color: #fff; }
+  .path .parr { color: var(--faint); font-weight: 700; }
+
+  .mm-section { margin-top: 1.6rem; }
+  .mm-section h2 { font-size: 1.3rem; font-weight: 800; margin-bottom: .2rem; }
+  .mm-section .mm-lede { color: var(--muted); font-size: .92rem; margin-bottom: .4rem; }
+  .mm-wrap { border: 1px solid var(--hairline); border-radius: var(--radius); background: linear-gradient(180deg,#fff,#F8EADD); padding: .6rem; overflow-x: auto; }
+  .mm-svg { width: 100%; height: auto; display: block; max-width: 60rem; margin: 0 auto; min-width: 34rem; }
+  .mm-link { cursor: pointer; text-decoration: none; }
+  .mm-node rect { transition: opacity .15s ease, filter .15s ease; }
+  .mm-node text { pointer-events: none; }
+  .mm-link:hover .mm-node rect { filter: brightness(1.06); }
+  .mm-edge { transition: opacity .15s ease; }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Customer Retention with Phoebe</div>
+    <h1>Two tracks from "our retention is 27%" to knowing what that means and what to do about it</h1>
+    <p class="sub">A stakeholder track that teaches why retention is the money metric, how to read a cohort heatmap in thirty seconds, which levers actually move the number - with the famous case studies folklore-checked - and exactly what to demand from your data team. And an analyst track that builds the whole toolkit in Python on real and synthetic data: D1/7/14/30 retention defined precisely (three different "D7"s exist, and tools disagree on purpose), the registration-cohort triangle and its heatmap, the viz gallery, RFM segmentation, survival analysis, CLV models, and churn prediction that actually helps. One law governs every number in the course: cohort-based, forward-looking, frozen once complete - a completed month's retention never restates, only the current window updates. Ecommerce and game examples throughout. A live in-browser cohort simulator lets you flatten the curve lever by lever and discover what doubling ad spend cannot buy.</p>
+    <div class="stats-row">
+      <div class="stat"><b data-count="12">12</b><span>sessions</span></div>
+      <div class="stat"><b data-count="2">2</b><span>tracks</span></div>
+      <div class="stat"><b data-count="8">8</b><span>runnable notebooks</span></div>
+      <div class="stat"><b data-count="3">3</b><span>live widgets</span></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="section">
+    <div class="paths" style="margin-top:0">
+      <h2>The stakeholder track 🤝 <span style="font-size:.85rem;font-weight:600;color:var(--muted)">· for leaders, PMs &amp; anyone who reads dashboards · 4 x 45 min · no code to write</span></h2>
+      <p class="plede">Value mode: why a five-point retention move is worth more than a marketing budget, how to read the triangle and the curve without touching Python, which levers are documented to work (Duolingo, Supercell, Amazon Prime) and which famous numbers are folklore, and the four questions that turn any retention readout into a decision.</p>
+    </div>
+    <div class="course-grid">
+      <a class="course-card" href="courses/s1-retention-is-the-money-metric.html" style="--diff:#34D399">
+        <span class="cicon">💰</span>
+        <span class="cnum">Stakeholder 1 · easy</span>
+        <h3>Retention is the money metric</h3>
+        <p>The leaky bucket vs compounding, Reichheld's real 1990 numbers, the honest version of "5x cheaper", and why retention precedes monetization everywhere.</p>
+        <span class="meta"><span class="pill amber">▶ Stakeholders start here</span></span>
+      </a>
+      <a class="course-card" href="courses/s2-read-the-chart-read-the-business.html" style="--diff:#34D399">
+        <span class="cicon">🔥</span>
+        <span class="cnum">Stakeholder 2 · easy</span>
+        <h3>Read the chart, read the business</h3>
+        <p>The cohort triangle's three scan directions, the three curve shapes and what each means for the company, and benchmarks with their honest vintage.</p>
+        <span class="meta"><span class="pill light">Triangle + curves</span></span>
+      </a>
+      <a class="course-card" href="courses/s3-levers-that-move-retention.html" style="--diff:#FBBF24">
+        <span class="cicon">🎮</span>
+        <span class="cnum">Stakeholder 3 · medium</span>
+        <h3>Levers that move retention</h3>
+        <p>Duolingo's CURR playbook, Supercell's kill gates, Prime and Sephora loyalty economics, winback - every case labeled documented or folklore.</p>
+        <span class="meta"><span class="pill light">Folklore-checked</span></span>
+      </a>
+      <a class="course-card" href="courses/s4-asking-the-right-questions.html" style="--diff:#FBBF24">
+        <span class="cicon">🎯</span>
+        <span class="cnum">Stakeholder 4 · medium</span>
+        <h3>Asking the right questions of your DA</h3>
+        <p>Which cohort, what changed, how much money - plus the mix-shift trap where the blended number rises while every segment falls. Drive it yourself.</p>
+        <span class="meta"><span class="pill light">▶ Mix-shift trap live</span></span>
+      </a>
+    </div>
+
+    <div class="paths">
+      <h2>The analyst track 🛠️ <span style="font-size:.85rem;font-weight:600;color:var(--muted)">· for data analysts · 8 x 45 min · pandas + seaborn + lifelines + XGBoost, notebook per session</span></h2>
+      <p class="plede">Build mode: define D1/7/14/30 retention precisely enough that your SQL matches the tool (a1), build the registration-cohort table and heatmap in five lines of pandas (a2), master the chart family and drive the flatten-the-curve simulator (a3), segment with RFM and the power-user curve (a4), go censoring-correct with survival analysis (a5), model CLV with buy-till-you-die (a6), predict churn without leaking or lying (a7), and ship the stakeholder-ready retention report (a8). Synthetic data with known answers first, then the gloriously messy UCI Online Retail II.</p>
+    </div>
+    <div class="course-grid">
+      <a class="course-card" href="courses/a1-retention-metrics-precisely.html" style="--diff:#34D399">
+        <span class="cicon">📏</span>
+        <span class="cnum">Analyst 1 · easy</span>
+        <h3>Retention metrics, precisely</h3>
+        <p>Three different "D7"s exist: classic, rolling, bracket. The frozen-history law, day boundaries, stickiness ratios, and the denominator decisions.</p>
+        <span class="meta"><span class="pill amber">▶ Analysts start here</span><span class="pill light">▶ Variant switcher</span></span>
+      </a>
+      <a class="course-card" href="courses/a2-cohort-table-and-heatmap.html" style="--diff:#FBBF24">
+        <span class="cicon">🔥</span>
+        <span class="cnum">Analyst 2 · medium</span>
+        <h3>The cohort table and heatmap</h3>
+        <p>Users who joined month 0, percent back in months 1-10. The canonical pandas recipe, the four heatmap choices, and the three scan directions.</p>
+        <span class="meta"><span class="pill light">The core session</span></span>
+      </a>
+      <a class="course-card" href="courses/a3-retention-viz-gallery.html" style="--diff:#FBBF24">
+        <span class="cicon">📈</span>
+        <span class="cnum">Analyst 3 · medium</span>
+        <h3>The retention viz gallery</h3>
+        <p>Curve shapes as diagnosis, the truncated-cohort trap, layer-cake, growth accounting, L28 - and the flatten-the-curve simulator with its ad-spend trap.</p>
+        <span class="meta"><span class="pill light">▶ Live simulator</span></span>
+      </a>
+      <a class="course-card" href="courses/a4-segmentation-rfm.html" style="--diff:#FBBF24">
+        <span class="cicon">🧩</span>
+        <span class="cnum">Analyst 4 · medium</span>
+        <h3>Segmentation: who is retained</h3>
+        <p>RFM scoring and personas, behavioral vs acquisition cohorts, stickiness by segment, and the wholesalers who eat your averages.</p>
+        <span class="meta"><span class="pill light">Champions to hibernating</span></span>
+      </a>
+      <a class="course-card" href="courses/a5-survival-analysis.html" style="--diff:#FB923C">
+        <span class="cicon">⏳</span>
+        <span class="cnum">Analyst 5 · hands-on</span>
+        <h3>Survival analysis</h3>
+        <p>Right-censoring done right: Kaplan-Meier curves, log-rank tests, Cox hazard ratios with lifelines - and when a plain cohort table is enough.</p>
+        <span class="meta"><span class="pill light">lifelines</span></span>
+      </a>
+      <a class="course-card" href="courses/a6-clv-buy-till-you-die.html" style="--diff:#FB923C">
+        <span class="cicon">💎</span>
+        <span class="cnum">Analyst 6 · hands-on</span>
+        <h3>CLV and buy-till-you-die</h3>
+        <p>BG/NBD and P(alive) for customers who never say goodbye, Gamma-Gamma for value, where the models break, and the honest LTV formulas.</p>
+        <span class="meta"><span class="pill light">P(alive)</span></span>
+      </a>
+      <a class="course-card" href="courses/a7-churn-prediction.html" style="--diff:#FB923C">
+        <span class="cicon">🤖</span>
+        <span class="cnum">Analyst 7 · hands-on</span>
+        <h3>Churn prediction that helps</h3>
+        <p>Label and feature windows without leakage, XGBoost + SHAP for drivers, thresholds priced by intervention economics - and why prediction is not prevention.</p>
+        <span class="meta"><span class="pill light">Leakage spot-the-bug</span></span>
+      </a>
+      <a class="course-card" href="courses/a8-capstone-retention-report.html" style="--diff:#F87171">
+        <span class="cicon">📦</span>
+        <span class="cnum">Analyst 8 · capstone</span>
+        <h3>Capstone: the retention report</h3>
+        <p>Full pipeline on Online Retail II, ending in the one-pager a stakeholder can act on: which cohort, what changed, how much money.</p>
+        <span class="meta"><span class="pill light">Ship it</span></span>
+      </a>
+    </div>
+    <div class="diff-legend">
+      <span><i style="background:#34D399"></i>easy - everyone</span>
+      <span><i style="background:#FBBF24"></i>medium</span>
+      <span><i style="background:#FB923C"></i>hands-on</span>
+      <span><i style="background:#F87171"></i>capstone</span>
+    </div>
+
+    <p class="prereq-line">Retention is where analytics meets money. It pairs with <a href="https://phoebefu6.github.io/learn-metric-decomposition-with-phoebe/">learn-metric-decomposition-with-phoebe</a> (retention is a driver in every tree), builds on <a href="https://phoebefu6.github.io/learn-python-data-analysis-with-phoebe/">learn-python-data-analysis-with-phoebe</a> (the pandas muscle), and hands off to <a href="https://phoebefu6.github.io/learn-experimentation-with-phoebe/">learn-experimentation-with-phoebe</a> when you want to prove a lever caused the lift.</p>
+    <p class="sources-line">Built from the Amplitude and Mixpanel retention documentation, GameAnalytics 2025 benchmarks (11,600 games), Sequoia and Reforge on curve shapes, Fader-Hardie buy-till-you-die papers, the lifelines and lifetimes libraries, Jonathan Hsu's growth accounting, and the documented Duolingo, Supercell, and Dollar Shave Club cases - taught with the folklore flagged as folklore.</p>
+
+    <div class="paths">
+      <h2>Choose your path 🗺️</h2>
+      <p class="plede">Two doors, one subject. Stakeholders never write code; analysts never sit through a chart they have not just built themselves.</p>
+      <div class="path"><b>🤝 The stakeholder path (read &amp; decide)</b>
+        <a class="pstep" href="courses/s1-retention-is-the-money-metric.html">s1</a><span class="parr">→</span>
+        <a class="pstep" href="courses/s2-read-the-chart-read-the-business.html">s2</a><span class="parr">→</span>
+        <a class="pstep" href="courses/s3-levers-that-move-retention.html">s3</a><span class="parr">→</span>
+        <a class="pstep" href="courses/s4-asking-the-right-questions.html">s4</a>
+      </div>
+      <div class="path"><b>🛠️ The analyst path (build &amp; ship)</b>
+        <a class="pstep" href="courses/a1-retention-metrics-precisely.html">a1</a><span class="parr">→</span>
+        <a class="pstep" href="courses/a2-cohort-table-and-heatmap.html">a2</a><span class="parr">→</span>
+        <a class="pstep" href="courses/a3-retention-viz-gallery.html">a3</a><span class="parr">→</span>
+        <a class="pstep" href="courses/a4-segmentation-rfm.html">a4</a><span class="parr">→</span>
+        <a class="pstep" href="courses/a5-survival-analysis.html">a5</a><span class="parr">→</span>
+        <a class="pstep" href="courses/a6-clv-buy-till-you-die.html">a6</a><span class="parr">→</span>
+        <a class="pstep" href="courses/a7-churn-prediction.html">a7</a><span class="parr">→</span>
+        <a class="pstep" href="courses/a8-capstone-retention-report.html">a8</a>
+      </div>
+      <div class="path"><b>🚀 The full journey (decide AND build)</b>
+        <a class="pstep" href="courses/s1-retention-is-the-money-metric.html">s1-s4</a><span class="parr">→</span>
+        <a class="pstep" href="courses/a1-retention-metrics-precisely.html">a1-a8</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section mm-section">
+    <h2>The knowledge map 🧠</h2>
+    <p class="mm-lede">Both tracks at a glance - hover a session to spotlight its concepts, click any node to jump in.</p>
+    <div class="mm-wrap"><div id="mindmap"></div></div>
+  </section>
+
+  <footer class="pagefoot">
+    <span>learn-customer-retention-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a> · built from Amplitude/Mixpanel docs, GameAnalytics 2025 benchmarks, Sequoia/Reforge, Fader-Hardie BTYD &amp; the documented Duolingo and Supercell cases · runs a live cohort simulator in your browser</span>
+  </footer>
+</main>
+
+<script>
+window.MINDMAP_DATA = {
+  title: "Customer\nRetention",
+  centerColor: "#7C2D12",
+  sessions: [
+    { label: "Money\nmetric", href: "courses/s1-retention-is-the-money-metric.html", color: "#34D399",
+      concepts: [
+        { label: "Leaky bucket vs compound", href: "courses/s1-retention-is-the-money-metric.html" },
+        { label: "Reichheld economics", href: "courses/s1-retention-is-the-money-metric.html" } ] },
+    { label: "Read the\nchart", href: "courses/s2-read-the-chart-read-the-business.html", color: "#34D399",
+      concepts: [
+        { label: "Three scan directions", href: "courses/s2-read-the-chart-read-the-business.html" },
+        { label: "Curve shapes = verdict", href: "courses/s2-read-the-chart-read-the-business.html" } ] },
+    { label: "Levers that\nwork", href: "courses/s3-levers-that-move-retention.html", color: "#FBBF24",
+      concepts: [
+        { label: "Duolingo CURR", href: "courses/s3-levers-that-move-retention.html" },
+        { label: "Folklore scorecard", href: "courses/s3-levers-that-move-retention.html" } ] },
+    { label: "Right\nquestions", href: "courses/s4-asking-the-right-questions.html", color: "#FBBF24",
+      concepts: [
+        { label: "Cohort, change, money", href: "courses/s4-asking-the-right-questions.html" },
+        { label: "Mix-shift trap", href: "courses/s4-asking-the-right-questions.html" } ] },
+    { label: "Metrics\nprecisely", href: "courses/a1-retention-metrics-precisely.html", color: "#34D399",
+      concepts: [
+        { label: "Three D7s", href: "courses/a1-retention-metrics-precisely.html" },
+        { label: "Frozen history", href: "courses/a1-retention-metrics-precisely.html" } ] },
+    { label: "Cohort table\n+ heatmap", href: "courses/a2-cohort-table-and-heatmap.html", color: "#FBBF24",
+      concepts: [
+        { label: "Five-line recipe", href: "courses/a2-cohort-table-and-heatmap.html" },
+        { label: "Mask the future", href: "courses/a2-cohort-table-and-heatmap.html" } ] },
+    { label: "Viz\ngallery", href: "courses/a3-retention-viz-gallery.html", color: "#FBBF24",
+      concepts: [
+        { label: "Flatten the curve", href: "courses/a3-retention-viz-gallery.html" },
+        { label: "Growth accounting", href: "courses/a3-retention-viz-gallery.html" } ] },
+    { label: "Segmen-\ntation", href: "courses/a4-segmentation-rfm.html", color: "#FBBF24",
+      concepts: [
+        { label: "RFM personas", href: "courses/a4-segmentation-rfm.html" },
+        { label: "L28 power users", href: "courses/a4-segmentation-rfm.html" } ] },
+    { label: "Survival\nanalysis", href: "courses/a5-survival-analysis.html", color: "#FB923C",
+      concepts: [
+        { label: "Kaplan-Meier", href: "courses/a5-survival-analysis.html" },
+        { label: "Censoring", href: "courses/a5-survival-analysis.html" } ] },
+    { label: "CLV +\nBTYD", href: "courses/a6-clv-buy-till-you-die.html", color: "#FB923C",
+      concepts: [
+        { label: "BG/NBD P(alive)", href: "courses/a6-clv-buy-till-you-die.html" },
+        { label: "Honest LTV", href: "courses/a6-clv-buy-till-you-die.html" } ] },
+    { label: "Churn\nprediction", href: "courses/a7-churn-prediction.html", color: "#FB923C",
+      concepts: [
+        { label: "No leakage", href: "courses/a7-churn-prediction.html" },
+        { label: "Predict is not prevent", href: "courses/a7-churn-prediction.html" } ] },
+    { label: "Capstone:\nthe report", href: "courses/a8-capstone-retention-report.html", color: "#F87171",
+      concepts: [
+        { label: "One-pager", href: "courses/a8-capstone-retention-report.html" },
+        { label: "Money impact", href: "courses/a8-capstone-retention-report.html" } ] }
+  ]
+};
+</script>
+<script src="assets/mindmap.js?v=1"></script>
+<script src="assets/app.js?v=1"></script>
+</body>
+</html>

@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Analyst session 6 of 8. Non-contractual customers never say goodbye - BG/NBD turns frequency, recency and customer age into P(alive) and expected future purchases. Then CLV without lying: why the ARPU x margin / churn formula overstates, and the cumulative cohort curve that is the honest ground truth.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="CLV and buy-till-you-die - learn customer retention with phoebe">
+<meta property="og:description" content="Analyst session 6 of 8. BG/NBD intuition and P(alive) in the lifetimes API, the failure modes that break buy-till-you-die models, and honest cohort-based LTV vs the naive formula.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-customer-retention-with-phoebe/courses/a6-clv-buy-till-you-die.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-customer-retention-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="CLV and buy-till-you-die - learn customer retention with phoebe">
+<meta name="twitter:description" content="BG/NBD intuition and P(alive), the failure modes that break buy-till-you-die models, and honest cohort-based LTV vs the naive formula.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-customer-retention-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Analyst session 6 · CLV and buy-till-you-die - learn customer retention with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-customer-retention-with-phoebe</a> / Analyst session 6 of 8</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Customer Retention with Phoebe · Analyst track · Session 6 of 8</div>
+    <h1>CLV and <span class="accent">buy-till-you-die</span></h1>
+    <p class="sub">A shop customer never cancels - they just stop showing up, and a four-month silence means completely different things for a weekly buyer and a quarterly one. Buy-till-you-die models turn that intuition into a per-customer P(alive) from nothing but frequency, recency and age. Then the second half takes on the most abused number in growth decks: LTV - why the simple formula overstates it, and the cumulative cohort curve from a2 that tells the truth.</p>
+    <div class="chip-row">
+      <span class="chip level">🟠 Analyst track</span>
+      <span class="chip audience">Data analysts · Python</span>
+      <span class="chip audience">Build-along: lifetimes</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:6">3-20 · P(alive)</span>
+      <span class="a3" style="flex:7">20-40 · CLV honestly</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Where this session sits</h2>
+    </div>
+    <p class="lede">a5 ended on an honest admission: shops and games only ever infer churn from silence. This session replaces "pick a 90-day window and hope" with a model that gives every customer their own probability of still being alive. The RFM summary you built in a4 is literally the model's input, a2's counts table returns as the ground truth for LTV, and a7 will inherit the "who is worth saving" question. Work along in the companion notebook <code>notebooks/a6_clv.ipynb</code>.</p>
+    <div class="legend">
+      <span class="pill solid">Live - presented in session</span>
+      <span class="pill light">Self-study - read after class</span>
+      <span class="pill peach">★ Build-along - run the code yourself</span>
+      <span class="pill inkpill">Sources covered</span>
+    </div>
+    <div class="callout win">
+      <strong>★ What you walk out with today</strong>
+      The BG/NBD intuition well enough to explain P(alive) to a stakeholder in one sentence, a fitted BetaGeoFitter with per-customer P(alive) and 90-day purchase forecasts, a working list of the four failure modes that break these models in the wild, and an honest LTV: the cumulative cohort curve that exposes what the ARPU x margin / churn formula overstates.
+    </div>
+  </section>
+
+  <!-- ============ PART 1: P(ALIVE) ============ -->
+  <section class="section" id="p-alive">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the BG/NBD model + P(alive)</span>
+      <h2>Customers who never say goodbye <span class="tag concept">17 min live</span></h2>
+    </div>
+    <p class="lede">Non-contractual settings have no churn event, so <strong>BG/NBD</strong> (Fader, Hardie and Lee, 2005) tells a story instead: while alive, each customer makes purchases at their own Poisson rate - rates vary across customers following a Gamma distribution - and <strong>after each purchase</strong> they flip a Beta-distributed coin that decides whether they silently die. Feed it three RFM summary numbers per customer - <strong>frequency</strong> (repeat purchases), <strong>recency</strong> (customer age at their LAST purchase) and <strong>T</strong> (total customer age) - and it returns P(alive) and expected future purchases. The magic intuition: <strong>high frequency + long silence = probably dead; low frequency + the same silence = probably fine</strong>, because that gap is simply their normal rhythm.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two customer timelines over twelve months. Customer A made thirteen purchases in eight months then went silent for four months, and the model reads that silence as roughly twenty times their usual gap, so P alive is about 0.09. Customer B made three purchases in eight months and the same four-month silence is their normal rhythm, so P alive is about 0.75. A box beneath summarizes the BG/NBD story and its inputs and outputs.">
+        <style>
+          .a6paT { font: 700 14px Inter, sans-serif; fill: #241A12; }
+          .a6paH { font: 600 11px Inter, sans-serif; fill: #6B5D52; }
+          .a6paB { font: 700 11.5px Inter, sans-serif; fill: #241A12; }
+          .a6paN { font: 400 11.5px Inter, sans-serif; fill: #6B5D52; }
+          .a6paK { stroke: #C2410C; stroke-width: 2.5; }
+        </style>
+        <rect x="0" y="0" width="880" height="360" fill="#FDF9F5"/>
+        <text class="a6paT" x="40" y="28">Same four months of silence, opposite verdicts</text>
+        <text class="a6paH" x="110" y="52">month 0</text>
+        <text class="a6paH" x="542" y="52" text-anchor="middle">month 8</text>
+        <text class="a6paH" x="758" y="52" text-anchor="end">month 12</text>
+
+        <text class="a6paB" x="110" y="76">Customer A - the regular · 13 purchases in 8 months</text>
+        <line x1="110" y1="92" x2="758" y2="92" stroke="#6B5D52" stroke-width="1.5"/>
+        <line class="a6paK" x1="110" y1="85" x2="110" y2="99"/><line class="a6paK" x1="146" y1="85" x2="146" y2="99"/><line class="a6paK" x1="182" y1="85" x2="182" y2="99"/><line class="a6paK" x1="218" y1="85" x2="218" y2="99"/><line class="a6paK" x1="254" y1="85" x2="254" y2="99"/><line class="a6paK" x1="290" y1="85" x2="290" y2="99"/><line class="a6paK" x1="326" y1="85" x2="326" y2="99"/><line class="a6paK" x1="362" y1="85" x2="362" y2="99"/><line class="a6paK" x1="398" y1="85" x2="398" y2="99"/><line class="a6paK" x1="434" y1="85" x2="434" y2="99"/><line class="a6paK" x1="470" y1="85" x2="470" y2="99"/><line class="a6paK" x1="506" y1="85" x2="506" y2="99"/><line class="a6paK" x1="542" y1="85" x2="542" y2="99"/>
+        <rect x="548" y="80" width="210" height="24" rx="6" fill="#FEF2F2" stroke="#FCA5A5"/>
+        <text class="a6paB" x="653" y="96" text-anchor="middle" fill="#991B1B">4 months of silence</text>
+        <text class="a6paN" x="110" y="124">Usual gap ~18 days. This silence is ~7x their rhythm. <tspan style="font-weight:700" fill="#991B1B">P(alive) ~ 0.09 - probably gone.</tspan></text>
+
+        <text class="a6paB" x="110" y="176">Customer B - the occasional · 3 purchases in 8 months</text>
+        <line x1="110" y1="192" x2="758" y2="192" stroke="#6B5D52" stroke-width="1.5"/>
+        <line class="a6paK" x1="164" y1="185" x2="164" y2="199"/><line class="a6paK" x1="353" y1="185" x2="353" y2="199"/><line class="a6paK" x1="542" y1="185" x2="542" y2="199"/>
+        <rect x="548" y="180" width="210" height="24" rx="6" fill="#F8EADD"/>
+        <text class="a6paB" x="653" y="196" text-anchor="middle" fill="#6B5D52">the same 4 months</text>
+        <text class="a6paN" x="110" y="224">Usual gap ~3.5 months. This silence is normal. <tspan style="font-weight:700" fill="#0F766E">P(alive) ~ 0.75 - probably fine.</tspan></text>
+
+        <rect x="40" y="252" width="800" height="70" rx="10" fill="#F8EADD"/>
+        <text class="a6paB" x="58" y="276">The BG/NBD story (Fader-Hardie-Lee 2005):</text>
+        <text class="a6paN" x="58" y="296">While alive, each customer buys at their own Poisson rate (rates Gamma-distributed across customers);</text>
+        <text class="a6paN" x="58" y="314">after every purchase, a Beta-weighted coin flip decides death. In: frequency, recency, T. Out: P(alive).</text>
+        <text class="a6paN" x="40" y="348">High frequency + long silence = probably dead. Low frequency + the same silence = probably fine.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - P(alive) judges silence against each customer's own purchase rhythm</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>★ Build-along: BetaGeoFitter and per-customer P(alive)<span class="mini">9 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Two customers, the same four quiet months. The regular's silence is an anomaly against their own history; the occasional's is not - and the model prices exactly that. It needs no browsing data, no demographics: one summary row per customer, straight from the transaction log.</p>
+        <div class="prompt-box good"><span class="label">★ Transactions to RFM summary, then fit BG/NBD</span>from lifetimes import BetaGeoFitter
+from lifetimes.utils import summary_data_from_transaction_data
+
+summary = summary_data_from_transaction_data(
+    orders, customer_id_col="customer_id", datetime_col="order_date",
+    observation_period_end=orders["order_date"].max())
+# columns: frequency (repeat purchases), recency (age at LAST
+# purchase), T (customer age at the end of the data)
+
+bgf = BetaGeoFitter(penalizer_coef=0.001)
+bgf.fit(summary["frequency"], summary["recency"], summary["T"])</div>
+        <div class="prompt-box good"><span class="label">★ P(alive) + expected purchases in the next 90 days</span>summary["p_alive"] = bgf.conditional_probability_alive(
+    summary["frequency"], summary["recency"], summary["T"])
+
+summary["pred_90d"] = bgf.conditional_expected_number_of_purchases_up_to_time(
+    90, summary["frequency"], summary["recency"], summary["T"])
+
+summary.sort_values("p_alive").head(10)   # the "probably gone" list</div>
+        <div class="callout tip">
+          <strong>Honesty check on the tooling</strong>
+          The <code>lifetimes</code> library is <strong>archived - maintenance mode</strong>. We still teach with it because its API maps one-to-one onto the concepts and reads beautifully. For production, the maintained successor is <strong>PyMC-Marketing's CLV module</strong>: the same BG/NBD family, fit Bayesian, so every P(alive) comes with honest uncertainty instead of a bare point estimate. Learn here, ship there.
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2: FAILURE MODES ============ -->
+  <section class="section" id="failure-modes">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers where BTYD assumptions break</span>
+      <h2>Where the models break <span class="tag concept">8 min live</span></h2>
+    </div>
+    <p class="lede">BG/NBD is a story, and stories have fine print. Dropout is <strong>irreversible</strong> in the model - once the coin lands on death, that customer can never buy again. Real customers resurrect, binge on promo weekends, and hibernate seasonally, and every one of those behaviors violates the story. Know the four classic breaks before you present a single P(alive).</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 430" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A four-panel gallery of buy-till-you-die failure modes: a resurrected customer buying again after the model declared them dead; a one-time buyer who looks immortal because death can only follow a purchase; a customer history too short relative to their purchase gap to identify parameters; and a scatter showing spend correlated with frequency, violating the Gamma-Gamma independence assumption.">
+        <style>
+          .a6fmT { font: 700 14px Inter, sans-serif; fill: #241A12; }
+          .a6fmB { font: 700 12px Inter, sans-serif; fill: #241A12; }
+          .a6fmN { font: 400 11px Inter, sans-serif; fill: #6B5D52; }
+          .a6fmK { stroke: #C2410C; stroke-width: 2.5; }
+        </style>
+        <rect x="0" y="0" width="880" height="430" fill="#FDF9F5"/>
+        <text class="a6fmT" x="40" y="28">Four ways reality breaks the story</text>
+
+        <rect x="40" y="48" width="392" height="170" rx="10" fill="#FFFFFF" stroke="#F8EADD" stroke-width="2"/>
+        <text class="a6fmB" x="58" y="74">1 · Resurrection</text>
+        <line x1="58" y1="110" x2="404" y2="110" stroke="#6B5D52" stroke-width="1.5"/>
+        <line class="a6fmK" x1="66" y1="103" x2="66" y2="117"/><line class="a6fmK" x1="94" y1="103" x2="94" y2="117"/><line class="a6fmK" x1="122" y1="103" x2="122" y2="117"/>
+        <rect x="136" y="98" width="180" height="24" rx="6" fill="#FEF2F2" stroke="#FCA5A5"/>
+        <text class="a6fmN" x="226" y="114" text-anchor="middle" fill="#991B1B">model: dead</text>
+        <circle cx="368" cy="110" r="7" fill="#7C2D12"/>
+        <text class="a6fmN" x="58" y="152">Dropout is irreversible in the model - a comeback</text>
+        <text class="a6fmN" x="58" y="170">after "death" should not exist. Seasonality and</text>
+        <text class="a6fmN" x="58" y="188">promo spikes violate the story the same way.</text>
+
+        <rect x="448" y="48" width="392" height="170" rx="10" fill="#FFFFFF" stroke="#F8EADD" stroke-width="2"/>
+        <text class="a6fmB" x="466" y="74">2 · One-time buyers look immortal</text>
+        <line x1="466" y1="110" x2="812" y2="110" stroke="#6B5D52" stroke-width="1.5"/>
+        <line class="a6fmK" x1="474" y1="103" x2="474" y2="117"/>
+        <text class="a6fmN" x="640" y="102" text-anchor="middle">nothing, forever</text>
+        <text class="a6fmN" x="466" y="152">The BG/NBD coin is only flipped AFTER a purchase.</text>
+        <text class="a6fmN" x="466" y="170">Zero repeats = zero death opportunities, so the</text>
+        <text class="a6fmN" x="466" y="188">model keeps them suspiciously alive. Quirk, not bug.</text>
+
+        <rect x="40" y="238" width="392" height="170" rx="10" fill="#FFFFFF" stroke="#F8EADD" stroke-width="2"/>
+        <text class="a6fmB" x="58" y="264">3 · History too short</text>
+        <line x1="58" y1="300" x2="200" y2="300" stroke="#6B5D52" stroke-width="1.5"/>
+        <line class="a6fmK" x1="66" y1="293" x2="66" y2="307"/><line class="a6fmK" x1="188" y1="293" x2="188" y2="307"/>
+        <text class="a6fmN" x="214" y="304">T barely covers one gap</text>
+        <text class="a6fmN" x="58" y="342">If T is short relative to the inter-purchase time,</text>
+        <text class="a6fmN" x="58" y="360">slow-and-alive vs fast-and-dead are indistinguishable:</text>
+        <text class="a6fmN" x="58" y="378">the parameters are unidentifiable. Wait for data.</text>
+
+        <rect x="448" y="238" width="392" height="170" rx="10" fill="#FFFFFF" stroke="#F8EADD" stroke-width="2"/>
+        <text class="a6fmB" x="466" y="264">4 · Spend tied to frequency</text>
+        <circle cx="490" cy="368" r="4" fill="#EE9A66"/><circle cx="520" cy="352" r="4" fill="#EE9A66"/><circle cx="548" cy="356" r="4" fill="#E06A2E"/><circle cx="576" cy="336" r="4" fill="#E06A2E"/><circle cx="604" cy="324" r="4" fill="#C2410C"/><circle cx="632" cy="312" r="4" fill="#C2410C"/><circle cx="660" cy="300" r="4" fill="#7C2D12"/><circle cx="688" cy="292" r="4" fill="#7C2D12"/>
+        <line x1="480" y1="376" x2="700" y2="284" stroke="#0F766E" stroke-width="2" stroke-dasharray="5 4"/>
+        <text class="a6fmN" x="712" y="300">correlated</text>
+        <text class="a6fmN" x="466" y="290">Gamma-Gamma (the monetary add-on) assumes spend</text>
+        <text class="a6fmN" x="466" y="308">is independent of frequency. Often violated -</text>
+        <text class="a6fmN" x="466" y="326">test the correlation BEFORE fitting it.</text>
+        <text class="a6fmN" x="40" y="424">Every failure mode is checkable before you present: plot comebacks, count one-timers, compare T to gaps, test corr.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - resurrection, immortal one-timers, short history, spend-frequency correlation</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The fine print, spelled out<span class="mini">6 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Irreversible dropout:</strong> the model has no resurrection state. Winback campaigns, seasonal shoppers and promo-spike bingers all generate purchase patterns the story says cannot happen - fit quality degrades quietly, so inspect holdout calibration, not just the fit summary.</li>
+          <li><strong>The one-time-buyer quirk:</strong> customers can only die immediately AFTER a purchase, so a buyer with zero repeats has never faced the coin - BG/NBD keeps their P(alive) high indefinitely. With a large one-time-buyer base (most shops), read cohort-level outputs with that skew in mind.</li>
+          <li><strong>Unidentifiability on short histories:</strong> when T is short relative to typical inter-purchase time, the data cannot separate "slow but alive" from "fast but dead". No fitter setting fixes missing time.</li>
+          <li><strong>Gamma-Gamma's independence assumption:</strong> the monetary model assumes spend per transaction is independent of frequency. Check <code>summary[["frequency", "monetary_value"]].corr()</code> first; a material correlation means the CLV ranking inherits a bias.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>When to just use the cohort table instead<span class="mini">3 min read</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>BTYD earns its keep when you need <strong>per-customer</strong> lifetime estimates in a <strong>non-contractual</strong> business with enough history. Skip it when:</p>
+        <ul>
+          <li><strong>Small data:</strong> a few thousand customers or a short observation window - the a2 cohort table plus a5's KM curve answer the aggregate question with far fewer assumptions.</li>
+          <li><strong>Weekly reporting:</strong> the frozen cohort table is the reporting artifact; a probabilistic model that restates every refit has no business on a weekly dashboard.</li>
+          <li><strong>Contractual business:</strong> churn is observed, so you do not need to infer it - survival analysis (a5) is the right tool, not BTYD.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3: LTV WITHOUT LYING ============ -->
+  <section class="section" id="ltv">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers honest LTV + cohort-informed budgeting</span>
+      <h2>LTV without lying <span class="tag concept">12 min live</span></h2>
+    </div>
+    <p class="lede">The formula every pitch deck loves: <strong>LTV = ARPU x margin / churn</strong>. It assumes one constant churn rate forever, and that assumption <strong>overstates</strong> - churn falls with tenure because the survivors are the durable ones (a5's lesson), so a single blended rate flatters the average customer. The honest ground truth needs no model at all: <strong>cumulative cohort gross profit over 12-36 months</strong>, read straight off a2's counts table times ARPU times margin. Against that curve, apply the classic <strong>LTV:CAC 3:1</strong> benchmark (David Skok) - and set channel-level CAC ceilings from channel-level cohort LTV curves, not from one blended number.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two LTV lines over 36 months of cohort age. The honest line, cumulative cohort gross profit per original member, rises and flattens. The naive constant-churn line rises faster and overshoots toward the formula's asymptote of ARPU times margin over churn, with the widening gap labeled as the overstatement.">
+        <style>
+          .a6lvT { font: 700 14px Inter, sans-serif; fill: #241A12; }
+          .a6lvH { font: 600 11px Inter, sans-serif; fill: #6B5D52; }
+          .a6lvB { font: 700 11.5px Inter, sans-serif; fill: #241A12; }
+          .a6lvN { font: 400 11.5px Inter, sans-serif; fill: #6B5D52; }
+        </style>
+        <rect x="0" y="0" width="880" height="340" fill="#FDF9F5"/>
+        <text class="a6lvT" x="40" y="28">The naive formula vs the cohort truth: constant churn overstates</text>
+        <line x1="90" y1="70" x2="720" y2="70" stroke="#E06A2E" stroke-width="1.5" stroke-dasharray="3 5"/>
+        <text class="a6lvB" x="98" y="62" fill="#E06A2E">naive LTV = ARPU x margin / churn</text>
+        <path d="M90,290 L143,224 L195,180 L300,132 L405,105 L510,92 L615,83 L720,79" fill="none" stroke="#E06A2E" stroke-width="3" stroke-dasharray="7 5"/>
+        <path d="M90,290 L143,242 L195,213 L300,180 L405,162 L510,151 L615,145 L720,140" fill="none" stroke="#7C2D12" stroke-width="3"/>
+        <text class="a6lvB" x="360" y="220" fill="#7C2D12">honest: cumulative cohort gross profit</text>
+        <text class="a6lvN" x="360" y="238" fill="#7C2D12">a2 counts x ARPU x margin, per member</text>
+        <text class="a6lvB" x="452" y="122" fill="#E06A2E">what constant churn implies</text>
+        <line x1="740" y1="79" x2="740" y2="140" stroke="#0F766E" stroke-width="2"/>
+        <line x1="734" y1="79" x2="746" y2="79" stroke="#0F766E" stroke-width="2"/>
+        <line x1="734" y1="140" x2="746" y2="140" stroke="#0F766E" stroke-width="2"/>
+        <text class="a6lvB" x="752" y="114" fill="#0F766E">the</text>
+        <text class="a6lvB" x="752" y="130" fill="#0F766E">gap</text>
+        <line x1="90" y1="60" x2="90" y2="290" stroke="#6B5D52" stroke-width="1.5"/>
+        <line x1="90" y1="290" x2="740" y2="290" stroke="#6B5D52" stroke-width="1.5"/>
+        <text class="a6lvH" x="82" y="294" text-anchor="end">$0</text>
+        <text class="a6lvH" x="90" y="308" text-anchor="middle">0</text>
+        <text class="a6lvH" x="195" y="308" text-anchor="middle">6</text>
+        <text class="a6lvH" x="300" y="308" text-anchor="middle">12</text>
+        <text class="a6lvH" x="405" y="308" text-anchor="middle">18</text>
+        <text class="a6lvH" x="510" y="308" text-anchor="middle">24</text>
+        <text class="a6lvH" x="720" y="308" text-anchor="middle">36 mo</text>
+        <text class="a6lvN" x="40" y="330">Churn falls with tenure - the survivors are durable (a5) - so one blended rate flatters every new customer.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the honest curve flattens where the constant-churn line keeps climbing</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>★ Build-along: the cumulative cohort LTV curve vs the formula<span class="mini">8 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>You already built the hard part in a2. The counts pivot (distinct buyers per cohort x period) becomes an LTV curve in three lines: cumulate across periods, convert to money, divide by cohort size.</p>
+        <div class="prompt-box good"><span class="label">★ Honest LTV from a2's counts pivot, vs the naive formula</span># counts = pivot from a2: distinct active buyers per (cohort, period)
+arpu, margin, churn_rate = 42.0, 0.30, 0.08    # monthly, illustrative
+
+cum_gp = (counts * arpu * margin).cumsum(axis=1)          # cohort gross profit
+ltv_curve = cum_gp.divide(counts.iloc[:, 0], axis=0)      # per original member
+ltv_curve.T.plot(legend=False, color="#C2410C", alpha=0.4)
+
+naive = arpu * margin / churn_rate                         # the deck formula
+print(f"naive formula: {naive:.0f}")
+print(f"12-month cohort truth: {ltv_curve[12].mean():.0f}")
+# the naive answer overshoots what any cohort actually delivered</div>
+        <ul>
+          <li><strong>Read the curve at fixed horizons</strong> - 12, 24, 36 months - and compare like with like. "LTV" without a horizon is not a number, it is a mood.</li>
+          <li><strong>LTV:CAC 3:1</strong> (Skok's classic benchmark) only means something against the honest curve at a stated horizon, with margin in the numerator.</li>
+          <li><strong>Cohort-informed budgeting:</strong> compute the curve per acquisition channel, and each channel gets its own CAC ceiling. A channel whose 12-month cohort LTV is half the blended average is quietly subsidized by every other channel.</li>
+        </ul>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>How ecommerce teams actually spend winback budgets.</strong> BG/NBD plus Gamma-Gamma is the standard ranking machine: score every lapsed customer by P(alive) and expected value, then aim the winback offer at high-value customers whose P(alive) is decaying - not at the definitely-dead (wasted send) and not at the comfortably-alive (wasted discount). One caveat travels with this: a7 will show that predicting who churns is not the same as knowing who can be persuaded - hold that thought until the uplift discussion.</p>
+    </div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Try it yourself - this week <span class="tag exercise">◐ 30 min total</span></h2>
+    </div>
+    <ul>
+      <li>Fit BG/NBD on Online Retail II - after running a2's clean-up gate (drop C-invoices, drop missing CustomerID, positive quantities only). Build the summary frame with <code>summary_data_from_transaction_data</code>.</li>
+      <li>Scatter P(alive) against recency. Describe the shape in one sentence: why is it not a straight line?</li>
+      <li>Find one customer the model calls alive (P(alive) high) that your a4 RFM scoring filed under Hibernating, and explain the disagreement in plain words - whose definition of "gone" is doing the work?</li>
+      <li>Add the cumulative cohort LTV curve for your oldest three cohorts to the running retention report - a8 will put a CAC line against it.</li>
+    </ul>
+  </section>
+
+  <!-- ============ SOURCES ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session draws on</h2>
+    </div>
+    <p class="lede">Buy-till-you-die is one of the rare corners of retention analytics with an actual academic spine. This page teaches the working core of:</p>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Fader, Hardie &amp; Lee (2005) - the BG/NBD "counting your customers" model</span><span class="note">Part 1 · the story, inputs and P(alive); Part 2 · its assumptions</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">lifetimes library API (archived - flagged in session)</span><span class="note">Part 1 · BetaGeoFitter, summary utils; teach here, do not ship here</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">PyMC-Marketing CLV module - the maintained successor</span><span class="note">Part 1 · named as the production path; Bayesian fitting not covered</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">David Skok - LTV:CAC 3:1 benchmark</span><span class="note">Part 3 · the benchmark, applied against honest cohort curves</span></div>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions before you go 🎯 <span class="tag exercise">◐ 90 seconds</span></h2>
+    </div>
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">1 · Two customers have both been silent for 4 months. A bought 13 times in their first 8 months; B bought 3 times in the same span. Who does BG/NBD call probably dead?</p>
+      <button class="qopt" type="button">A · B - fewer purchases means weaker attachment, so B churns first</button>
+      <button class="qopt" type="button">B · A - four quiet months against an every-18-days rhythm is a screaming anomaly; the same silence is B's normal gap</button>
+      <button class="qopt" type="button">C · Both equally - the silence is the same length</button>
+      <p class="qwhy">P(alive) judges silence against each customer's own purchase rate. The regular's gap is many times their usual rhythm; the occasional buyer's identical gap is unremarkable. This is the whole point of modeling heterogeneous rates.</p>
+    </div>
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">2 · Why do one-time buyers look immortal to BG/NBD?</p>
+      <button class="qopt" type="button">A · The fitter drops them, so they never get a P(alive) at all</button>
+      <button class="qopt" type="button">B · First purchases are weighted more heavily than repeats</button>
+      <button class="qopt" type="button">C · The death coin is only flipped after a purchase - zero repeats means the model has never seen them face a death opportunity</button>
+      <p class="qwhy">In the BG/NBD story a customer can only die immediately after a purchase. A buyer with no repeat purchases has never been exposed to the dropout coin, so the model holds their P(alive) high indefinitely - a quirk to keep in mind wherever one-time buyers dominate.</p>
+    </div>
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">3 · Why does LTV = ARPU x margin / churn overstate?</p>
+      <button class="qopt" type="button">A · It assumes one constant churn rate forever, but churn falls with tenure - the blended rate flatters the average customer's lifetime</button>
+      <button class="qopt" type="button">B · It ignores margin, so it reports revenue as profit</button>
+      <button class="qopt" type="button">C · It understates, actually - loyal customers make it too conservative</button>
+      <p class="qwhy">The survivors are the durable ones (a5's lesson), so churn is high early and falls with tenure. Plugging one blended rate into 1/churn projects the durable minority's behavior onto every new customer. The honest check is cumulative cohort gross profit over 12-36 months.</p>
+    </div>
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Analyst session 6 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>BG/NBD in one breath</b><span>While alive: Poisson purchasing, rates Gamma-distributed across customers. After each purchase: a Beta-weighted coin flip of dying. Fader-Hardie-Lee 2005.</span></div>
+      <div class="cheat-item"><b>The three inputs</b><span>frequency = repeat purchases · recency = customer age at LAST purchase · T = total customer age. Straight from a4's RFM summary.</span></div>
+      <div class="cheat-item"><b>The P(alive) intuition</b><span>Silence is judged against the customer's own rhythm: high frequency + long silence = probably dead; low frequency + same silence = probably fine.</span></div>
+      <div class="cheat-item"><b>Tooling honesty</b><span>lifetimes is archived (maintenance mode) - best API to learn on. Production successor: PyMC-Marketing CLV, Bayesian BG/NBD with uncertainty.</span></div>
+      <div class="cheat-item"><b>The four breaks</b><span>Irreversible dropout (resurrection/seasonality/promos violate it) · one-time buyers look immortal · short T = unidentifiable · Gamma-Gamma needs spend independent of frequency.</span></div>
+      <div class="cheat-item"><b>When to skip BTYD</b><span>Small data, weekly reporting, or a contractual business - use the a2 cohort table or a5 survival instead. Models restate; the reported table never does.</span></div>
+      <div class="cheat-item"><b>Honest LTV</b><span>Cumulative cohort gross profit over 12-36 months = a2 counts x ARPU x margin / cohort size. The ARPU x margin / churn formula OVERSTATES - churn falls with tenure.</span></div>
+      <div class="cheat-item"><b>LTV:CAC discipline</b><span>3:1 classic benchmark (Skok), judged at a stated horizon on the honest curve. Channel-level cohort curves set channel-level CAC ceilings.</span></div>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <span>Analyst session 6 of 8 · learn-customer-retention-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="a5-survival-analysis.html">← Prev: Survival analysis</a> &nbsp;·&nbsp; <a href="../index.html">All sessions</a> &nbsp;·&nbsp; <a href="a7-churn-prediction.html">Next: Churn prediction that helps →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>
