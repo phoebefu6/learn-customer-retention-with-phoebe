@@ -150,17 +150,50 @@
     </figure>
 
     <details class="card" open>
-      <summary><span class="mode live">Live</span>The frozen-history rule: this course's reporting law<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <summary><span class="mode live">Live</span>Frozen history: why a completed cohort never restates<span class="mini">4 min</span><span class="caret">▶</span></summary>
       <div class="body">
-        <p>Every retention number in this course is computed one way: <strong>fix the base, look forward</strong>. The base is a cohort anchored to a fixed date - everyone who registered in January, or everyone active on Aug 1. Then you look forward 1, 7, 14, 30 days (or 1 to 10 months) and count who came back. Because the base never changes and the window eventually closes, a completed cell is <strong>immutable</strong>. January's month-3 retention is the same number today, next quarter, and forever.</p>
+        <p>A retention number you can trend, compare, and set targets against is computed one way: <strong>fix the base, look forward</strong>. The base is a cohort anchored to a fixed date - everyone who registered in January, or everyone active on Aug 1. Then you look forward 1, 7, 14, 30 days (or 1 to 10 months) and count who came back. Because the base never changes and the window eventually closes, a completed cell is <strong>immutable</strong>. January's month-3 retention is the same number today, next quarter, and forever.</p>
         <ul>
           <li><strong>Forward-looking, cohort-based:</strong> the question is always "of the people who started at time T, how many returned within x days?" The denominator is locked at time T.</li>
           <li><strong>Frozen once complete:</strong> when the window has fully elapsed, the number is final. Your January row will never restate. A dashboard whose history rewrites itself cannot be trusted, compared, or targeted against.</li>
           <li><strong>Only the current window updates:</strong> the newest diagonal of the triangle is still filling. Mark it as partial - an outline, an asterisk, a lighter shade - so nobody reads a half-filled month as a collapse.</li>
         </ul>
+        <figure class="zoomable">
+          <svg viewBox="0 0 880 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two ways to anchor a retention metric. Top: fix the base at a cohort date and look forward through windows that close and freeze one by one. Bottom: anchor to today and look backward, so the base moves every day and every historical number keeps changing.">
+            <style>
+              .fhT { font: 700 13px Inter, sans-serif; fill: #241A12; }
+              .fhW { font: 700 11.5px Inter, sans-serif; fill: #FFFFFF; }
+              .fhB { font: 400 11.5px Inter, sans-serif; fill: #6B5D52; }
+              .fhG { font: 700 11.5px Inter, sans-serif; fill: #0F766E; }
+              .fhR { font: 700 11.5px Inter, sans-serif; fill: #991B1B; }
+            </style>
+            <rect x="0" y="0" width="880" height="250" fill="#FDF9F5"/>
+            <text class="fhT" x="40" y="28">Anchor to the cohort and look forward, never to today and back</text>
+
+            <rect x="40" y="46" width="800" height="86" rx="10" fill="#FFFFFF" stroke="#EFE2D6"/>
+            <text class="fhG" x="56" y="70">✓ Fixed base, forward windows</text>
+            <line x1="120" y1="104" x2="800" y2="104" stroke="#D3C4B8" stroke-width="2"/>
+            <rect x="112" y="92" width="16" height="24" rx="4" fill="#7C2D12"/>
+            <text class="fhB" x="120" y="130" text-anchor="middle">Jan 1 base</text>
+            <rect x="180" y="94" width="58" height="20" rx="10" fill="#C2410C"/><text class="fhW" x="209" y="108" text-anchor="middle">D1 ✓</text>
+            <rect x="270" y="94" width="58" height="20" rx="10" fill="#C2410C"/><text class="fhW" x="299" y="108" text-anchor="middle">D7 ✓</text>
+            <rect x="360" y="94" width="58" height="20" rx="10" fill="#C2410C"/><text class="fhW" x="389" y="108" text-anchor="middle">D14 ✓</text>
+            <rect x="450" y="94" width="66" height="20" rx="10" fill="#FBE3D2" stroke="#EA580C" stroke-width="1.6"/><text class="fhB" x="483" y="108" text-anchor="middle">D30 filling</text>
+            <text class="fhB" x="560" y="108">closed windows are frozen forever</text>
+
+            <rect x="40" y="146" width="800" height="86" rx="10" fill="#FEF2F2" stroke="#FCA5A5"/>
+            <text class="fhR" x="56" y="170">✗ Moving base, backward window</text>
+            <line x1="120" y1="204" x2="800" y2="204" stroke="#D3C4B8" stroke-width="2"/>
+            <rect x="700" y="192" width="16" height="24" rx="4" fill="#991B1B"/>
+            <text class="fhB" x="708" y="230" text-anchor="middle">"today"</text>
+            <rect x="520" y="194" width="170" height="20" rx="10" fill="#FCA5A5"/><text class="fhR" x="605" y="208" text-anchor="middle">last 7 days, recomputed daily</text>
+            <text class="fhB" x="130" y="208">yesterday's number is already different - nothing can be trended</text>
+          </svg>
+          <figcaption>🔍 Click to zoom - fix the base and look forward: closed windows freeze; a moving base never stops rewriting</figcaption>
+        </figure>
         <div class="callout tip">
-          <strong>The two banned metrics</strong>
-          Two popular numbers violate this law, and both are banned from reporting in this course. <strong>Trailing look-back</strong> ("of today's actives, how many were here 7 days ago") re-anchors to today, so the denominator shifts every single day and yesterday's number is already different. <strong>Rolling retention</strong> ("returned on day 7 or any later day") lets a user who resurfaces on day 45 rewrite day-7 history retroactively - Mixpanel's own default works this way, which is why its historical numbers keep creeping up. Session a1 covers both as concepts; neither ever goes on a dashboard.
+          <strong>Two metrics that rewrite their own history</strong>
+          <strong>Trailing look-back</strong> ("of today's actives, how many were here 7 days ago") re-anchors to today, so the denominator shifts every single day and yesterday's number is already different. <strong>Rolling retention</strong> ("returned on day 7 or any later day") lets a user who resurfaces on day 45 rewrite day-7 history retroactively - Mixpanel's own default works this way, which is why its historical numbers keep creeping up. Both are unusable for trend reporting: a line whose past keeps moving cannot be compared or targeted against. Keep them off dashboards.
         </div>
       </div>
     </details>
@@ -453,7 +486,7 @@ plt.tight_layout()</div>
       <button class="qopt" type="button">A · Whatever the dashboard recomputes today - retention is always live</button>
       <button class="qopt" type="button">B · 34% - the window completed, so the number is frozen forever</button>
       <button class="qopt" type="button">C · Slightly higher, because some users came back later</button>
-      <p class="qwhy">Forward-looking cohort retention locks the base (January joiners) and the window (month 2). Once March ended, every fact the number depends on is in the past. "Came back later" is rolling retention - the banned metric that rewrites history.</p>
+      <p class="qwhy">Forward-looking cohort retention locks the base (January joiners) and the window (month 2). Once March ended, every fact the number depends on is in the past. "Came back later" is rolling retention - the metric that rewrites its own history.</p>
     </div>
     <div class="quiz-q" data-answer="2">
       <p class="qtext">2 · You forget the mask argument and NaN cells render at the colormap floor. What does your VP see?</p>
@@ -478,7 +511,7 @@ plt.tight_layout()</div>
     <div class="grid-2">
       <div class="cheat-item"><b>Registration cohort</b><span>Everyone who joined in the same month. Month 0 = join month = 100% by construction. One cohort, one row, forever.</span></div>
       <div class="cheat-item"><b>The frozen-history rule</b><span>Fix the base, look forward x days. Completed windows are immutable; only the current window updates, visibly marked partial.</span></div>
-      <div class="cheat-item"><b>Banned from dashboards</b><span>Trailing look-back (denominator moves daily) and rolling "day N or later" retention (history rewrites itself). Concepts only.</span></div>
+      <div class="cheat-item"><b>Keep off dashboards</b><span>Trailing look-back (denominator moves daily) and rolling "day N or later" retention (history rewrites itself). Neither can be trended.</span></div>
       <div class="cheat-item"><b>The recipe</b><span>cohort = groupby(customer).transform("min") -&gt; period = order_month - cohort -&gt; pivot_table nunique -&gt; divide by column 0.</span></div>
       <div class="cheat-item"><b>The four heatmap choices</b><span>annot every cell · mask the future · anchor vmin/vmax · single-hue colorblind-safe cmap. Break one and the chart lies.</span></div>
       <div class="cheat-item"><b>Three scan directions</b><span>Across a row = one cohort aging. Down a column = product improving? Diagonal = calendar shock (vertical stripe = lifecycle event).</span></div>

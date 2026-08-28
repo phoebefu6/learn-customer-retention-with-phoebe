@@ -35,7 +35,7 @@
   <div class="wrap">
     <div class="eyebrow">Learn Customer Retention with Phoebe · Analyst track · Session 7 of 8</div>
     <h1>Churn prediction that <span class="accent">helps</span></h1>
-    <p class="sub">A churn model is the easiest impressive artifact in data science and the easiest to get silently wrong. Today you build one that survives contact with reality: a training frame whose feature window strictly precedes its label window, an evaluation that does not let accuracy lie about imbalanced classes, SHAP explanations a stakeholder can act on - and the honesty core that most courses skip: the customers your model ranks riskiest are often exactly the ones an offer cannot save.</p>
+    <p class="sub">A churn model is the easiest impressive artifact in data science and the easiest to get silently wrong. Today you build one that survives contact with reality: a training frame whose feature window strictly precedes its label window, an evaluation that does not let accuracy lie about imbalanced classes, SHAP explanations a stakeholder can act on - and the honesty core most write-ups skip: the customers your model ranks riskiest are often exactly the ones an offer cannot save.</p>
     <div class="chip-row">
       <span class="chip level">🟠 Analyst track</span>
       <span class="chip audience">Data analysts · Python</span>
@@ -120,7 +120,7 @@
         <path d="M600,100 C540,86 400,86 340,100" stroke="#991B1B" stroke-width="2.5" fill="none" stroke-dasharray="7 4" marker-end="url(#a7twArr)"/>
         <line x1="428" y1="78" x2="452" y2="102" stroke="#991B1B" stroke-width="3.5"/>
         <line x1="452" y1="78" x2="428" y2="102" stroke="#991B1B" stroke-width="3.5"/>
-        <text class="a7twR" x="600" y="112">exit_survey_score - only exists AFTER churn</text>
+        <text class="a7twR" x="600" y="112">exit_survey_score: post-churn data</text>
 
         <rect x="40" y="262" width="800" height="40" rx="10" fill="#FEF2F2" stroke="#FCA5A5"/>
         <text class="a7twR" x="58" y="287">Any feature that crosses the cutoff aces validation and dies in production - the leak IS the lie.</text>
@@ -166,6 +166,68 @@ feats["churned_90d"] = (~feats.index.isin(future["customer_id"])).astype(int)</d
         <p>One frame per cutoff. Every aggregate above reads only <code>past</code>; the label reads only <code>future</code>. That physical separation - two dataframes, not one - is the cheapest leakage insurance there is.</p>
       </div>
     </details>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 430" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The eight proposed features drawn as bars against the cutoff line t. Five clean features end at or before the cutoff: tenure days, orders in the last 90 days, support tickets over 180 days, payment failures over 90 days, and average order value. Three leaking features cross or sit past the cutoff and are struck out in red: days since last order computed at training time, exit survey score which only exists after churn, and sessions in the week after the cutoff.">
+        <style>
+          .a7flT { font: 700 14px Inter, sans-serif; fill: #241A12; }
+          .a7flL { font: 400 11.5px Inter, sans-serif; fill: #241A12; }
+          .a7flK { font: 700 11.5px Inter, sans-serif; fill: #991B1B; }
+          .a7flV { font: 700 11.5px Inter, sans-serif; fill: #0F766E; }
+          .a7flE { font: 400 10px Inter, sans-serif; fill: #991B1B; }
+          .a7flN { font: 400 11.5px Inter, sans-serif; fill: #6B5D52; }
+          .a7flC { font: 700 12px Inter, sans-serif; fill: #0F766E; }
+        </style>
+        <rect x="0" y="0" width="880" height="430" fill="#FDF9F5"/>
+        <text class="a7flT" x="40" y="28">The eight proposed features against cutoff t: three cross the line</text>
+
+        <text class="a7flN" x="445" y="52" text-anchor="middle">before t</text>
+        <text class="a7flC" x="600" y="52" text-anchor="middle">cutoff t</text>
+        <text class="a7flN" x="710" y="52" text-anchor="middle">after t</text>
+        <line x1="600" y1="58" x2="600" y2="368" stroke="#0F766E" stroke-width="2.5"/>
+
+        <text class="a7flL" x="40" y="83">1 · tenure_days</text>
+        <rect x="320" y="69" width="276" height="18" rx="4" fill="#EE9A66"/>
+        <text class="a7flV" x="858" y="83" text-anchor="end">clean</text>
+
+        <text class="a7flL" x="40" y="119">2 · orders_last_90d</text>
+        <rect x="480" y="105" width="116" height="18" rx="4" fill="#EE9A66"/>
+        <text class="a7flV" x="858" y="119" text-anchor="end">clean</text>
+
+        <text class="a7flK" x="40" y="155">3 · days_since_last (today)</text>
+        <rect x="480" y="141" width="300" height="18" rx="4" fill="#FCA5A5" stroke="#991B1B" stroke-width="1.5"/>
+        <line x1="40" y1="150" x2="780" y2="150" stroke="#991B1B" stroke-width="2"/>
+        <text class="a7flK" x="858" y="155" text-anchor="end">LEAK</text>
+        <text class="a7flE" x="480" y="170">computed today, not at t - encodes the future</text>
+
+        <text class="a7flL" x="40" y="191">4 · support_tickets_180d</text>
+        <rect x="400" y="177" width="196" height="18" rx="4" fill="#EE9A66"/>
+        <text class="a7flV" x="858" y="191" text-anchor="end">clean</text>
+
+        <text class="a7flK" x="40" y="227">5 · exit_survey_score</text>
+        <rect x="610" y="213" width="150" height="18" rx="4" fill="#FCA5A5" stroke="#991B1B" stroke-width="1.5"/>
+        <line x1="40" y1="222" x2="760" y2="222" stroke="#991B1B" stroke-width="2"/>
+        <text class="a7flK" x="858" y="227" text-anchor="end">LEAK</text>
+        <text class="a7flE" x="610" y="242">only exists after churn</text>
+
+        <text class="a7flL" x="40" y="263">6 · payment_failures_90d</text>
+        <rect x="480" y="249" width="116" height="18" rx="4" fill="#EE9A66"/>
+        <text class="a7flV" x="858" y="263" text-anchor="end">clean</text>
+
+        <text class="a7flK" x="40" y="299">7 · sessions_wk_after_cutoff</text>
+        <rect x="604" y="285" width="56" height="18" rx="4" fill="#FCA5A5" stroke="#991B1B" stroke-width="1.5"/>
+        <line x1="40" y1="294" x2="660" y2="294" stroke="#991B1B" stroke-width="2"/>
+        <text class="a7flK" x="858" y="299" text-anchor="end">LEAK</text>
+        <text class="a7flE" x="604" y="314">the label window itself</text>
+
+        <text class="a7flL" x="40" y="335">8 · avg_order_value</text>
+        <rect x="320" y="321" width="276" height="18" rx="4" fill="#EE9A66"/>
+        <text class="a7flV" x="858" y="335" text-anchor="end">clean</text>
+
+        <text class="a7flN" x="40" y="410">The test for every feature: could the warehouse compute this value on the morning of t? Needs today = leak.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the eight features as bars against the cutoff: the three struck in red read the future</figcaption>
+    </figure>
   </section>
 
   <!-- ============ PART 2: MODEL + EVALUATE ============ -->
@@ -263,7 +325,7 @@ shap.plots.waterfall(shap_values[42])     # why THIS customer scores 0.83</div>
           <li><strong>Usage trend deltas</strong> - this week's activity minus last week's, week-over-week, computed inside the feature window. A falling delta is often the earliest honest signal.</li>
           <li><strong>Support tickets</strong> - count and recency before the cutoff; pair with resolution time if you have it.</li>
           <li><strong>Payment failures</strong> - failed charges before the cutoff; among the strongest involuntary-churn predictors.</li>
-          <li><strong>Days-since-last, computed at the cutoff</strong> - the same recency that powers a6's BG/NBD, and this session's #1 leak when computed lazily at training time.</li>
+          <li><strong>Days-since-last, computed at the cutoff</strong> - the same recency that powers a6's BG/NBD, and the #1 leak when computed lazily at training time.</li>
         </ul>
         <p>Rule of thumb: for every feature, ask "could the data warehouse have produced this exact value on the morning of the cutoff date?" If the answer needs the word "today", it leaks.</p>
       </div>
@@ -276,7 +338,7 @@ shap.plots.waterfall(shap_values[42])     # why THIS customer scores 0.83</div>
       <span class="klabel">Part 3 · covers the Ascarza caveat + intervention economics</span>
       <h2>Prediction is not prevention <span class="tag concept">8 min live</span></h2>
     </div>
-    <p class="lede">Here is the finding that should be stapled to every churn model, from Eva Ascarza's research: <strong>the customers most likely to churn are often the least persuadable</strong>. Ranking by risk and mailing the top decile wastes budget twice - on "lost causes" no offer can save, and on "sure things" who would have stayed anyway. What moves money is targeting <strong>persuadables</strong>: customers whose behavior actually changes because you contacted them. That is uplift modeling - two models (treated vs control) or one model with a treatment flag - and it needs experiment data, which is why this course hands the intervention design to learn-experimentation-with-phoebe.</p>
+    <p class="lede">Here is the finding that should be stapled to every churn model, from Eva Ascarza's research: <strong>the customers most likely to churn are often the least persuadable</strong>. Ranking by risk and mailing the top decile wastes budget twice - on "lost causes" no offer can save, and on "sure things" who would have stayed anyway. What moves money is targeting <strong>persuadables</strong>: customers whose behavior actually changes because you contacted them. That is uplift modeling - two models (treated vs control) or one model with a treatment flag - and it needs experiment data: intervention design is experiment territory - see learn-experimentation-with-phoebe.</p>
 
     <details class="card">
       <summary><span class="mode live">Live</span>The four customer types - and the one worth your budget<span class="mini">5 min</span><span class="caret">▶</span></summary>
@@ -381,13 +443,13 @@ shap.plots.waterfall(shap_values[42])     # why THIS customer scores 0.83</div>
       <span class="klabel">Sources covered</span>
       <h2>What this session draws on</h2>
     </div>
-    <p class="lede">ML churn modeling is standard supervised learning; what makes it churn-specific is the windowing discipline and the intervention caveat. This page teaches the working core of:</p>
+    <p class="lede">ML churn modeling is standard supervised learning; what makes it churn-specific is the windowing discipline and the intervention caveat. The working core:</p>
     <div class="covered">
       <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Leakage and windowing discipline - feature window strictly precedes label window</span><span class="note">Part 1 · the spot-the-leak drill</span></div>
       <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The XGBoost + SHAP workflow (logistic baseline, time-based split, PR evaluation)</span><span class="note">Part 2 · build-along</span></div>
       <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Eva Ascarza - retention futility research: prediction is not prevention, target persuadables</span><span class="note">Part 3 · the four-types grid</span></div>
       <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Intervention-economics thresholding (offer cost vs margin saved, not F1)</span><span class="note">Parts 2-3 · the budget dial</span></div>
-      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Uplift modeling implementation (two-model, treatment-flag)</span><span class="note">Caveat taught; full method handed to learn-experimentation-with-phoebe</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Uplift modeling implementation (two-model, treatment-flag)</span><span class="note">Caveat only; full method: learn-experimentation-with-phoebe</span></div>
     </div>
   </section>
 

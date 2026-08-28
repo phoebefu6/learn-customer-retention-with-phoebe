@@ -334,6 +334,46 @@ print(cph.concordance_index_)     # C-index: 0.5 = coin flip, ~0.7+ useful</div>
       <li>Overlay KM for two a4 personas and run the log-rank test. Report gap size and p-value together, in one stakeholder-ready sentence.</li>
       <li>Both plots go into your running retention report - a8 assembles it, and a6 will want your churn-window choice as its baseline.</li>
     </ul>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three horizontal bars showing illustrative Kaplan-Meier median lifetimes from the same orders under three churn-window definitions: a 60-day window gives roughly 5.1 months, a 90-day window roughly 7.4 months, and a 120-day window roughly 9.8 months. The definition alone nearly doubles the answer before any modeling choice is made.">
+        <style>
+          .a5cwT { font: 700 14px Inter, sans-serif; fill: #241A12; }
+          .a5cwH { font: 600 11px Inter, sans-serif; fill: #6B5D52; }
+          .a5cwB { font: 700 11.5px Inter, sans-serif; fill: #241A12; }
+          .a5cwN { font: 400 11px Inter, sans-serif; fill: #6B5D52; }
+          .a5cwA { font: 700 11.5px Inter, sans-serif; fill: #0F766E; }
+        </style>
+        <rect x="0" y="0" width="880" height="330" fill="#FDF9F5"/>
+        <text class="a5cwT" x="40" y="28">Same orders, three churn definitions, three medians (illustrative)</text>
+
+        <text class="a5cwB" x="238" y="86" text-anchor="end">60-day window</text>
+        <rect x="250" y="66" width="265" height="34" rx="5" fill="#EE9A66"/>
+        <text class="a5cwB" x="525" y="83" dx="10">median ~5.1 mo</text>
+        <text class="a5cwN" x="535" y="98">strict: silence becomes churn fast, lifetimes cut short</text>
+
+        <text class="a5cwB" x="238" y="142" text-anchor="end">90-day window</text>
+        <rect x="250" y="122" width="385" height="34" rx="5" fill="#C2410C"/>
+        <text class="a5cwB" x="645" y="139" dx="10">median ~7.4 mo</text>
+        <text class="a5cwN" x="655" y="154">the middle-of-the-road pick</text>
+
+        <text class="a5cwB" x="238" y="198" text-anchor="end">120-day window</text>
+        <rect x="250" y="178" width="510" height="34" rx="5" fill="#7C2D12"/>
+        <text class="a5cwB" x="770" y="195" dx="6">~9.8 mo</text>
+        <text class="a5cwN" x="250" y="228">lenient: slow buyers stay censored longer, fewer churn events, longer lifetimes</text>
+
+        <line x1="250" y1="246" x2="770" y2="246" stroke="#6B5D52" stroke-width="1.5"/>
+        <text class="a5cwH" x="250" y="262" text-anchor="middle">0</text>
+        <text class="a5cwH" x="354" y="262" text-anchor="middle">2</text>
+        <text class="a5cwH" x="458" y="262" text-anchor="middle">4</text>
+        <text class="a5cwH" x="562" y="262" text-anchor="middle">6</text>
+        <text class="a5cwH" x="666" y="262" text-anchor="middle">8</text>
+        <text class="a5cwH" x="770" y="262" text-anchor="middle">10 months</text>
+        <text class="a5cwA" x="40" y="292">From 60 to 120 days the median nearly doubles - the definition set the answer before any model did.</text>
+        <text class="a5cwN" x="40" y="312">None of the three is wrong. The churn window is a modeling choice: print it on the chart, keep it fixed across reruns.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - three churn windows, three medians: the definition is a modeling choice, so print it</figcaption>
+    </figure>
   </section>
 
   <!-- ============ SOURCES ============ -->

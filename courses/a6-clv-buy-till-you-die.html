@@ -305,6 +305,65 @@ print(f"12-month cohort truth: {ltv_curve[12].mean():.0f}")
       <span class="ex-pill">Real world</span>
       <p><strong>How ecommerce teams actually spend winback budgets.</strong> BG/NBD plus Gamma-Gamma is the standard ranking machine: score every lapsed customer by P(alive) and expected value, then aim the winback offer at high-value customers whose P(alive) is decaying - not at the definitely-dead (wasted send) and not at the comfortably-alive (wasted discount). One caveat travels with this: a7 will show that predicting who churns is not the same as knowing who can be persuaded - hold that thought until the uplift discussion.</p>
     </div>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 408" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A targeting map with P(alive) on the horizontal axis and Gamma-Gamma expected value on the vertical axis. The left band below P(alive) 0.3 is marked definitely dead, a wasted send. The right band above 0.7 is comfortably alive, a wasted discount. The winback target zone is the high-value middle band where P(alive) is decaying. An arrow across the top shows customers drifting left as silence lengthens.">
+        <style>
+          .a6wbT { font: 700 14px Inter, sans-serif; fill: #241A12; }
+          .a6wbH { font: 600 11px Inter, sans-serif; fill: #6B5D52; }
+          .a6wbB { font: 700 12px Inter, sans-serif; fill: #241A12; }
+          .a6wbN { font: 400 11px Inter, sans-serif; fill: #6B5D52; }
+        </style>
+        <defs>
+          <marker id="a6wbArw" markerWidth="9" markerHeight="8" refX="7" refY="4" orient="auto">
+            <path d="M0.5,0.5 L8,4 L0.5,7.5 Z" fill="#6B5D52"/>
+          </marker>
+        </defs>
+        <rect x="0" y="0" width="880" height="408" fill="#FDF9F5"/>
+        <text class="a6wbT" x="40" y="28">Where the winback budget goes: value x P(alive), offers only to the decaying middle</text>
+        <text class="a6wbN" x="440" y="56" text-anchor="middle">as silence lengthens, P(alive) drifts left - timing is the whole game</text>
+        <line x1="740" y1="68" x2="150" y2="68" stroke="#6B5D52" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#a6wbArw)"/>
+
+        <rect x="120" y="90" width="192" height="240" fill="#FEF2F2"/>
+        <rect x="568" y="90" width="192" height="240" fill="#F8EADD"/>
+        <rect x="312" y="90" width="256" height="120" fill="#FBE3D2" stroke="#C2410C" stroke-width="2" stroke-dasharray="6 4"/>
+
+        <text class="a6wbB" x="216" y="196" text-anchor="middle" fill="#991B1B">definitely dead</text>
+        <text class="a6wbN" x="216" y="214" text-anchor="middle" fill="#991B1B">winback = wasted send</text>
+
+        <text class="a6wbB" x="440" y="128" text-anchor="middle" fill="#7C2D12">decaying + high value</text>
+        <text class="a6wbB" x="440" y="146" text-anchor="middle" fill="#C2410C">aim the offer here</text>
+
+        <text class="a6wbN" x="440" y="262" text-anchor="middle">low value: the discount costs</text>
+        <text class="a6wbN" x="440" y="278" text-anchor="middle">more than they would return</text>
+
+        <text class="a6wbB" x="664" y="196" text-anchor="middle">comfortably alive</text>
+        <text class="a6wbN" x="664" y="214" text-anchor="middle">discount = wasted margin</text>
+
+        <circle cx="180" cy="248" r="5" fill="#FCA5A5"/>
+        <circle cx="252" cy="296" r="5" fill="#FCA5A5"/>
+        <circle cx="356" cy="180" r="5" fill="#C2410C"/>
+        <circle cx="438" cy="168" r="5" fill="#7C2D12"/>
+        <circle cx="512" cy="186" r="5" fill="#C2410C"/>
+        <circle cx="398" cy="304" r="5" fill="#F6C39E"/>
+        <circle cx="484" cy="276" r="5" fill="#F6C39E"/>
+        <circle cx="622" cy="122" r="5" fill="#EE9A66"/>
+        <circle cx="694" cy="160" r="5" fill="#EE9A66"/>
+        <circle cx="652" cy="284" r="5" fill="#F6C39E"/>
+
+        <line x1="120" y1="90" x2="120" y2="330" stroke="#6B5D52" stroke-width="1.5"/>
+        <line x1="120" y1="330" x2="760" y2="330" stroke="#6B5D52" stroke-width="1.5"/>
+        <text class="a6wbH" x="112" y="104" text-anchor="end">high value</text>
+        <text class="a6wbH" x="112" y="326" text-anchor="end">low value</text>
+        <text class="a6wbH" x="120" y="348" text-anchor="middle">0.0</text>
+        <text class="a6wbH" x="312" y="348" text-anchor="middle">0.3</text>
+        <text class="a6wbH" x="568" y="348" text-anchor="middle">0.7</text>
+        <text class="a6wbH" x="760" y="348" text-anchor="middle">1.0</text>
+        <text class="a6wbH" x="440" y="366" text-anchor="middle">P(alive) from BG/NBD · value axis from Gamma-Gamma</text>
+        <text class="a6wbN" x="40" y="392">Winback list = high value x decaying P(alive) - the dead waste the send, the alive waste the discount.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the winback map: P(alive) across, expected value up, budget only for the decaying middle</figcaption>
+    </figure>
   </section>
 
   <!-- ============ HOMEWORK ============ -->

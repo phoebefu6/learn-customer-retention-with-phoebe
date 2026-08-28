@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- social:start -->
-<meta name="description" content="Analyst session 1 of 8. Three teams say 'D7 retention' and mean three different numbers - 22%, 88%, 94% on the same users. Pin down classic, rolling, and bracket retention, learn the frozen-history law this course reports under, and drive a live switcher that computes all three on one event log.">
+<meta name="description" content="Analyst session 1 of 8. Three teams say 'D7 retention' and mean three different numbers - 22%, 88%, 94% on the same users. Pin down classic, rolling, and bracket retention, learn the frozen-history discipline that keeps trend lines honest, and drive a live switcher that computes all three on one event log.">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Learn with Phoebe">
 <meta property="og:title" content="Retention metrics, precisely - learn customer retention with phoebe">
@@ -35,7 +35,7 @@
   <div class="wrap">
     <div class="eyebrow">Learn Customer Retention with Phoebe · Analyst track · Session 1 of 8</div>
     <h1>Retention metrics, <span class="accent">precisely</span></h1>
-    <p class="sub">Ask three teams for "D7 retention" and you will get three different numbers computed from the same event log - and all three are honest. Before anyone builds a cohort table, a model, or a dashboard, this session pins the vocabulary down: the three counting variants of day-N retention, the frozen-history law every number in this course obeys, the day-boundary conventions that make your SQL disagree with the analytics tool, and what DAU/MAU can and cannot tell you.</p>
+    <p class="sub">Ask three teams for "D7 retention" and you will get three different numbers computed from the same event log - and all three are honest. Before anyone builds a cohort table, a model, or a dashboard, this session pins the vocabulary down: the three counting variants of day-N retention, the frozen-history discipline every trustworthy retention number obeys, the day-boundary conventions that make your SQL disagree with the analytics tool, and what DAU/MAU can and cannot tell you.</p>
     <div class="chip-row">
       <span class="chip level">🟢 Analyst track</span>
       <span class="chip audience">Data analysts · Python</span>
@@ -68,7 +68,7 @@
     </div>
     <div class="callout win">
       <strong>★ What you walk out with today</strong>
-      The three counting variants of "D7 retention" and which tools default to which, the frozen-history law that makes this course's numbers immutable once their window closes, the day-boundary conventions behind tool-vs-SQL disagreements, checkpoint diagnostics for D1/D7/D14/D30, and a four-line metric contract you can write for your own product tonight.
+      The three counting variants of "D7 retention" and which tools default to which, the frozen-history discipline that makes a retention number immutable once its window closes, the day-boundary conventions behind tool-vs-SQL disagreements, checkpoint diagnostics for D1/D7/D14/D30, and a four-line metric contract you can write for your own product tonight.
     </div>
   </section>
 
@@ -88,7 +88,7 @@
         <p>Each variant fixes the same base - all 400 users, anchored at their first-seen day - and differs only in which return events count:</p>
         <ul>
           <li><strong>Classic / N-day (22% here):</strong> the user returned <em>exactly on day 7</em>. Amplitude calls it "N-Day", Mixpanel calls it "On", and it is GameAnalytics' default - which makes it <strong>the benchmark standard</strong>: every published D1/D7/D30 figure you will compare against is classic. Once day 7 has passed for a cohort, the number is frozen. It never moves again.</li>
-          <li><strong>Rolling / unbounded (94% here):</strong> the user returned <em>on day 7 or any later day</em>. Mixpanel's default. It is always the biggest of the three by construction, and it equals 1 minus churn-by-day-7. Its fatal flaw: a dormant user returning on day 45 flips their day-7 answer from no to yes, so <strong>historical values keep rising retroactively</strong>. Useful concept, banned from reporting in this course - a trend line that rewrites its own past cannot be trended.</li>
+          <li><strong>Rolling / unbounded (94% here):</strong> the user returned <em>on day 7 or any later day</em>. Mixpanel's default. It is always the biggest of the three by construction, and it equals 1 minus churn-by-day-7. Its fatal flaw: a dormant user returning on day 45 flips their day-7 answer from no to yes, so <strong>historical values keep rising retroactively</strong>. A useful concept - but never put it on a dashboard: a trend line that rewrites its own past cannot be trended.</li>
           <li><strong>Bracket / range (88% for week 1 here):</strong> the user returned <em>within a window</em>, days 1-7. Each bracket is independent and freezes once its window closes. This is the right shape for products with a weekly or repurchase cadence, where "came back on exactly day 7" is an arbitrary target but "came back within the first week" is the real habit question.</li>
         </ul>
         <div class="callout tip">
@@ -109,10 +109,10 @@
   <!-- ============ PART 2: FROZEN HISTORY ============ -->
   <section class="section" id="frozen-history">
     <div class="section-kicker">
-      <span class="klabel">Part 2 · covers the course-wide reporting law</span>
+      <span class="klabel">Part 2 · covers frozen history, the reporting discipline</span>
       <h2>The frozen-history law <span class="tag concept">8 min live</span></h2>
     </div>
-    <p class="lede">Every retention number in this course is computed one way: <strong>fix the base, look forward</strong>. Anchor a cohort to a fixed date - registration date, or everyone active on a fixed date like Aug 1 - then look forward 1, 7, 14, 30 days and count who came back. Because the base never moves and the window eventually closes, a completed number is <strong>immutable</strong>. Only the current, still-filling window updates, and it is always visibly marked partial.</p>
+    <p class="lede">A retention number you can trust is computed one way: <strong>fix the base, look forward</strong>. Anchor a cohort to a fixed date - registration date, or everyone active on a fixed date like Aug 1 - then look forward 1, 7, 14, 30 days and count who came back. Because the base never moves and the window eventually closes, a completed number is <strong>immutable</strong>. Only the current, still-filling window updates, and it is always visibly marked partial.</p>
 
     <figure class="zoomable">
       <svg viewBox="0 0 880 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Timeline of one user. The anchor is the first-seen day. Forward windows D1, D7, D14 and D30 are drawn as brackets from the anchor. A return on day 45 is marked after all four windows and explicitly does not change the frozen D7 result.">
@@ -155,7 +155,7 @@
         <text class="a1tlB" x="345" y="161">This return lands OUTSIDE every closed window:</text>
 
         <text class="a1tlB" x="40" y="264">Classic and bracket ignore the day-45 return - their windows closed. Rolling would flip D7 to "yes",</text>
-        <text class="a1tlB" x="40" y="282">retroactively rewriting a five-week-old number. That is exactly why rolling is banned from reporting.</text>
+        <text class="a1tlB" x="40" y="282">retroactively rewriting a five-week-old number. That is why rolling never belongs on a dashboard.</text>
       </svg>
       <figcaption>🔍 Click to zoom - fix the base at day 0, look forward; closed windows are history and history does not move</figcaption>
     </figure>
@@ -187,8 +187,8 @@ d30_mature = anchor + pd.Timedelta(days=30) &lt;= snapshot            # else: ma
 print(classic, round(bracket_w1, 3), d30_mature.mean())</div>
         <p>Note what is NOT here: no "last 7 days as of today", no "day 7 or later". The anchor is per-user and fixed; the window looks forward from it; a completed window never recomputes.</p>
         <div class="callout tip">
-          <strong>Why the two banned metrics restate</strong>
-          <strong>Trailing look-back</strong> ("of today's actives, how many were here 7 days ago?") re-anchors to today, so the denominator moves every single day - yesterday's number is already different, and no two days of the trend line describe the same population. <strong>Rolling retention</strong> keeps the anchor but never closes the window, so a day-45 return rewrites day-7 history. Both are taught here as concepts, and neither ever goes on a dashboard in this course.
+          <strong>Why two popular metrics restate their own history</strong>
+          <strong>Trailing look-back</strong> ("of today's actives, how many were here 7 days ago?") re-anchors to today, so the denominator moves every single day - yesterday's number is already different, and no two days of the trend line describe the same population. <strong>Rolling retention</strong> keeps the anchor but never closes the window, so a day-45 return rewrites day-7 history. Both are worth understanding, and neither ever belongs on a dashboard.
         </div>
       </div>
     </details>
@@ -351,6 +351,52 @@ print(classic, round(bracket_w1, 3), d30_mature.mean())</div>
       <li>Write your product's <strong>metric contract</strong> in four lines: the anchor event, the active event, the window type (classic / bracket, and which days), and the timezone-plus-day-boundary convention. Pin it to the top of every retention notebook from now on.</li>
       <li>Find one retention number your team already reports and identify its variant. If nobody can tell you, you have found this week's most useful bug.</li>
     </ul>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A filled-in metric contract card with four lines. Line 1, anchor event: first completed purchase - who is in the base and when each user's clock starts. Line 2, active event: any later purchase - what counts as coming back. Line 3, window type: classic D30, frozen at close - which question the number answers. Line 4, timezone and boundary: calendar days in the shop timezone - the 23:50 install problem. Changing any one line makes it a different metric.">
+        <style>
+          .a1mcT { font: 700 14px Inter, sans-serif; fill: #241A12; }
+          .a1mcW { font: 700 12px Inter, sans-serif; fill: #FFFFFF; }
+          .a1mcV { font: 700 12px Inter, sans-serif; fill: #241A12; }
+          .a1mcN { font: 400 11px Inter, sans-serif; fill: #6B5D52; }
+        </style>
+        <rect x="0" y="0" width="880" height="330" fill="#FDF9F5"/>
+        <text class="a1mcT" x="40" y="28">The metric contract - four lines that fully specify a retention number (ecommerce example)</text>
+
+        <rect x="40" y="46" width="800" height="228" rx="10" fill="#FFFFFF" stroke="#EFE2D6"/>
+
+        <rect x="60" y="62" width="200" height="36" rx="6" fill="#7C2D12"/>
+        <text class="a1mcW" x="160" y="85" text-anchor="middle">1 · Anchor event</text>
+        <rect x="272" y="62" width="290" height="36" rx="6" fill="#F8EADD"/>
+        <text class="a1mcV" x="286" y="85">first completed purchase</text>
+        <text class="a1mcN" x="578" y="77">who is in the base, and when</text>
+        <text class="a1mcN" x="578" y="92">each user's clock starts</text>
+
+        <rect x="60" y="114" width="200" height="36" rx="6" fill="#C2410C"/>
+        <text class="a1mcW" x="160" y="137" text-anchor="middle">2 · Active event</text>
+        <rect x="272" y="114" width="290" height="36" rx="6" fill="#F8EADD"/>
+        <text class="a1mcV" x="286" y="137">any later purchase</text>
+        <text class="a1mcN" x="578" y="129">what counts as coming back -</text>
+        <text class="a1mcN" x="578" y="144">a visit is not a retained buyer</text>
+
+        <rect x="60" y="166" width="200" height="36" rx="6" fill="#E06A2E"/>
+        <text class="a1mcW" x="160" y="189" text-anchor="middle">3 · Window type</text>
+        <rect x="272" y="166" width="290" height="36" rx="6" fill="#F8EADD"/>
+        <text class="a1mcV" x="286" y="189">classic D30, frozen at close</text>
+        <text class="a1mcN" x="578" y="181">which question it answers;</text>
+        <text class="a1mcN" x="578" y="196">brackets for weekly cadence</text>
+
+        <rect x="60" y="218" width="200" height="36" rx="6" fill="#EE9A66"/>
+        <text class="a1mcW" x="160" y="241" text-anchor="middle">4 · Timezone + boundary</text>
+        <rect x="272" y="218" width="290" height="36" rx="6" fill="#F8EADD"/>
+        <text class="a1mcV" x="286" y="241">calendar days, shop timezone</text>
+        <text class="a1mcN" x="578" y="233">the 23:50 install problem -</text>
+        <text class="a1mcN" x="578" y="248">copy the tool's convention</text>
+
+        <text class="a1mcN" x="40" y="306">Change any one line and it is a different metric - pin the four lines to the top of every retention notebook.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - anchor, active event, window, timezone: change any line and it is a different metric</figcaption>
+    </figure>
   </section>
 
   <!-- ============ SOURCES ============ -->
@@ -364,7 +410,7 @@ print(classic, round(bracket_w1, 3), d30_mature.mean())</div>
       <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Amplitude retention docs - N-Day vs unbounded, 24h window mechanics, the 3.5x study</span><span class="note">Parts 1 + 3 · variants and boundaries</span></div>
       <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Mixpanel retention docs - "On" vs "on or after", calendar-day convention</span><span class="note">Parts 1 + 3 · the other default</span></div>
       <div class="covered-row"><span class="status pill solid">✓</span><span class="name">GameAnalytics 2025 benchmarks (11,600 games, 1.48B MAU)</span><span class="note">Part 3 · medians with vintage</span></div>
-      <div class="covered-row"><span class="status pill light">◐</span><span class="name">devtodev - rolling vs classic retention comparison</span><span class="note">Part 1 · why rolling restates; full ban rationale in a2</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">devtodev - rolling vs classic retention comparison</span><span class="note">Part 1 · why rolling restates; the full trending case in a2</span></div>
       <div class="covered-row"><span class="status pill light">◐</span><span class="name">Lenny's Newsletter - "Measuring cohort retention" (Olga Berezovsky)</span><span class="note">Part 3 · denominator discipline; cohort build in a2</span></div>
     </div>
   </section>
@@ -380,7 +426,7 @@ print(classic, round(bracket_w1, 3), d30_mature.mean())</div>
       <button class="qopt" type="button">A · Classic - the exact-day rule is too strict, so numbers drift</button>
       <button class="qopt" type="button">B · Rolling - "day 7 or later" never closes, so a day-45 return flips a five-week-old cell from no to yes</button>
       <button class="qopt" type="button">C · Bracket - overlapping windows double-count returns</button>
-      <p class="qwhy">Rolling/unbounded retention keeps the window open forever, so every dormant user who resurfaces rewrites the historical value upward. Classic freezes when day N passes; each bracket freezes when its window closes. A metric whose past keeps moving cannot be trended - hence the reporting ban.</p>
+      <p class="qwhy">Rolling/unbounded retention keeps the window open forever, so every dormant user who resurfaces rewrites the historical value upward. Classic freezes when day N passes; each bracket freezes when its window closes. A metric whose past keeps moving cannot be trended - keep it off dashboards.</p>
     </div>
     <div class="quiz-q" data-answer="2">
       <p class="qtext">2 · A user installs at 23:50 and returns at 00:10, twenty minutes later. Which convention counts them D1-retained?</p>

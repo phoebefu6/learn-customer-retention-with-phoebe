@@ -197,6 +197,68 @@ rfm["persona"].value_counts()</div>
       </svg>
       <figcaption>🔍 Click to zoom - Champions top-right, At-Risk top-left, Hibernating bottom-left: the corners are the strategy</figcaption>
     </figure>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The handoff from the RFM table to the buy-till-you-die models built in a6. Left: the rfm table with one row per customer and its columns recency, frequency, monetary, and code plus persona. Arrows carry recency and frequency, plus a tenure column computed from the first order date, into the BG/NBD model box, whose outputs are P(alive) and expected future orders. Another arrow carries monetary into the Gamma-Gamma model box, whose output is expected spend per order. Both model outputs combine into CLV per customer. A dashed note says the personas stay behind in the report as the speakable layer, not a model input.">
+        <style>
+          .a4btT { font: 700 14px Inter, sans-serif; fill: #241A12; }
+          .a4btH { font: 700 12px Inter, sans-serif; fill: #FFFFFF; }
+          .a4btC { font: 700 11.5px Inter, sans-serif; fill: #241A12; }
+          .a4btB { font: 400 11px Inter, sans-serif; fill: #241A12; }
+          .a4btW { font: 400 11px Inter, sans-serif; fill: #FFFFFF; }
+          .a4btG { font: 700 11px Inter, sans-serif; fill: #0F766E; }
+          .a4btN { font: 400 11px Inter, sans-serif; fill: #6B5D52; }
+          .a4btA { stroke: #C2410C; stroke-width: 2.2; fill: none; marker-end: url(#a4btArr); }
+          .a4btD { stroke: #6B5D52; stroke-width: 1.5; fill: none; stroke-dasharray: 5 4; }
+        </style>
+        <defs>
+          <marker id="a4btArr" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L8,4.5 L0,9 z" fill="#C2410C"/></marker>
+        </defs>
+        <rect x="0" y="0" width="880" height="320" fill="#FDF9F5"/>
+        <text class="a4btT" x="40" y="28">The handoff: today's RFM table is the model input a6 expects</text>
+
+        <rect x="40" y="52" width="250" height="30" rx="8" fill="#7C2D12"/>
+        <text class="a4btH" x="165" y="72" text-anchor="middle">rfm - one row per customer</text>
+        <rect x="40" y="86" width="250" height="32" fill="#F8EADD"/>
+        <text class="a4btC" x="56" y="107">recency (days since last)</text>
+        <rect x="40" y="122" width="250" height="32" fill="#FBE3D2"/>
+        <text class="a4btC" x="56" y="143">frequency (order count)</text>
+        <rect x="40" y="158" width="250" height="32" fill="#F8EADD"/>
+        <text class="a4btC" x="56" y="179">monetary (total spend)</text>
+        <rect x="40" y="194" width="250" height="32" fill="#FBE3D2"/>
+        <text class="a4btC" x="56" y="215">code + persona</text>
+
+        <path class="a4btA" d="M290,102 C360,102 400,108 466,116"/>
+        <path class="a4btA" d="M290,138 C360,138 400,132 466,124"/>
+        <path class="a4btA" d="M290,174 C370,174 410,192 466,204"/>
+
+        <text class="a4btG" x="316" y="66">+ tenure T (days since first order)</text>
+        <text class="a4btN" x="316" y="82">the one column to add - a6 needs it</text>
+        <path class="a4btD" d="M340,88 C340,100 380,108 420,112"/>
+
+        <rect x="470" y="86" width="190" height="70" rx="10" fill="#C2410C"/>
+        <text class="a4btH" x="565" y="110" text-anchor="middle">BG/NBD (a6)</text>
+        <text class="a4btW" x="565" y="128" text-anchor="middle">recency, frequency, T in;</text>
+        <text class="a4btW" x="565" y="144" text-anchor="middle">P(alive) + expected orders out</text>
+
+        <rect x="470" y="180" width="190" height="60" rx="10" fill="#E06A2E"/>
+        <text class="a4btH" x="565" y="204" text-anchor="middle">Gamma-Gamma (a6)</text>
+        <text class="a4btW" x="565" y="224" text-anchor="middle">expected spend per order</text>
+
+        <rect x="700" y="126" width="140" height="76" rx="10" fill="#7C2D12"/>
+        <text class="a4btH" x="770" y="152" text-anchor="middle">CLV per customer</text>
+        <text class="a4btW" x="770" y="172" text-anchor="middle">expected orders</text>
+        <text class="a4btW" x="770" y="188" text-anchor="middle">x expected spend</text>
+
+        <path class="a4btA" d="M660,121 C680,128 684,136 696,148"/>
+        <path class="a4btA" d="M660,210 C680,204 684,196 696,182"/>
+
+        <path class="a4btD" d="M165,226 L165,258"/>
+        <text class="a4btN" x="40" y="278">Personas stay behind in the report - the speakable layer for stakeholders, not a model input.</text>
+        <text class="a4btN" x="40" y="306">Segment once, reuse twice: the same three columns power the buy-till-you-die CLV models in a6.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - three RFM columns plus tenure flow straight into a6's BG/NBD and Gamma-Gamma models; the personas stay in the report</figcaption>
+    </figure>
   </section>
 
   <!-- ============ PART 2: BEHAVIORAL COHORTS ============ -->
@@ -418,12 +480,12 @@ by_seg.sort_values("stickiness", ascending=False)</div>
       <span class="klabel">Sources covered</span>
       <h2>What this session draws on</h2>
     </div>
-    <p class="lede">Segmentation is the oldest craft in this course - RFM predates the web - standardized by a few durable sources. This page teaches the working core of:</p>
+    <p class="lede">Segmentation is the oldest craft in retention analytics - RFM predates the web - standardized by a few durable sources. Everything above is the working core of:</p>
     <div class="covered">
       <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Arthur Hughes - RFM quintile scoring and personas (1994 heritage)</span><span class="note">Part 1 · codes, personas, the qcut build</span></div>
       <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Amplitude - behavioral cohorting (acquisition spots, behavior explains)</span><span class="note">Part 2 · the two-cohort workflow</span></div>
       <div class="covered-row"><span class="status pill solid">✓</span><span class="name">a16z "The Power User Curve" (Li Jin) - the L28 reading</span><span class="note">Part 3 · smile vs slumped-left</span></div>
-      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Course-map ecommerce benchmarks (repeat-customer concentration, payer economics)</span><span class="note">Real-world callout · full money framing in a6 and s1</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Published ecommerce benchmarks (repeat-customer concentration, payer economics)</span><span class="note">Real-world callout · full money framing in a6 and s1</span></div>
     </div>
   </section>
 

@@ -255,6 +255,44 @@ days_active = window.groupby("user_id")["date"].nunique()
 days_active.value_counts().sort_index().plot.bar(
     figsize=(10, 4), color="#C2410C", title="L28: users by active days")</div>
         <p>Facebook's growth team invented this reading; a16z popularized it as "the power user curve". Use it whenever a stakeholder says "our DAU/MAU is fine" - the histogram tells you whether that ratio is one loyal core or a blur of drive-bys.</p>
+        <figure class="zoomable">
+          <svg viewBox="0 0 880 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two L28 histogram shapes with identical DAU over MAU ratios. Left: a smile with mass at one active day and again at twenty-eight active days, meaning a hardcore daily segment exists. Right: a curve slumped entirely to the left, meaning nobody is hooked.">
+            <style>
+              .l28T { font: 700 13px Inter, sans-serif; fill: #241A12; }
+              .l28H { font: 700 12px Inter, sans-serif; fill: #241A12; }
+              .l28B { font: 400 11.5px Inter, sans-serif; fill: #6B5D52; }
+            </style>
+            <rect x="0" y="0" width="880" height="260" fill="#FDF9F5"/>
+            <text class="l28T" x="40" y="28">Same DAU/MAU, opposite businesses: the histogram is the tiebreaker</text>
+
+            <rect x="40" y="46" width="390" height="160" rx="10" fill="#FFFFFF" stroke="#EFE2D6"/>
+            <g fill="#C2410C">
+              <rect x="66" y="90" width="22" height="96"/><rect x="94" y="130" width="22" height="56"/>
+              <rect x="122" y="150" width="22" height="36"/><rect x="150" y="160" width="22" height="26"/>
+              <rect x="178" y="164" width="22" height="22"/><rect x="206" y="162" width="22" height="24"/>
+              <rect x="234" y="156" width="22" height="30"/><rect x="262" y="146" width="22" height="40"/>
+              <rect x="290" y="128" width="22" height="58"/><rect x="318" y="104" width="22" height="82"/>
+              <rect x="346" y="86" width="22" height="100" fill="#0F766E"/>
+            </g>
+            <text class="l28H" x="60" y="72">The smile</text>
+            <text class="l28B" x="60" y="228">Mass at both ends: casual users AND a daily</text>
+            <text class="l28B" x="60" y="246">hardcore (teal bar = 28 of 28 days). Hooked core exists.</text>
+
+            <rect x="450" y="46" width="390" height="160" rx="10" fill="#FFFFFF" stroke="#EFE2D6"/>
+            <g fill="#EE9A66">
+              <rect x="476" y="80" width="22" height="106"/><rect x="504" y="110" width="22" height="76"/>
+              <rect x="532" y="136" width="22" height="50"/><rect x="560" y="154" width="22" height="32"/>
+              <rect x="588" y="166" width="22" height="20"/><rect x="616" y="172" width="22" height="14"/>
+              <rect x="644" y="176" width="22" height="10"/><rect x="672" y="180" width="22" height="6"/>
+              <rect x="700" y="182" width="22" height="4"/><rect x="728" y="183" width="22" height="3"/>
+              <rect x="756" y="184" width="22" height="2"/>
+            </g>
+            <text class="l28H" x="470" y="72">The slump</text>
+            <text class="l28B" x="470" y="228">All mass at 1-3 active days: everyone samples,</text>
+            <text class="l28B" x="470" y="246">nobody returns. No habit, whatever the averages say.</text>
+          </svg>
+          <figcaption>🔍 Click to zoom - smile = a hardcore daily segment exists; slump = drive-bys only</figcaption>
+        </figure>
       </div>
     </details>
   </section>
