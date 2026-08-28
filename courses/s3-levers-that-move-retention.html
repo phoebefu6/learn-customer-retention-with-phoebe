@@ -164,6 +164,57 @@
       </div>
     </details>
 
+    <p class="lede">The machine above names the states; the chart below runs one real month of this course's dataset through it, every flow sized to its count.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Flow diagram of one month of lifecycle movements using the course dataset's May 2026 numbers. From the left, 326 new customers flow in, 817 of April's 1,267 current customers stay current, and 181 return from the dormant pool as resurrected, together making 1,324 May actives. The remaining 450 of April's base flow out to at-risk and dormant.">
+        <style>
+          .s3flT { font: 700 14px Inter, sans-serif; fill: #241A12; }
+          .s3flH { font: 600 11px Inter, sans-serif; fill: #6B5D52; }
+          .s3flW { font: 700 12px Inter, sans-serif; fill: #FFFFFF; }
+          .s3flC { font: 700 11.5px Inter, sans-serif; fill: #FFFFFF; }
+          .s3flI { font: 700 12px Inter, sans-serif; fill: #241A12; }
+          .s3flR { font: 700 11.5px Inter, sans-serif; fill: #991B1B; }
+          .s3flZ { font: 700 11.5px Inter, sans-serif; fill: #A16207; }
+          .s3flN { font: 400 11.5px Inter, sans-serif; fill: #6B5D52; }
+        </style>
+        <rect x="0" y="0" width="880" height="380" fill="#FDF9F5"/>
+        <text class="s3flT" x="40" y="28">One month's volumes through the machine: May 2026</text>
+
+        <text class="s3flH" x="40" y="52">April: where they were</text>
+        <text class="s3flH" x="840" y="52" text-anchor="end">May: where they land</text>
+
+        <path d="M220,60 L660,60 L660,99 L220,99 Z" fill="#C2410C" fill-opacity="0.85"/>
+        <path d="M220,115 C440,115 440,99 660,99 L660,197 C440,197 440,213 220,213 Z" fill="#0D9488"/>
+        <path d="M220,213 C440,213 440,250 660,250 L660,304 C440,304 440,267 220,267 Z" fill="#FCA5A5"/>
+        <path d="M220,285 C440,285 440,197 660,197 L660,219 C440,219 440,307 220,307 Z" fill="#A16207"/>
+
+        <text class="s3flC" x="430" y="84" text-anchor="middle">326 new in</text>
+        <text class="s3flC" x="430" y="152" text-anchor="middle">817 stay current</text>
+        <text class="s3flR" x="640" y="272" text-anchor="end">450 out to at-risk</text>
+        <text class="s3flZ" x="232" y="322">181 resurrected</text>
+
+        <rect x="40" y="60" width="180" height="39" rx="6" fill="#C2410C"/>
+        <text class="s3flW" x="130" y="84" text-anchor="middle">New in May</text>
+        <rect x="40" y="115" width="180" height="152" rx="6" fill="#7C2D12"/>
+        <text class="s3flW" x="130" y="182" text-anchor="middle">Current base (Apr)</text>
+        <text class="s3flW" x="130" y="200" text-anchor="middle">1,267</text>
+        <rect x="40" y="285" width="180" height="40" rx="6" fill="#FEF2F2" stroke="#FCA5A5"/>
+        <text class="s3flR" x="130" y="309" text-anchor="middle">Dormant pool</text>
+
+        <rect x="660" y="60" width="180" height="159" rx="6" fill="#F8EADD"/>
+        <text class="s3flI" x="750" y="131" text-anchor="middle">Active in May</text>
+        <text class="s3flI" x="750" y="149" text-anchor="middle">1,324</text>
+        <rect x="660" y="250" width="180" height="54" rx="6" fill="#FEF2F2" stroke="#FCA5A5"/>
+        <text class="s3flR" x="750" y="272" text-anchor="middle">At-risk / dormant</text>
+        <text class="s3flR" x="750" y="290" text-anchor="middle">450</text>
+
+        <text class="s3flN" x="40" y="348">Counts from the course dataset's May 2026 month: 326 new + 817 retained + 181 resurrected = 1,324 actives.</text>
+        <text class="s3flN" x="40" y="366">The 450 outflow is the balance: of April's 1,267 actives, only 817 stayed current.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the same machine with May's real volumes: three inflows, one leak, 1,324 actives</figcaption>
+    </figure>
+
     <details class="card">
       <summary><span class="mode self">Self-study</span>Why a state machine beats one blended number<span class="mini">4 min read</span><span class="caret">▶</span></summary>
       <div class="body">

@@ -163,6 +163,68 @@ print(kmf.median_survival_time_)         # 7.0 - not the naive 4.3</div>
         </div>
       </div>
     </details>
+
+    <p class="lede">Here is that churn-definition choice applied to the repo's own orders: call 90 days of silence churn, then plot how long each churned customer lasted from first order to last. The shape explains why this session exists.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A histogram of the number of days between first and last order for 2,514 churned retail customers under a 90 day inactivity window. The day zero bar dominates at 1,241 customers, 49 percent, who never placed a second order. The later spans are far smaller: 185 in the first month, 427 between 30 and 60 days, 231 to 90 days, then a slow tail of 141, 183, 90 and 16 out to 400 days.">
+        <style>
+          .a5tcT { font: 700 14px Inter, sans-serif; fill: #241A12; }
+          .a5tcH { font: 600 11px Inter, sans-serif; fill: #6B5D52; }
+          .a5tcC { font: 700 11px Inter, sans-serif; fill: #241A12; }
+          .a5tcD { font: 700 16px Inter, sans-serif; fill: #7C2D12; }
+          .a5tcS { font: 400 11.5px Inter, sans-serif; fill: #6B5D52; }
+          .a5tcB { font: 700 11.5px Inter, sans-serif; fill: #241A12; }
+          .a5tcN { font: 400 11.5px Inter, sans-serif; fill: #6B5D52; }
+        </style>
+        <rect x="0" y="0" width="880" height="420" fill="#FDF9F5"/>
+        <text class="a5tcT" x="40" y="28">Time from first to last order: 2,514 churned retail customers (90-day window)</text>
+
+        <line x1="80" y1="219" x2="810" y2="219" stroke="#D3C4B8" stroke-width="1"/>
+        <line x1="80" y1="129" x2="810" y2="129" stroke="#D3C4B8" stroke-width="1"/>
+        <line x1="80" y1="75" x2="80" y2="310" stroke="#6B5D52" stroke-width="1.5"/>
+        <line x1="80" y1="310" x2="810" y2="310" stroke="#6B5D52" stroke-width="1.5"/>
+        <text class="a5tcH" x="72" y="314" text-anchor="end">0</text>
+        <text class="a5tcH" x="72" y="223" text-anchor="end">500</text>
+        <text class="a5tcH" x="72" y="133" text-anchor="end">1,000</text>
+        <text class="a5tcH" x="80" y="68">customers</text>
+
+        <rect x="100" y="85" width="68" height="225" fill="#7C2D12"/>
+        <rect x="190" y="276" width="68" height="34" fill="#EE9A66"/>
+        <rect x="280" y="233" width="68" height="77" fill="#EE9A66"/>
+        <rect x="370" y="268" width="68" height="42" fill="#EE9A66"/>
+        <rect x="460" y="284" width="68" height="26" fill="#EE9A66"/>
+        <rect x="550" y="277" width="68" height="33" fill="#EE9A66"/>
+        <rect x="640" y="294" width="68" height="16" fill="#EE9A66"/>
+        <rect x="730" y="307" width="68" height="3" fill="#EE9A66"/>
+
+        <text class="a5tcC" x="134" y="79" text-anchor="middle">1,241</text>
+        <text class="a5tcC" x="224" y="270" text-anchor="middle">185</text>
+        <text class="a5tcC" x="314" y="227" text-anchor="middle">427</text>
+        <text class="a5tcC" x="404" y="262" text-anchor="middle">231</text>
+        <text class="a5tcC" x="494" y="278" text-anchor="middle">141</text>
+        <text class="a5tcC" x="584" y="271" text-anchor="middle">183</text>
+        <text class="a5tcC" x="674" y="288" text-anchor="middle">90</text>
+        <text class="a5tcC" x="764" y="301" text-anchor="middle">16</text>
+
+        <text class="a5tcD" x="195" y="118">49% never placed a second order</text>
+        <text class="a5tcS" x="195" y="138">1,241 of 2,514 bought once, went quiet, and were gone at day 90</text>
+
+        <text class="a5tcH" x="134" y="328" text-anchor="middle">day 0</text>
+        <text class="a5tcH" x="224" y="328" text-anchor="middle">1-29</text>
+        <text class="a5tcH" x="314" y="328" text-anchor="middle">30-59</text>
+        <text class="a5tcH" x="404" y="328" text-anchor="middle">60-89</text>
+        <text class="a5tcH" x="494" y="328" text-anchor="middle">90-119</text>
+        <text class="a5tcH" x="584" y="328" text-anchor="middle">120-179</text>
+        <text class="a5tcH" x="674" y="328" text-anchor="middle">180-269</text>
+        <text class="a5tcH" x="764" y="328" text-anchor="middle">270-399</text>
+        <text class="a5tcH" x="445" y="348" text-anchor="middle">days between first and last order</text>
+
+        <text class="a5tcB" x="40" y="380">The day-0 cliff is why the second purchase is the single biggest lever - and why survival curves front-load.</text>
+        <text class="a5tcN" x="40" y="402">Churned customers only: the still-active are censored and are not in this histogram.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - 49% of churned customers never placed a second order: the day-0 cliff that front-loads retention work</figcaption>
+    </figure>
   </section>
 
   <!-- ============ PART 2: COMPARING SEGMENTS ============ -->
