@@ -172,7 +172,7 @@
 
             <rect x="40" y="46" width="800" height="86" rx="10" fill="#FFFFFF" stroke="#EFE2D6"/>
             <text class="fhG" x="56" y="70">✓ Fixed base, forward windows</text>
-            <line x1="120" y1="104" x2="800" y2="104" stroke="#D3C4B8" stroke-width="2"/>
+            <path d="M120,104 H180 M238,104 H270 M328,104 H360 M418,104 H450 M516,104 H548" fill="none" stroke="#D3C4B8" stroke-width="2"/>
             <rect x="112" y="92" width="16" height="24" rx="4" fill="#7C2D12"/>
             <text class="fhB" x="120" y="130" text-anchor="middle">Jan 1 base</text>
             <rect x="180" y="94" width="58" height="20" rx="10" fill="#C2410C"/><text class="fhW" x="209" y="108" text-anchor="middle">D1 ✓</text>
@@ -183,11 +183,11 @@
 
             <rect x="40" y="146" width="800" height="86" rx="10" fill="#FEF2F2" stroke="#FCA5A5"/>
             <text class="fhR" x="56" y="170">✗ Moving base, backward window</text>
-            <line x1="120" y1="204" x2="800" y2="204" stroke="#D3C4B8" stroke-width="2"/>
+            <path d="M120,204 H520 M690,204 H800" fill="none" stroke="#D3C4B8" stroke-width="2"/>
             <rect x="700" y="192" width="16" height="24" rx="4" fill="#991B1B"/>
             <text class="fhB" x="708" y="230" text-anchor="middle">"today"</text>
             <rect x="520" y="194" width="170" height="20" rx="10" fill="#FCA5A5"/><text class="fhR" x="605" y="208" text-anchor="middle">last 7 days, recomputed daily</text>
-            <text class="fhB" x="130" y="208">yesterday's number is already different - nothing can be trended</text>
+            <text class="fhB" x="130" y="188">yesterday's number is already different - nothing can be trended</text>
           </svg>
           <figcaption>🔍 Click to zoom - fix the base and look forward: closed windows freeze; a moving base never stops rewriting</figcaption>
         </figure>

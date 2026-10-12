@@ -187,7 +187,7 @@ print(kmf.median_survival_time_)         # 7.0 - not the naive 4.3</div>
         <text class="a5tcH" x="72" y="314" text-anchor="end">0</text>
         <text class="a5tcH" x="72" y="223" text-anchor="end">500</text>
         <text class="a5tcH" x="72" y="133" text-anchor="end">1,000</text>
-        <text class="a5tcH" x="80" y="68">customers</text>
+        <text class="a5tcH" x="80" y="58">customers</text>
 
         <rect x="100" y="85" width="68" height="225" fill="#7C2D12"/>
         <rect x="190" y="276" width="68" height="34" fill="#EE9A66"/>
@@ -200,7 +200,7 @@ print(kmf.median_survival_time_)         # 7.0 - not the naive 4.3</div>
 
         <text class="a5tcC" x="134" y="79" text-anchor="middle">1,241</text>
         <text class="a5tcC" x="224" y="270" text-anchor="middle">185</text>
-        <text class="a5tcC" x="314" y="227" text-anchor="middle">427</text>
+        <text class="a5tcC" x="314" y="214" text-anchor="middle">427</text>
         <text class="a5tcC" x="404" y="262" text-anchor="middle">231</text>
         <text class="a5tcC" x="494" y="278" text-anchor="middle">141</text>
         <text class="a5tcC" x="584" y="271" text-anchor="middle">183</text>
@@ -306,14 +306,14 @@ print(res.p_value)     # small = the gap is unlikely to be luck</div>
     <p class="lede">KM compares one segmentation at a time. <strong>Cox proportional hazards</strong> handles many covariates at once, and it is <strong>semi-parametric</strong>: it estimates each covariate's effect as a <strong>hazard ratio</strong> without ever specifying the baseline churn curve. The canonical Telco read: a month-to-month contract carries roughly <strong>3x the churn hazard</strong> of a two-year contract, other covariates held fixed. Read <code>exp(coef)</code> as multiplicative risk, verify the proportional-hazards assumption with <code>check_assumptions()</code>, and judge ranking quality with the C-index.</p>
 
     <figure class="zoomable">
-      <svg viewBox="0 0 880 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A hazard-ratio forest plot with three covariate rows on a log scale around a reference line at hazard ratio 1.0. Month-to-month contract sits near 3.0 with a confidence interval clear of 1.0, a schematic protective covariate sits near 0.7, and a third covariate's interval crosses 1.0 so no effect should be reported.">
+      <svg viewBox="0 0 880 338" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A hazard-ratio forest plot with three covariate rows on a log scale around a reference line at hazard ratio 1.0. Month-to-month contract sits near 3.0 with a confidence interval clear of 1.0, a schematic protective covariate sits near 0.7, and a third covariate's interval crosses 1.0 so no effect should be reported.">
         <style>
           .a5cxT { font: 700 14px Inter, sans-serif; fill: #241A12; }
           .a5cxH { font: 600 11px Inter, sans-serif; fill: #6B5D52; }
           .a5cxB { font: 700 11.5px Inter, sans-serif; fill: #241A12; }
           .a5cxN { font: 400 11.5px Inter, sans-serif; fill: #6B5D52; }
         </style>
-        <rect x="0" y="0" width="880" height="330" fill="#FDF9F5"/>
+        <rect x="0" y="0" width="880" height="338" fill="#FDF9F5"/>
         <text class="a5cxT" x="40" y="28">Reading a forest plot: which side of 1.0, and does the interval cross it?</text>
         <line x1="420" y1="70" x2="420" y2="245" stroke="#0F766E" stroke-width="2" stroke-dasharray="5 4"/>
         <text class="a5cxB" x="420" y="60" text-anchor="middle" fill="#0F766E">HR = 1.0 - no effect</text>
@@ -338,9 +338,9 @@ print(res.p_value)     # small = the gap is unlikely to be luck</div>
         <text class="a5cxH" x="420" y="262" text-anchor="middle">1.0</text>
         <text class="a5cxH" x="530" y="262" text-anchor="middle">2.0</text>
         <text class="a5cxH" x="640" y="262" text-anchor="middle">4.0</text>
-        <text class="a5cxH" x="700" y="262" text-anchor="end">hazard ratio (log scale)</text>
-        <text class="a5cxN" x="40" y="292">exp(coef) is multiplicative: HR 3.0 = three times the instantaneous churn risk among survivors, at every t.</text>
-        <text class="a5cxN" x="40" y="312">Right of 1.0 raises risk, left lowers it. Bars B and C are schematic reading practice, not Telco estimates.</text>
+        <text class="a5cxH" x="700" y="280" text-anchor="end">hazard ratio (log scale)</text>
+        <text class="a5cxN" x="40" y="300">exp(coef) is multiplicative: HR 3.0 = three times the instantaneous churn risk among survivors, at every t.</text>
+        <text class="a5cxN" x="40" y="320">Right of 1.0 raises risk, left lowers it. Bars B and C are schematic reading practice, not Telco estimates.</text>
       </svg>
       <figcaption>🔍 Click to zoom - the whole model summary in one picture: point, interval, and the 1.0 line</figcaption>
     </figure>

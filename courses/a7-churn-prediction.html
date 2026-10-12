@@ -196,9 +196,9 @@ feats["churned_90d"] = (~feats.index.isin(future["customer_id"])).astype(int)</d
 
         <text class="a7flK" x="40" y="155">3 · days_since_last (today)</text>
         <rect x="480" y="141" width="300" height="18" rx="4" fill="#FCA5A5" stroke="#991B1B" stroke-width="1.5"/>
-        <line x1="40" y1="150" x2="780" y2="150" stroke="#991B1B" stroke-width="2"/>
+        <line x1="40" y1="150" x2="780" y2="150" stroke="#991B1B" stroke-width="2" data-strike="1"/>
         <text class="a7flK" x="858" y="155" text-anchor="end">LEAK</text>
-        <text class="a7flE" x="480" y="170">computed today, not at t - encodes the future</text>
+        <text class="a7flE" x="606" y="170">computed today, not at t - encodes the future</text>
 
         <text class="a7flL" x="40" y="191">4 · support_tickets_180d</text>
         <rect x="400" y="177" width="196" height="18" rx="4" fill="#EE9A66"/>
@@ -206,7 +206,7 @@ feats["churned_90d"] = (~feats.index.isin(future["customer_id"])).astype(int)</d
 
         <text class="a7flK" x="40" y="227">5 · exit_survey_score</text>
         <rect x="610" y="213" width="150" height="18" rx="4" fill="#FCA5A5" stroke="#991B1B" stroke-width="1.5"/>
-        <line x1="40" y1="222" x2="760" y2="222" stroke="#991B1B" stroke-width="2"/>
+        <line x1="40" y1="222" x2="760" y2="222" stroke="#991B1B" stroke-width="2" data-strike="1"/>
         <text class="a7flK" x="858" y="227" text-anchor="end">LEAK</text>
         <text class="a7flE" x="610" y="242">only exists after churn</text>
 
@@ -216,7 +216,7 @@ feats["churned_90d"] = (~feats.index.isin(future["customer_id"])).astype(int)</d
 
         <text class="a7flK" x="40" y="299">7 · sessions_wk_after_cutoff</text>
         <rect x="604" y="285" width="56" height="18" rx="4" fill="#FCA5A5" stroke="#991B1B" stroke-width="1.5"/>
-        <line x1="40" y1="294" x2="660" y2="294" stroke="#991B1B" stroke-width="2"/>
+        <line x1="40" y1="294" x2="660" y2="294" stroke="#991B1B" stroke-width="2" data-strike="1"/>
         <text class="a7flK" x="858" y="299" text-anchor="end">LEAK</text>
         <text class="a7flE" x="604" y="314">the label window itself</text>
 
@@ -306,7 +306,7 @@ shap.plots.waterfall(shap_values[42])     # why THIS customer scores 0.83</div>
 
         <line x1="430" y1="60" x2="430" y2="240" stroke="#0F766E" stroke-width="2.5" stroke-dasharray="6 4"/>
         <circle cx="430" cy="160" r="8" fill="#0F766E"/>
-        <text class="a7prC" x="442" y="152">your threshold lives here</text>
+        <text class="a7prC" x="442" y="228">your threshold lives here</text>
 
         <rect x="96" y="278" width="340" height="34" rx="8" fill="#F8EADD"/>
         <text class="a7prH" x="110" y="299">Too low: wasted offers (precision cost)</text>

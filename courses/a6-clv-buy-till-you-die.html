@@ -96,14 +96,14 @@
         <text class="a6paH" x="758" y="52" text-anchor="end">month 12</text>
 
         <text class="a6paB" x="110" y="76">Customer A - the regular · 13 purchases in 8 months</text>
-        <line x1="110" y1="92" x2="758" y2="92" stroke="#6B5D52" stroke-width="1.5"/>
+        <line x1="110" y1="92" x2="548" y2="92" stroke="#6B5D52" stroke-width="1.5"/>
         <line class="a6paK" x1="110" y1="85" x2="110" y2="99"/><line class="a6paK" x1="146" y1="85" x2="146" y2="99"/><line class="a6paK" x1="182" y1="85" x2="182" y2="99"/><line class="a6paK" x1="218" y1="85" x2="218" y2="99"/><line class="a6paK" x1="254" y1="85" x2="254" y2="99"/><line class="a6paK" x1="290" y1="85" x2="290" y2="99"/><line class="a6paK" x1="326" y1="85" x2="326" y2="99"/><line class="a6paK" x1="362" y1="85" x2="362" y2="99"/><line class="a6paK" x1="398" y1="85" x2="398" y2="99"/><line class="a6paK" x1="434" y1="85" x2="434" y2="99"/><line class="a6paK" x1="470" y1="85" x2="470" y2="99"/><line class="a6paK" x1="506" y1="85" x2="506" y2="99"/><line class="a6paK" x1="542" y1="85" x2="542" y2="99"/>
         <rect x="548" y="80" width="210" height="24" rx="6" fill="#FEF2F2" stroke="#FCA5A5"/>
         <text class="a6paB" x="653" y="96" text-anchor="middle" fill="#991B1B">4 months of silence</text>
         <text class="a6paN" x="110" y="124">Usual gap ~18 days. This silence is ~7x their rhythm. <tspan style="font-weight:700" fill="#991B1B">P(alive) ~ 0.09 - probably gone.</tspan></text>
 
         <text class="a6paB" x="110" y="176">Customer B - the occasional · 3 purchases in 8 months</text>
-        <line x1="110" y1="192" x2="758" y2="192" stroke="#6B5D52" stroke-width="1.5"/>
+        <line x1="110" y1="192" x2="548" y2="192" stroke="#6B5D52" stroke-width="1.5"/>
         <line class="a6paK" x1="164" y1="185" x2="164" y2="199"/><line class="a6paK" x1="353" y1="185" x2="353" y2="199"/><line class="a6paK" x1="542" y1="185" x2="542" y2="199"/>
         <rect x="548" y="180" width="210" height="24" rx="6" fill="#F8EADD"/>
         <text class="a6paB" x="653" y="196" text-anchor="middle" fill="#6B5D52">the same 4 months</text>
@@ -169,7 +169,7 @@ summary.sort_values("p_alive").head(10)   # the "probably gone" list</div>
 
         <rect x="40" y="48" width="392" height="170" rx="10" fill="#FFFFFF" stroke="#F8EADD" stroke-width="2"/>
         <text class="a6fmB" x="58" y="74">1 · Resurrection</text>
-        <line x1="58" y1="110" x2="404" y2="110" stroke="#6B5D52" stroke-width="1.5"/>
+        <path d="M58,110 H136 M316,110 H404" fill="none" stroke="#6B5D52" stroke-width="1.5"/>
         <line class="a6fmK" x1="66" y1="103" x2="66" y2="117"/><line class="a6fmK" x1="94" y1="103" x2="94" y2="117"/><line class="a6fmK" x1="122" y1="103" x2="122" y2="117"/>
         <rect x="136" y="98" width="180" height="24" rx="6" fill="#FEF2F2" stroke="#FCA5A5"/>
         <text class="a6fmN" x="226" y="114" text-anchor="middle" fill="#991B1B">model: dead</text>
@@ -198,9 +198,9 @@ summary.sort_values("p_alive").head(10)   # the "probably gone" list</div>
 
         <rect x="448" y="238" width="392" height="170" rx="10" fill="#FFFFFF" stroke="#F8EADD" stroke-width="2"/>
         <text class="a6fmB" x="466" y="264">4 · Spend tied to frequency</text>
-        <circle cx="490" cy="368" r="4" fill="#EE9A66"/><circle cx="520" cy="352" r="4" fill="#EE9A66"/><circle cx="548" cy="356" r="4" fill="#E06A2E"/><circle cx="576" cy="336" r="4" fill="#E06A2E"/><circle cx="604" cy="324" r="4" fill="#C2410C"/><circle cx="632" cy="312" r="4" fill="#C2410C"/><circle cx="660" cy="300" r="4" fill="#7C2D12"/><circle cx="688" cy="292" r="4" fill="#7C2D12"/>
-        <line x1="480" y1="376" x2="700" y2="284" stroke="#0F766E" stroke-width="2" stroke-dasharray="5 4"/>
-        <text class="a6fmN" x="712" y="300">correlated</text>
+        <circle cx="490" cy="396" r="4" fill="#EE9A66"/><circle cx="520" cy="385" r="4" fill="#EE9A66"/><circle cx="548" cy="388" r="4" fill="#E06A2E"/><circle cx="576" cy="374" r="4" fill="#E06A2E"/><circle cx="604" cy="366" r="4" fill="#C2410C"/><circle cx="632" cy="358" r="4" fill="#C2410C"/><circle cx="660" cy="350" r="4" fill="#7C2D12"/><circle cx="688" cy="344" r="4" fill="#7C2D12"/>
+        <line x1="480" y1="401" x2="700" y2="339" stroke="#0F766E" stroke-width="2" stroke-dasharray="5 4"/>
+        <text class="a6fmN" x="712" y="352">correlated</text>
         <text class="a6fmN" x="466" y="290">Gamma-Gamma (the monetary add-on) assumes spend</text>
         <text class="a6fmN" x="466" y="308">is independent of frequency. Often violated -</text>
         <text class="a6fmN" x="466" y="326">test the correlation BEFORE fitting it.</text>
